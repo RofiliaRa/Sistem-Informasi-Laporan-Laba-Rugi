@@ -1,0 +1,2684 @@
+:root {
+    --primary-dark: #0b2341;
+    --primary-dark-2: #12365f;
+    --primary-blue: #1f5f99;
+    --primary-light: #eaf3fb;
+    --soft-bg: #f3f7fb;
+    --card-radius: 24px;
+    --shadow-soft: 0 18px 45px rgba(11, 35, 65, 0.16);
+    --border-soft: rgba(255, 255, 255, 0.18);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--soft-bg);
+    color: #1f2937;
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-wrapper {
+    height: 100vh;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0%, transparent 30%),
+        linear-gradient(135deg, #0b2341 0%, #12365f 50%, #1f5f99 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
+.login-container {
+    width: 100%;
+}
+
+.login-card {
+    border: none;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    background: #ffffff;
+}
+
+.login-left {
+    background:
+        radial-gradient(circle at 30% 18%, rgba(255,255,255,0.08) 0%, transparent 32%),
+        linear-gradient(160deg, #0b2341 0%, #12365f 55%, #1f5f99 100%);
+    color: #ffffff;
+    display: flex;
+    min-height: 560px;
+}
+
+.login-left-inner {
+    width: 100%;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+    text-align: center;
+}
+
+.login-right {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 560px;
+}
+
+.login-form-box {
+    width: 100%;
+    max-width: 420px;
+    padding: 36px 28px;
+}
+
+.login-logo-wrap {
+    text-align: center;
+}
+
+.login-logo-jaya {
+    width: 100%;
+    max-width: 150px;
+    object-fit: contain;
+    border-radius: 18px;
+    box-shadow: 0 10px 26px rgba(11, 35, 65, 0.22);
+    display: block;
+    margin: 0 auto;
+}
+
+.login-brand-desc {
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 1rem;
+    line-height: 1.9;
+    margin: 0;
+}
+
+.unit-box {
+    width: fit-content;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin: 0 auto;
+    backdrop-filter: blur(2px);
+}
+
+.login-instansi {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.login-title {
+    font-size: 2.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+
+.login-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 26px;
+}
+
+.login-input {
+    height: 54px;
+    border-radius: 16px;
+    border: 1px solid #d1d5db;
+    padding: 0 18px;
+    font-size: 1rem;
+    color: #111827;
+    background: #ffffff;
+}
+
+.login-input::placeholder {
+    color: #9ca3af;
+}
+
+.login-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(31, 95, 153, 0.16);
+}
+
+.btn-login-custom {
+    height: 54px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0b2341 0%, #12365f 100%);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-login-custom:hover {
+    background: linear-gradient(135deg, #12365f 0%, #1f5f99 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.login-footer {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* ===== PASSWORD TOGGLE ===== */
+.password-wrapper {
+    position: relative;
+}
+
+.password-input {
+    padding-right: 54px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    font-size: 1.15rem;
+    cursor: pointer;
+    color: #64748b;
+    padding: 4px;
+}
+
+.password-toggle:hover,
+.password-toggle:hover svg {
+    color: var(--primary-dark);
+}
+
+.password-toggle svg {
+    color: #64748b;
+}
+
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+    -webkit-text-fill-color: #111827;
+}
+
+/* ===== RESPONSIVE LOGIN ===== */
+@media (max-width: 991.98px) {
+    .login-wrapper {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        padding: 16px 12px;
+    }
+
+    .login-left {
+        display: none !important;
+    }
+
+    .login-right {
+        min-height: auto;
+    }
+
+    .login-form-box {
+        max-width: 100%;
+        padding: 32px 22px;
+    }
+
+    .login-title {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .login-wrapper {
+        padding: 10px;
+    }
+
+    .login-form-box {
+        padding: 26px 18px;
+    }
+
+    .login-title {
+        font-size: 1.55rem;
+    }
+
+    .login-input,
+    .btn-login-custom {
+        height: 52px;
+        border-radius: 14px;
+    }
+
+    .login-footer {
+        font-size: 0.85rem;
+    }
+}
+/* ==========================================================
+   DASHBOARD LAYOUT
+========================================================== */
+
+:root{
+
+    --primary:#12365f;
+    --primary-dark:#0b2341;
+    --primary-light:#1f5f99;
+
+    --bg:#f5f8fc;
+
+    --white:#ffffff;
+
+    --border:#e7edf5;
+
+    --text:#0f172a;
+
+    --muted:#64748b;
+
+    --shadow:0 10px 24px rgba(15,23,42,.06);
+
+    --radius:18px;
+
+}
+
+/* ==========================================================
+   WRAPPER
+========================================================== */
+
+.dashboard-shell{
+
+    display:flex;
+
+    min-height:100vh;
+
+    background:var(--bg);
+
+}
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+.dash-sidebar{
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 280px;
+
+    height: 100vh;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(255,255,255,.08),
+        transparent 30%),
+
+        linear-gradient(
+            180deg,
+            var(--primary-dark) 0%,
+            var(--primary) 55%,
+            var(--primary-light) 100%
+        );
+
+    color:#fff;
+
+    z-index:1040;
+
+}
+
+/* ==========================================================
+   SIDEBAR CONTENT
+========================================================== */
+
+.dash-sidebar-inner{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:100%;
+
+    padding:22px;
+
+}
+
+/* ==========================================================
+   BRAND
+========================================================== */
+
+.dash-brand{
+
+    text-align:center;
+
+    padding-bottom:18px;
+
+    margin-bottom:18px;
+
+    border-bottom:1px solid rgba(255,255,255,.10);
+
+}
+
+.dash-brand-logo{
+
+    width:72px;
+
+    height:72px;
+
+    object-fit:contain;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.08);
+
+    padding:8px;
+
+    margin-bottom:12px;
+
+}
+
+.dash-brand-title{
+
+    color:#fff;
+
+    font-size:1.9rem;
+
+    font-weight:800;
+
+    margin-bottom:4px;
+
+}
+
+.dash-brand-subtitle{
+
+    color:rgba(255,255,255,.72);
+
+    font-size:.88rem;
+
+    line-height:1.5;
+
+}
+
+/* ==========================================================
+   MENU
+========================================================== */
+
+.dash-menu-label{
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    font-size:.78rem;
+
+    color:rgba(255,255,255,.58);
+
+    margin-bottom:10px;
+
+    padding-left:8px;
+
+}
+
+/* ==========================================================
+   NAVIGATION
+========================================================== */
+
+.dash-nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.dash-nav-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:11px 14px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    color:rgba(255,255,255,.88);
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.dash-nav-link i{
+
+    width:20px;
+
+    text-align:center;
+
+    font-size:17px;
+
+}
+
+.dash-nav-link:hover{
+
+    color:#fff;
+
+    background:rgba(255,255,255,.10);
+
+}
+
+.dash-nav-link.active{
+
+    color:#fff;
+
+    background:rgba(255,255,255,.16);
+
+}
+
+/* ==========================================================
+   LOGOUT
+========================================================== */
+
+.sidebar-logout{
+
+    margin-top:auto;
+
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,.10);
+
+}
+
+/* ==========================================================
+   MAIN
+========================================================== */
+
+.dash-main{
+
+    margin-left:280px;
+
+    width:calc(100% - 280px);
+
+}
+
+.dash-content{
+
+    min-height:100vh;
+
+    padding:24px;
+
+    background:
+
+        radial-gradient(
+            circle at top right,
+            rgba(31,95,153,.08),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f8fbff 40%,
+            #eef6fc
+        );
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+.dash-menu-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:12px;
+
+    border:1px solid #d7dce3;
+
+    background:#fff;
+
+}
+
+.dash-offcanvas{
+
+    width:280px !important;
+
+}
+
+.dash-offcanvas .offcanvas-body{
+
+    padding:0;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:991px){
+
+    .dash-sidebar{
+
+        display:none;
+
+    }
+
+    .dash-main{
+
+        width:100%;
+
+        margin-left:0;
+
+    }
+
+    .dash-content{
+
+        padding:18px;
+
+    }
+
+}
+/* ===========================================================
+   DASHBOARD UI - PART 1
+   Hero + Statistik + Grafik
+=========================================================== */
+
+/* ===========================================================
+   HERO
+=========================================================== */
+
+.dashboard-hero{
+
+    border:none !important;
+
+    border-radius:18px;
+
+    background:#ffffff;
+
+    box-shadow:0 6px 20px rgba(15,23,42,.06);
+
+    margin-bottom:24px;
+
+}
+
+.dashboard-hero .card-body{
+
+    padding:22px 26px;
+
+}
+
+.dashboard-date{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:#eef6ff;
+
+    color:#12365f;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+.dashboard-title{
+
+    margin-top:10px;
+
+    margin-bottom:6px;
+
+    font-size:28px;
+
+    font-weight:600;
+
+    color:#0f172a;
+
+    line-height:1.1;
+
+}
+
+.dashboard-subtitle{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:15px;
+
+    line-height:1.7;
+
+}
+
+.dashboard-role{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    background:linear-gradient(135deg,#12365f,#1f5f99);
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    box-shadow:0 8px 18px rgba(18,54,95,.18);
+
+}
+
+/* ===========================================================
+   CARD STATISTIK
+=========================================================== */
+
+.dashboard-stat-card{
+
+    background:#ffffff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:10px 10px;
+
+    height:100%;
+
+    min-height:100px;
+
+    box-shadow:0 6px 12px rgba(15,23,42,.06);
+
+    transition:.25s;
+
+}
+
+.dashboard-stat-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.dashboard-stat-card.income{
+
+    border-top:4px solid #16a34a;
+
+}
+
+.dashboard-stat-card.expense{
+
+    border-top:4px solid #dc2626;
+
+}
+
+.dashboard-stat-card.profit{
+
+    border-top:4px solid #2563eb;
+
+}
+
+.stat-top{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    text-align:center;
+
+}
+
+.stat-icon{
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#edf6ff;
+
+    color:#12365f;
+
+    font-size:20px;
+
+}
+
+.stat-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+    line-height:1.2;
+
+}
+
+.dashboard-stat-card small{
+
+    display:block;
+
+    margin-top:4px;
+
+    font-size:15px;
+
+    color:#94a3b8;
+
+    font-weight:500;
+
+}
+
+.stat-value{
+
+    margin-top:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    width:100%;
+
+    font-size:18px;
+
+    font-weight:800;
+
+    line-height:1.2;
+
+}
+
+/* ===========================================================
+   GRAFIK
+=========================================================== */
+
+.chart-card{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 6px 20px rgba(15,23,42,.06);
+
+}
+
+.chart-card .card-header{
+
+    background:#ffffff;
+
+    border-bottom:1px solid #edf2f7;
+
+    padding:18px 22px;
+
+}
+
+.chart-card .card-header h5{
+
+    margin:0;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#12365f;
+
+}
+
+.chart-card .card-body{
+
+    background:#ffffff;
+
+    padding:20px 22px;
+
+}
+
+#adminFinanceChart{
+
+    width:100%!important;
+
+    height:1600px!important;
+
+    max-height:160px;
+
+}
+
+/* ===========================================================
+   FOOTER DASHBOARD
+=========================================================== */
+
+.dashboard-summary-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    margin-top:18px;
+
+    padding-top:18px;
+
+    border-top:1px solid #edf2f7;
+
+}
+
+.summary-item{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.summary-item span{
+
+    font-size:13px;
+
+    color:#64748b;
+
+}
+
+.summary-item strong{
+
+    margin-top:2px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    color:#12365f;
+
+}
+
+/* ===========================================================
+   RESPONSIVE
+=========================================================== */
+
+@media(max-width:991px){
+
+    .dashboard-title{
+
+        font-size:20px;
+
+    }
+
+    .dashboard-role{
+
+        margin-top:12px;
+
+    }
+
+    .dashboard-hero .card-body{
+
+        padding:12px;
+
+    }
+
+    .dashboard-stat-card{
+
+        padding:12px;
+
+    }
+
+    #adminFinanceChart{
+
+        height:220px!important;
+
+    }
+
+}
+/* ==========================================================
+   TRANSAKSI TERBARU
+========================================================== */
+
+.transaksi-card{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 6px 20px rgba(15,23,42,.06);
+
+}
+
+.transaksi-card .card-header{
+
+    background:#ffffff;
+
+    border-bottom:1px solid #eef2f7;
+
+    padding:18px 22px;
+
+}
+
+.transaksi-card .card-header h4{
+
+    color:#12365f;
+
+    font-size:20px;
+
+    font-weight:700;
+
+}
+
+.transaksi-card .card-header small{
+
+    color:#94a3b8;
+
+}
+
+.transaksi-card .card-body{
+
+    padding:18px 22px;
+
+}
+/* ==========================================================
+   TABLE TRANSAKSI
+========================================================== */
+
+.table-responsive{
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.dash-table-pro{
+
+    width:100%;
+
+    margin-bottom:0;
+
+    border-collapse:collapse;
+
+    table-layout:fixed;
+
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.dash-table-pro thead{
+
+    background:#f8fafc;
+
+}
+
+.dash-table-pro thead th{
+
+    padding:15px 10px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#334155;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+
+    border-bottom:2px solid #e5e7eb;
+
+    vertical-align:middle;
+
+}
+
+/* ==========================
+   BODY
+========================== */
+
+.dash-table-pro tbody td{
+
+    padding:16px 10px;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    font-size:14px;
+
+    color:#1e293b;
+
+    border-bottom:1px solid #eef2f7;
+
+    transition:.2s;
+
+}
+
+.dash-table-pro tbody tr:last-child td{
+
+    border-bottom:none;
+
+}
+
+.dash-table-pro tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ==========================
+   LEBAR KOLOM
+========================== */
+
+.col-no{
+
+    width:7%;
+
+}
+
+.col-tanggal{
+
+    width:16%;
+
+    white-space:nowrap;
+
+}
+
+.col-jam{
+
+    width:10%;
+
+    white-space:nowrap;
+
+    color:#64748b;
+
+    font-weight:600;
+
+}
+
+.col-jenis{
+
+    width:18%;
+
+}
+
+.col-keterangan{
+
+    width:29%;
+
+    text-align:center;
+
+    font-weight:500;
+
+    word-break:break-word;
+
+}
+
+.col-nominal{
+
+    width:20%;
+
+    white-space:nowrap;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   BADGE
+========================== */
+
+.dash-badge{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:110px;
+
+    height:32px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.dash-badge.success{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.dash-badge.danger{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+.dash-badge.warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+.summary-box{
+
+    height:100%;
+
+    border:1px solid #eef2f7;
+
+    border-radius:14px;
+
+    padding:18px;
+
+    text-align:center;
+
+    background:#fafcff;
+
+}
+
+/* ==========================================================
+   SUMMARY CARD
+========================================================== */
+
+.summary-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    background:#ffffff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:16px;
+
+    padding:16px 18px;
+
+    height:100%;
+
+    transition:.25s;
+
+}
+
+.summary-card:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 6px 16px rgba(15,23,42,.05);
+
+}
+
+/* ========================= */
+
+.summary-icon{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+    color:#12365f;
+
+    flex-shrink:0;
+
+}
+
+/* ========================= */
+
+.summary-content{
+
+    flex:1;
+
+}
+
+.summary-content small{
+
+    display:block;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    margin-bottom:4px;
+
+    line-height:1.4;
+
+}
+
+.summary-content h4{
+
+    margin:0;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    color:#12365f;
+
+    line-height:1.2;
+
+}
+
+/* ========================= */
+
+.summary-content .badge{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    padding:7px 16px;
+
+    border-radius:10px;
+
+}
+
+/* ==========================
+   NOMINAL
+========================== */
+
+.nominal-pendapatan{
+
+    color:#16a34a;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+.nominal-pengeluaran{
+
+    color:#dc2626;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+.dashboard-summary-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-top:18px;
+
+    padding-top:18px;
+
+    border-top:1px solid #eef2f7;
+
+}
+
+.summary-item{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+}
+
+.summary-item span{
+
+    color:#64748b;
+
+    font-size:13px;
+
+}
+
+.summary-item strong{
+
+    color:#12365f;
+
+    font-size:17px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   ALERT
+========================================================== */
+
+.transaksi-card .alert{
+
+    border-radius:14px;
+
+    border:1px solid #e2e8f0;
+
+    background:#f8fafc;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+    .dash-table-pro{
+
+        min-width:820px;
+
+    }
+
+    .dashboard-summary-footer{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+}
+
+.dashboard-header{
+
+    margin-bottom:18px;
+
+}
+
+.dashboard-title{
+
+    font-size:25px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+    margin-bottom:3px;
+
+}
+
+.dashboard-subtitle{
+
+    color:#64748b;
+
+    font-size:15px;
+
+}
+
+/* ==========================
+   ROW BOOTSTRAP
+========================== */
+
+.row.g-4{
+
+    --bs-gutter-x:1rem;
+
+    --bs-gutter-y:1rem;
+
+}
+
+.row.g-3{
+
+    --bs-gutter-x:.9rem;
+
+    --bs-gutter-y:.9rem;
+
+}
+
+.mb-4{
+
+    margin-bottom:1rem !important;
+
+}
+
+.mb-3{
+
+    margin-bottom:.85rem !important;
+
+}
+
+/* ==========================
+   HERO
+========================== */
+
+.welcome-hero-card{
+
+    min-height:135px;
+
+}
+
+.welcome-hero-title{
+
+    font-size:30px;
+
+}
+
+.welcome-hero-subtitle{
+
+    font-size:14px;
+
+}
+
+.welcome-hero-role{
+
+    min-width:115px;
+
+    padding:10px 18px;
+
+}
+
+/* ==========================
+   CARD STATISTIK
+========================== */
+
+.dash-summary-card-pro{
+
+    min-height:120px;
+
+}
+
+.dash-summary-value{
+
+    font-size:22px;
+
+}
+
+.dash-summary-label{
+
+    font-size:14px;
+
+}
+
+.dash-summary-icon{
+
+    width:38px;
+
+    height:38px;
+
+     font-size:18px;
+
+}
+
+/* ==========================
+   GRAFIK
+========================== */
+
+#adminFinanceChart{
+
+    width:100%!important;
+
+    height:180px!important;
+
+    max-height:180px;
+
+}
+
+/* ==========================
+   INFORMASI SISTEM
+========================== */
+
+.dash-info-item{
+
+    padding:4px 0;
+
+}
+
+.dash-info-label{
+
+    font-size:13px;
+
+}
+
+.dash-info-value{
+
+    font-size:13px;
+
+}
+
+/* ==========================
+   PANEL
+========================== */
+
+.dash-panel-card-pro{
+
+    border-radius:18px;
+
+}
+
+.dash-panel-header{
+
+    padding:10px 16px 0;
+
+}
+
+.dash-panel-body{
+
+    padding:10px 16px 14px;
+
+}
+
+/* ==========================
+   TABEL
+========================== */
+
+.dash-table-pro thead th{
+
+    background:#f8fafc;
+
+    color:#475569;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    padding:10px 8px;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+.dash-table-pro tbody td{
+
+    padding:10px 8px;
+
+    font-size:13px;
+
+    border-bottom:1px solid #f1f5f9;
+
+}
+
+.nominal-pendapatan{
+
+    color:#16a34a;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+.nominal-pengeluaran{
+
+    color:#dc2626;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+.dash-badge{
+
+    min-width:88px;
+
+    height:28px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+.dash-brand{
+
+    padding-bottom:10px;
+
+    margin-bottom:13px;
+
+}
+
+.dash-brand-logo{
+
+    width:60px;
+
+    height:60px;
+
+}
+
+.dash-brand-title{
+
+    font-size:16px;
+
+}
+
+.dash-brand-subtitle{
+
+    font-size:12px;
+
+     line-height:1.4;
+
+
+}
+
+.dash-menu-label{
+
+    margin-bottom:6px;
+
+}
+
+.dash-nav-link{
+
+    padding:8px 10px;
+
+    margin-bottom:4px;
+
+    border-radius:14px;
+
+    font-size:14px;
+
+}
+
+.sidebar-logout{
+
+    padding-top:14px;
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width:991px){
+
+    .welcome-hero-card{
+
+        min-height:auto;
+
+    }
+
+    .dash-summary-card-pro{
+
+        min-height:auto;
+
+    }
+
+    #adminFinanceChart{
+
+        max-height:260px;
+
+    }
+
+}
+
+/* =========================================
+   LAPORAN LABA RUGI
+========================================= */
+
+.laporan-box {
+    background: #ffffff;
+    border: 2px solid #111827;
+    border-radius: 18px;
+    padding: 50px;
+}
+
+.laporan-instansi {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: 1px;
+}
+
+.laporan-unit {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b2341;
+    margin-top: 8px;
+}
+
+.laporan-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 14px;
+    color: #111827;
+}
+
+.laporan-periode {
+    font-size: 17px;
+    margin-top: 10px;
+    color: #374151;
+}
+
+.laporan-table {
+    margin-top: 40px;
+}
+
+.laporan-table td {
+    border: none;
+    padding: 12px 10px;
+    font-size: 17px;
+    color: #111827;
+}
+
+.laporan-section td,
+td.laporan-section {
+    font-weight: 800;
+    font-size: 18px;
+    padding-top: 28px;
+    padding-bottom: 12px;
+}
+
+.laporan-item {
+    padding-left: 40px !important;
+}
+
+.laporan-total td {
+    border-top: 1.5px solid #111827;
+    font-weight: 800;
+}
+
+.laporan-grand-total td {
+    border-top: 3px solid #111827;
+    font-weight: 900;
+    font-size: 21px;
+    padding-top: 18px;
+}
+/* ======================================================
+REPORT MODERN UI
+====================================================== */
+
+.report-hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.report-title{
+    font-size:2rem;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:6px;
+}
+
+.report-subtitle{
+    color:#64748b;
+    margin:0;
+}
+
+.report-actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.btn-report{
+    border-radius:14px;
+    padding:12px 20px;
+    font-weight:700;
+}
+
+.report-filter-card{
+    background:#fff;
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
+.modern-input{
+    height:52px;
+    border-radius:14px;
+}
+
+.modern-btn{
+    height:52px;
+    border-radius:14px;
+    font-weight:700;
+}
+
+.finance-card{
+    background:#fff;
+    border-radius:24px;
+    padding:28px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.06);
+    height:100%;
+}
+
+.finance-icon{
+    width:68px;
+    height:68px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.7rem;
+    color:#fff;
+}
+
+.income-card .finance-icon{
+    background:#16a34a;
+}
+
+.expense-card .finance-icon{
+    background:#dc2626;
+}
+
+.profit-card .finance-icon{
+    background:#2563eb;
+}
+
+.finance-label{
+    color:#64748b;
+    margin-bottom:6px;
+}
+
+.finance-value{
+    font-size:2rem;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.report-paper{
+    background:#fff;
+    border-radius:30px;
+    padding:50px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+.paper-header{
+    margin-bottom:50px;
+}
+
+.paper-small{
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+.paper-title{
+    font-size:2.2rem;
+    font-weight:900;
+    color:#0f172a;
+    margin-top:10px;
+}
+
+.paper-subtitle{
+    font-size:1.7rem;
+    font-weight:800;
+    margin-top:14px;
+}
+
+.paper-period{
+    color:#64748b;
+    margin-top:10px;
+}
+
+.report-section{
+    margin-bottom:40px;
+}
+
+.section-title{
+    font-size:1.2rem;
+    font-weight:800;
+    margin-bottom:18px;
+    color:#0f172a;
+}
+
+.report-table{
+    margin-bottom:0;
+}
+
+.report-table td{
+    padding:16px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.table-total td{
+    font-weight:800;
+    border-top:2px solid #0f172a;
+    border-bottom:none;
+}
+
+.final-result{
+    background:#0f172a;
+    color:#fff;
+    padding:24px 30px;
+    border-radius:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:1.5rem;
+    font-weight:800;
+}
+
+@media(max-width:768px){
+
+    .report-paper{
+        padding:28px;
+    }
+
+    .paper-title{
+        font-size:1.5rem;
+    }
+
+    .paper-subtitle{
+        font-size:1.3rem;
+    }
+
+    .finance-value{
+        font-size:1.4rem;
+    }
+
+    .final-result{
+        font-size:1rem;
+    }
+
+}
+/* ==========================================================
+   HALAMAN KELOLA AKUN
+========================================================== */
+
+/* ==========================
+   PANEL
+========================== */
+
+.dash-panel-card-pro{
+
+    background:#ffffff;
+
+    border:none;
+
+    border-radius:18px;
+
+    box-shadow:0 6px 18px rgba(15,23,42,.06);
+
+    overflow:hidden;
+
+    margin-bottom:20px;
+
+}
+
+.dash-panel-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    border-bottom:1px solid #eef2f7;
+
+}
+
+.dash-panel-header h3{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#12365f;
+
+}
+
+.dash-panel-header small{
+
+    display:block;
+
+    margin-top:4px;
+
+    font-size:14px;
+
+    color:#64748b;
+
+}
+
+.dash-panel-body{
+
+    padding:18px 22px;
+
+}
+
+/* ==========================
+   BUTTON TAMBAH AKUN
+========================== */
+
+.dash-panel-header .btn{
+
+    height:42px;
+
+    padding:0 20px;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   TOTAL DATA
+========================== */
+
+.total-data-chip{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    background:#eef6ff;
+
+    color:#12365f;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   TABEL AKUN
+========================================================== */
+
+.table-responsive{
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.akun-table{
+
+    width:100%;
+
+    margin-bottom:0;
+
+    border-collapse:collapse;
+
+}
+
+.akun-thead{
+
+    background:#f8fafc;
+
+}
+
+.akun-table thead th{
+
+    padding:12px 10px;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#475569;
+
+    border-bottom:1px solid #e5e7eb;
+
+    white-space:nowrap;
+
+}
+
+.akun-table tbody td{
+
+    padding:13px 10px;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    font-size:14px;
+
+    color:#1e293b;
+
+    border-bottom:1px solid #eef2f7;
+
+    transition:.25s;
+
+}
+
+.akun-table tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+.akun-table tbody tr:last-child td{
+
+    border-bottom:none;
+
+}
+
+/* ==========================
+   ROLE BADGE
+========================== */
+
+.akun-table .badge{
+
+    min-width:105px;
+
+    height:32px;
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+/* ==========================
+   BUTTON AKSI
+========================== */
+
+.btn-action{
+
+    height:36px;
+
+    padding:0 14px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.btn-action i{
+
+    font-size:14px;
+
+}
+
+.action-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:nowrap;
+
+}
+
+.action-group form{
+
+    margin:0;
+
+}
+
+/* ==========================
+   PAGINATION
+========================== */
+
+.pagination{
+
+    gap:6px;
+
+}
+
+.pagination .page-link{
+
+    min-width:40px;
+
+    height:40px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:#12365f;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.pagination .page-item.active .page-link{
+
+    background:#12365f;
+
+    color:#ffffff;
+
+}
+
+.pagination .page-link:hover{
+
+    background:#eaf3fb;
+
+    color:#12365f;
+
+}
+
+.pagination-info{
+
+    font-size:14px;
+
+    color:#64748b;
+
+}
+
+.pagination-info strong{
+
+    color:#12365f;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   MODAL TAMBAH & EDIT AKUN
+========================================================== */
+
+#modalTambah .modal-dialog,
+[id^="modalEdit"] .modal-dialog{
+
+    max-width:500px;
+
+    display:flex;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    margin:auto;
+
+}
+
+#modalTambah .modal-content,
+[id^="modalEdit"] .modal-content{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:#ffffff;
+
+    box-shadow:0 18px 45px rgba(15,23,42,.18);
+
+}
+
+/* ==========================
+   HEADER MODAL
+========================== */
+
+#modalTambah .modal-header,
+[id^="modalEdit"] .modal-header{
+
+    padding:16px 20px;
+
+    border-bottom:1px solid #eef2f7;
+
+}
+
+#modalTambah .modal-header h5,
+[id^="modalEdit"] .modal-header h5{
+
+    margin:0;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#12365f;
+
+}
+
+/* ==========================
+   BODY MODAL
+========================== */
+
+#modalTambah .modal-body,
+[id^="modalEdit"] .modal-body{
+
+    padding:18px 20px;
+
+}
+
+#modalTambah label,
+[id^="modalEdit"] label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+#modalTambah .form-control,
+#modalTambah .form-select,
+[id^="modalEdit"] .form-control,
+[id^="modalEdit"] .form-select{
+
+    height:42px;
+
+    border-radius:10px;
+
+    border:1px solid #d6dbe5;
+
+    font-size:14px;
+
+}
+
+#modalTambah .form-control:focus,
+#modalTambah .form-select:focus,
+[id^="modalEdit"] .form-control:focus,
+[id^="modalEdit"] .form-select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 .18rem rgba(37,99,235,.12);
+
+}
+
+#modalTambah .input-group .btn,
+[id^="modalEdit"] .input-group .btn{
+
+    width:46px;
+
+    height:42px;
+
+}
+
+#modalTambah small,
+[id^="modalEdit"] small{
+
+    display:block;
+
+    margin-top:5px;
+
+    font-size:12px;
+
+    color:#6b7280;
+
+    line-height:1.5;
+
+}
+
+/* ==========================
+   FOOTER MODAL
+========================== */
+
+#modalTambah .modal-footer,
+[id^="modalEdit"] .modal-footer{
+
+    padding:14px 20px;
+
+    border-top:1px solid #eef2f7;
+
+}
+
+#modalTambah .modal-footer .btn,
+[id^="modalEdit"] .modal-footer .btn{
+
+    min-width:110px;
+
+    height:40px;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width:768px){
+
+    .dash-panel-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+
+    }
+
+    .akun-table{
+
+        min-width:760px;
+
+    }
+
+    #modalTambah .modal-dialog,
+    [id^="modalEdit"] .modal-dialog{
+
+        max-width:100%;
+
+        margin:12px;
+
+    }
+
+}
+
+/* ==========================================================
+   SIDEBAR LOGOUT
+========================================================== */
+
+.sidebar-logout{
+
+    margin-top:auto;
+
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,.10);
+
+}
+
+.sidebar-logout form{
+
+    margin:0;
+
+}
+
+.dash-logout-btn{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:12px;
+
+    padding:12px 16px;
+
+    border:none;
+
+    background:transparent;
+
+    color:rgba(255,255,255,.90);
+
+    border-radius:14px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:all .25s ease;
+
+}
+
+.dash-logout-btn:hover{
+
+    background:rgba(255,255,255,.14);
+
+    color:#ffffff;
+
+    transform:translateX(2px);
+
+}
+
+.dash-logout-btn:focus{
+
+    outline:none;
+
+    box-shadow:none;
+
+}
+
+.dash-logout-btn i{
+
+    width:20px;
+
+    text-align:center;
+
+    font-size:17px;
+
+    flex-shrink:0;
+
+}
+
+.dash-logout-btn span{
+
+    flex:1;
+
+    text-align:left;
+
+}
