@@ -2751,3 +2751,114 @@ REPORT MODERN UI
         width: 100% !important;
     }
 }
+
+/* ==========================================================
+   HALAMAN PENGELUARAN
+========================================================== */
+
+.table-pengeluaran {
+    width: 100%;
+
+    min-width: 900px;
+
+    margin-bottom: 0;
+
+    border-collapse: collapse;
+}
+
+.table-pengeluaran thead th {
+    padding: 12px 10px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+}
+
+.table-pengeluaran tbody td {
+    padding: 13px 10px;
+
+    vertical-align: middle;
+
+    font-size: 14px;
+
+    color: #1e293b;
+
+    border-bottom: 1px solid #eef2f7;
+
+    white-space: nowrap;
+}
+
+.table-pengeluaran tbody tr:hover {
+    background: #f8fbff;
+}
+
+/* ==========================================================
+   HALAMAN PENDAPATAN
+========================================================== */
+
+.table-pendapatan {
+    width: 100%;
+
+    min-width: 950px;
+
+    margin-bottom: 0;
+
+    border-collapse: collapse;
+}
+
+.table-pendapatan thead th {
+    padding: 12px 10px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+}
+
+.table-pendapatan tbody td {
+    padding: 13px 10px;
+
+    vertical-align: middle;
+
+    font-size: 14px;
+
+    color: #1e293b;
+
+    border-bottom: 1px solid #eef2f7;
+
+    white-space: nowrap;
+}
+
+.table-pendapatan tbody tr:hover {
+    background: #f8fbff;
+}
+
+@media (max-width: 768px) {
+    .btn-form-mobile-full,
+    .btn-form-mobile-full .btn {
+        width: 100% !important;
+    }
+}
+
+.badge-fixed {
+    display: inline-block;
+
+    min-width: 110px;
+
+    text-align: center;
+}
