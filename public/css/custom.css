@@ -2600,3 +2600,146 @@ REPORT MODERN UI
 
     transition: 0.25s;
 }
+
+/* ==========================================================
+   HALAMAN LAPORAN LABA RUGI
+========================================================== */
+
+.laporan-body {
+    padding: 22px 28px;
+}
+
+.header-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+.header-action {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.laporan-table td {
+    padding: 8px 10px;
+
+    font-size: 15px;
+
+    vertical-align: middle;
+
+    color: #334155;
+}
+
+.laporan-table tr:first-child td,
+.laporan-table tr.section-title:first-child td {
+    padding-top: 0 !important;
+}
+
+.laporan-table .section-title td {
+    padding-top: 10px;
+
+    padding-bottom: 2px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.laporan-table .subtotal-row td {
+    border-top: 1px solid #d1d5db;
+
+    padding-top: 10px;
+
+    padding-bottom: 8px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.laporan-table .grand-total-row td {
+    border-top: 2px solid #0f172a;
+
+    padding-top: 12px;
+
+    padding-bottom: 10px;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+}
+
+.nominal {
+    width: 220px;
+
+    text-align: right !important;
+
+    white-space: nowrap;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+.dots-row {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.dots-text {
+    white-space: nowrap;
+}
+
+.dots-line {
+    flex: 1;
+
+    border-bottom: 1px dotted #94a3b8;
+
+    margin: 0 8px 4px;
+}
+
+.dots-value {
+    min-width: 140px;
+
+    text-align: right !important;
+
+    white-space: nowrap;
+
+    font-weight: 600;
+
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .laporan-body {
+        padding: 16px;
+    }
+
+    .dots-text {
+        white-space: normal;
+    }
+
+    .dots-line {
+        display: none;
+    }
+}
