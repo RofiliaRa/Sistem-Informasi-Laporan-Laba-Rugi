@@ -10,108 +10,53 @@
 
 {{-- CARD STATISTIK --}}
 <div class="row g-3 mb-4">
-    {{-- Total Laporan --}}
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="dash-panel-card-pro stat-card">
-            <div class="dash-panel-body">
-                <div class="stat-icon stat-primary">
-                    <i class="bi bi-file-earmark-text"></i>
-                </div>
-                <div class="stat-title">Total Laporan</div>
-                <div class="stat-value">{{ $totalLaporan ?? 0 }}</div>
-            </div>
-        </div>
+        @include('partials.stat-card', [
+            'icon' => 'bi bi-file-earmark-text',
+            'iconBg' => 'stat-primary',
+            'title' => 'Total Laporan',
+            'value' => $totalLaporan ?? 0
+        ])
     </div>
 
-    {{-- Tahun Aktif --}}
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="dash-panel-card-pro stat-card">
-            <div class="dash-panel-body">
-                <div class="stat-icon stat-primary">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
-                <div class="stat-title">Tahun Aktif</div>
-                <div class="stat-value">
-                    {{ request('bulan') ? date('Y', strtotime(request('bulan'))) : now()->year }}
-                </div>
-            </div>
-        </div>
+        @include('partials.stat-card', [
+            'icon' => 'bi bi-calendar-check',
+            'iconBg' => 'stat-primary',
+            'title' => 'Tahun Aktif',
+            'value' => request('bulan') ? date('Y', strtotime(request('bulan'))) : now()->year
+        ])
     </div>
 
-    {{-- Laporan Final --}}
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="dash-panel-card-pro stat-card">
-            <div class="dash-panel-body">
-                <div class="stat-icon stat-success">
-                    <i class="bi bi-check-circle"></i>
-                </div>
-                <div class="stat-title">Laporan Final</div>
-                <div class="stat-value stat-success">{{ $totalFinal ?? 0 }}</div>
-            </div>
-        </div>
+        @include('partials.stat-card', [
+            'icon' => 'bi bi-check-circle',
+            'iconBg' => 'stat-success',
+            'title' => 'Laporan Final',
+            'value' => $totalFinal ?? 0,
+            'valueClass' => 'stat-success'
+        ])
     </div>
 
-    {{-- Laporan Draft --}}
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="dash-panel-card-pro stat-card">
-            <div class="dash-panel-body">
-                <div class="stat-icon stat-warning">
-                    <i class="bi bi-hourglass-split"></i>
-                </div>
-                <div class="stat-title">Laporan Draft</div>
-                <div class="stat-value stat-warning">{{ $totalDraft ?? 0 }}</div>
-            </div>
-        </div>
+        @include('partials.stat-card', [
+            'icon' => 'bi bi-hourglass-split',
+            'iconBg' => 'stat-warning',
+            'title' => 'Laporan Draft',
+            'value' => $totalDraft ?? 0,
+            'valueClass' => 'stat-warning'
+        ])
     </div>
 </div>
 
 {{-- FILTER PERIODE --}}
-<div class="dash-panel-card-pro mb-4">
-    <div class="dash-panel-body">
-        <form
-            method="GET"
-            action="{{ auth()->user()->role == 'admin' ? route('admin.riwayat.index') : route('direktur.riwayat.index') }}"
-        >
-            <div class="row align-items-end g-3">
-                <div class="col-12 col-md-6 col-lg-4">
-                    <label class="form-label fw-semibold">
-                        Pilih Periode
-                    </label>
-                    <input
-                        type="month"
-                        name="bulan"
-                        class="form-control"
-                        value="{{ request('bulan', now()->format('Y-m')) }}"
-                    >
-                </div>
-
-                <div class="col-6 col-md-3 col-lg-2">
-                    <button
-                        type="submit"
-                        class="btn btn-primary w-100"
-                    >
-                        <i class="bi bi-search me-1"></i>
-                        Tampilkan
-                    </button>
-                </div>
-
-                <div class="col-6 col-md-3 col-lg-2">
-                    <a
-                        href="{{ auth()->user()->role == 'admin' ? route('admin.riwayat.index') : route('direktur.riwayat.index') }}"
-                        class="btn btn-secondary w-100"
-                    >
-                        <i class="bi bi-arrow-clockwise me-1"></i>
-                        Reset
-                    </a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+@include('partials.filter-periode', [
+    'action' => auth()->user()->role == 'admin' ? route('admin.riwayat.index') : route('direktur.riwayat.index'),
+    'showReset' => true
+])
 
 {{-- DATA RIWAYAT LAPORAN --}}
 <div class="dash-panel-card-pro">
-    {{-- Header Card --}}
     @include('partials.panel-header', [
         'title' => 'Data Riwayat Laporan',
         'icon' => 'bi bi-clock-history',
@@ -119,7 +64,6 @@
         'totalLabel' => 'Laporan'
     ])
 
-    {{-- Body --}}
     <div class="dash-panel-body">
         <div class="table-responsive">
             <table class="riwayat-table">
@@ -246,7 +190,6 @@
             </table>
         </div>
 
-        {{-- Pagination --}}
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
             <div class="pagination-info">
                 Menampilkan
@@ -268,7 +211,6 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    /* HAPUS LAPORAN */
     const formHapus = document.querySelectorAll('.form-hapus');
     if (formHapus.length > 0) {
         formHapus.forEach(form => {
@@ -293,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* FINALISASI LAPORAN */
     const formFinal = document.querySelectorAll('.form-final');
     if (formFinal.length > 0) {
         formFinal.forEach(form => {
