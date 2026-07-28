@@ -94,15 +94,16 @@
     class="offcanvas offcanvas-start dash-offcanvas"
     tabindex="-1"
     id="mobileSidebar"
+    aria-labelledby="mobileSidebarLabel"
 >
 
     <div class="offcanvas-body p-0">
 
-        <aside class="dash-sidebar d-flex w-100">
+        <div class="dash-sidebar-mobile-container h-100">
 
             @include('partials.dashboard-sidebar')
 
-        </aside>
+        </div>
 
     </div>
 
