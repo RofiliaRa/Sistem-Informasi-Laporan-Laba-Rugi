@@ -66,7 +66,7 @@
 
     <div class="dash-panel-body">
         <div class="table-responsive">
-            <table class="riwayat-table">
+            <table class="riwayat-table text-nowrap">
                 <thead>
                     <tr>
                         <th width="60" class="text-center">No</th>

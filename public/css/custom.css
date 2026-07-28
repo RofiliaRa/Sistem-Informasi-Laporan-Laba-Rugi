@@ -2419,6 +2419,8 @@ REPORT MODERN UI
     border-bottom: 1px solid #eef2f7;
 
     transition: 0.25s;
+
+    white-space: nowrap;
 }
 
 .riwayat-table tbody tr:hover {
