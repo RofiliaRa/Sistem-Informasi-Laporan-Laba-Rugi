@@ -82,63 +82,66 @@
 {{-- RINGKASAN LAPORAN TERBARU --}}
 <div class="card direktur-laporan-card mb-4 border-0 shadow-sm rounded-4">
     <div class="card-header bg-white border-0 py-4 px-4">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h4 class="fw-bold text-primary mb-1">Riwayat Laporan Keuangan</h4>
-                <small class="text-muted">Laporan keuangan bulanan Unit Usaha Fotokopi Jayadirana</small>
-            </div>
-            <a href="{{ route('direktur.riwayat.index') }}" class="btn btn-outline-primary btn-sm rounded-3 px-3 py-2 fw-semibold">
-                Lihat Semua Riwayat <i class="bi bi-arrow-right ms-1"></i>
-            </a>
+        <div>
+            <h4 class="fw-bold text-primary mb-1">Laporan Bulanan Terbaru</h4>
+            <small class="text-muted d-block">
+                Menampilkan 3 laporan laba rugi terbaru
+            </small>
         </div>
     </div>
 
     <div class="card-body pt-0 px-4 pb-4">
-        @if(!isset($riwayatLaporan) || $riwayatLaporan->isEmpty())
+        @if(!isset($laporanTerbaru) || $laporanTerbaru->isEmpty())
             <div class="alert alert-light border mb-0 text-center py-4">
-                <i class="bi bi-info-circle me-2"></i> Belum ada data laporan keuangan.
+                <i class="bi bi-info-circle me-2"></i> Belum ada data laporan laba rugi.
             </div>
         @else
             <div class="table-responsive">
-                <table class="table direktur-table text-nowrap align-middle mb-0">
+                <table class="riwayat-table text-nowrap">
                     <thead>
                         <tr>
                             <th width="60" class="text-center">No</th>
                             <th class="text-start">Periode</th>
-                            <th class="text-end">Pendapatan</th>
-                            <th class="text-end">Pengeluaran</th>
-                            <th class="text-end">Laba / Rugi</th>
+                            <th class="text-start">Pendapatan</th>
+                            <th class="text-start">Pengeluaran</th>
+                            <th class="text-start">Laba / Rugi</th>
                             <th width="120" class="text-center">Status</th>
-                            <th width="140" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($riwayatLaporan as $laporan)
+                        @foreach($laporanTerbaru->take(3) as $laporan)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td class="text-start fw-semibold">
                                     {{ \Carbon\Carbon::create()->month($laporan->bulan)->translatedFormat('F') }} {{ $laporan->tahun }}
                                 </td>
-                                <td class="text-end">
+                                <td class="text-start">
                                     Rp {{ number_format($laporan->total_pendapatan, 0, ',', '.') }}
                                 </td>
-                                <td class="text-end">
+                                <td class="text-start">
                                     Rp {{ number_format($laporan->total_pengeluaran, 0, ',', '.') }}
                                 </td>
-                                <td class="text-end fw-bold {{ $laporan->laba_bersih >= 0 ? 'text-success' : 'text-danger' }}">
-                                    Rp {{ number_format(abs($laporan->laba_bersih), 0, ',', '.') }}
-                                </td>
-                                <td class="text-center">
-                                    @if($laporan->status == 'final')
-                                        <span class="badge bg-success rounded-pill px-3 py-2">Final</span>
+                                <td class="text-start">
+                                    @if($laporan->laba_bersih >= 0)
+                                        <span class="nominal-profit">
+                                            Rp {{ number_format($laporan->laba_bersih, 0, ',', '.') }}
+                                        </span>
                                     @else
-                                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Draft</span>
+                                        <span class="nominal-loss">
+                                            Rp {{ number_format(abs($laporan->laba_bersih), 0, ',', '.') }}
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('direktur.laporan.pdf', ['bulan' => sprintf('%04d-%02d', $laporan->tahun, $laporan->bulan)]) }}" class="btn btn-sm btn-outline-danger px-3 py-1 rounded-3">
-                                        <i class="bi bi-file-earmark-pdf me-1"></i> PDF
-                                    </a>
+                                    @if($laporan->status == 'final')
+                                        <span class="status-badge status-final">
+                                            Final
+                                        </span>
+                                    @else
+                                        <span class="status-badge status-draft">
+                                            Draft
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

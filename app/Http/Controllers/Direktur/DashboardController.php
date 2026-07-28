@@ -48,6 +48,7 @@ class DashboardController extends Controller
             'totalPengeluaran' => $totalPengeluaran,
             'labaBersih' => $labaBersih,
             'laporanTerbaru' => $laporanTerbaru,
+            'riwayatLaporan' => $laporanTerbaru,
             'periodeAktif' => $now->translatedFormat('F Y'),
             'todayText' => $now->translatedFormat('l, d F Y'),
             'chartLabels' => $chartLabels,
