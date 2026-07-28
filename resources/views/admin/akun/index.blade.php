@@ -5,7 +5,7 @@
 {{-- HEADER UTAMA --}}
 @php
     $actionBtn = auth()->user()->role == 'admin'
-        ? '<button class="btn btn-primary px-4 py-2 rounded-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah"><i class="bi bi-plus-circle me-1"></i> Tambah Akun</button>'
+        ? '<button class="btn btn-primary px-4 py-2 rounded-3 shadow-sm w-100 w-sm-auto" data-bs-toggle="modal" data-bs-target="#modalTambah"><i class="bi bi-plus-circle me-1"></i> Tambah Akun</button>'
         : null;
 @endphp
 
@@ -17,7 +17,6 @@
 
 {{-- DATA AKUN PANEL --}}
 <div class="dash-panel-card-pro">
-
     {{-- HEADER CARD --}}
     @include('partials.panel-header', [
         'title' => 'Data Akun Pengguna',
@@ -29,7 +28,7 @@
     {{-- BODY --}}
     <div class="dash-panel-body">
         <div class="table-responsive">
-            <table class="akun-table">
+            <table class="akun-table text-nowrap">
                 <thead class="akun-thead">
                     <tr>
                         <th width="70" class="text-center">No</th>
@@ -60,11 +59,11 @@
                         {{-- ROLE --}}
                         <td class="text-center">
                             @if($user->role == 'admin')
-                                <span class="badge rounded-pill bg-success px-4 py-2">
+                                <span class="badge rounded-pill bg-success px-3 py-2 badge-fixed">
                                     Admin
                                 </span>
                             @else
-                                <span class="badge rounded-pill bg-primary px-4 py-2">
+                                <span class="badge rounded-pill bg-primary px-3 py-2 badge-fixed">
                                     Direktur
                                 </span>
                             @endif
@@ -72,14 +71,13 @@
 
                         {{-- AKSI --}}
                         <td class="text-center">
-                            <div class="action-group">
+                            <div class="action-group justify-content-center">
                                 <button
                                     class="btn btn-outline-primary btn-action"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalEdit{{ $user->id }}"
                                 >
-                                    <i class="bi bi-pencil-square me-1"></i>
-                                    Edit
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
                                 </button>
 
                                 @if(auth()->user()->role == 'admin')
@@ -95,8 +93,7 @@
                                             type="submit"
                                             class="btn btn-outline-danger btn-action"
                                         >
-                                            <i class="bi bi-trash me-1"></i>
-                                            Hapus
+                                            <i class="bi bi-trash me-1"></i> Hapus
                                         </button>
                                     </form>
                                 @endif
@@ -120,7 +117,7 @@
     </div>
 </div>
 
-{{-- MODAL EDIT AKUN (Ditaruh diluar table agar HTML valid & responsive) --}}
+{{-- MODAL EDIT AKUN --}}
 @foreach($users as $user)
     <div
         class="modal fade"
@@ -130,7 +127,7 @@
         aria-hidden="true"
     >
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content rounded-4 border-0 shadow">
                 <form
                     action="{{ route('admin.akun.update', $user->id) }}"
                     method="POST"
@@ -138,10 +135,9 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditLabel{{ $user->id }}">
-                            <i class="bi bi-pencil-square me-2 text-primary"></i>
-                            Edit Akun
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold" id="modalEditLabel{{ $user->id }}">
+                            <i class="bi bi-pencil-square me-2 text-primary"></i> Edit Akun
                         </h5>
                         <button
                             type="button"
@@ -151,11 +147,9 @@
                         ></button>
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body py-3">
                         <div class="mb-3">
-                            <label class="form-label">
-                                Nama Pengguna
-                            </label>
+                            <label class="form-label fw-semibold">Nama Pengguna</label>
                             <input
                                 type="text"
                                 name="name"
@@ -166,9 +160,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Email
-                            </label>
+                            <label class="form-label fw-semibold">Email</label>
                             <input
                                 type="email"
                                 name="email"
@@ -180,23 +172,12 @@
 
                         @if(auth()->user()->role == 'admin')
                             <div class="mb-3">
-                                <label class="form-label">
-                                    Role
-                                </label>
-                                <select
-                                    name="role"
-                                    class="form-select"
-                                >
-                                    <option
-                                        value="admin"
-                                        {{ $user->role == 'admin' ? 'selected' : '' }}
-                                    >
+                                <label class="form-label fw-semibold">Role</label>
+                                <select name="role" class="form-select">
+                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>
                                         Admin
                                     </option>
-                                    <option
-                                        value="direktur"
-                                        {{ $user->role == 'direktur' ? 'selected' : '' }}
-                                    >
+                                    <option value="direktur" {{ $user->role == 'direktur' ? 'selected' : '' }}>
                                         Direktur
                                     </option>
                                 </select>
@@ -204,7 +185,7 @@
                         @endif
 
                         <div class="mb-3">
-                            <label class="form-label">Password Baru</label>
+                            <label class="form-label fw-semibold">Password Baru</label>
                             <div class="input-group">
                                 <input
                                     type="password"
@@ -212,11 +193,11 @@
                                     id="password_edit{{ $user->id }}"
                                     class="form-control"
                                     minlength="8"
-                                    placeholder="Kosongkan jika tidak ingin mengganti password"
+                                    placeholder="Kosongkan jika tidak mengganti password"
                                 >
                                 <button
                                     type="button"
-                                    class="btn btn-outline-secondary"
+                                    class="btn btn-outline-secondary px-3"
                                     onclick="togglePassword('password_edit{{ $user->id }}')"
                                 >
                                     <i class="bi bi-eye"></i>
@@ -228,7 +209,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Konfirmasi Password Baru</label>
+                            <label class="form-label fw-semibold">Konfirmasi Password Baru</label>
                             <div class="input-group">
                                 <input
                                     type="password"
@@ -239,7 +220,7 @@
                                 >
                                 <button
                                     type="button"
-                                    class="btn btn-outline-secondary"
+                                    class="btn btn-outline-secondary px-3"
                                     onclick="togglePassword('password_confirmation_edit{{ $user->id }}')"
                                 >
                                     <i class="bi bi-eye"></i>
@@ -248,17 +229,17 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer">
+                    <div class="modal-footer border-top-0 pt-0">
                         <button
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-secondary px-3 rounded-3"
                             data-bs-dismiss="modal"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
-                            class="btn btn-primary"
+                            class="btn btn-primary px-4 rounded-3"
                         >
                             Simpan Perubahan
                         </button>
@@ -279,7 +260,7 @@
         aria-hidden="true"
     >
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content rounded-4 border-0 shadow">
                 <form
                     action="{{ route('admin.akun.store') }}"
                     method="POST"
@@ -287,10 +268,9 @@
                 >
                     @csrf
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTambahLabel">
-                            <i class="bi bi-person-plus me-2 text-primary"></i>
-                            Tambah Akun
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold" id="modalTambahLabel">
+                            <i class="bi bi-person-plus me-2 text-primary"></i> Tambah Akun
                         </h5>
                         <button
                             type="button"
@@ -300,11 +280,9 @@
                         ></button>
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body py-3">
                         <div class="mb-3">
-                            <label class="form-label">
-                                Nama Pengguna
-                            </label>
+                            <label class="form-label fw-semibold">Nama Pengguna</label>
                             <input
                                 type="text"
                                 name="name"
@@ -315,9 +293,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Email
-                            </label>
+                            <label class="form-label fw-semibold">Email</label>
                             <input
                                 type="email"
                                 name="email"
@@ -328,7 +304,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
+                            <label class="form-label fw-semibold">Password</label>
                             <div class="input-group">
                                 <input
                                     type="password"
@@ -340,7 +316,7 @@
                                 >
                                 <button
                                     type="button"
-                                    class="btn btn-outline-secondary"
+                                    class="btn btn-outline-secondary px-3"
                                     onclick="togglePassword('password_tambah')"
                                 >
                                     <i class="bi bi-eye"></i>
@@ -352,7 +328,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Konfirmasi Password</label>
+                            <label class="form-label fw-semibold">Konfirmasi Password</label>
                             <div class="input-group">
                                 <input
                                     type="password"
@@ -364,7 +340,7 @@
                                 >
                                 <button
                                     type="button"
-                                    class="btn btn-outline-secondary"
+                                    class="btn btn-outline-secondary px-3"
                                     onclick="togglePassword('password_confirmation_tambah')"
                                 >
                                     <i class="bi bi-eye"></i>
@@ -373,34 +349,25 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Role
-                            </label>
-                            <select
-                                name="role"
-                                class="form-select"
-                            >
-                                <option value="admin">
-                                    Admin
-                                </option>
-                                <option value="direktur">
-                                    Direktur
-                                </option>
+                            <label class="form-label fw-semibold">Role</label>
+                            <select name="role" class="form-select">
+                                <option value="admin">Admin</option>
+                                <option value="direktur">Direktur</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="modal-footer">
+                    <div class="modal-footer border-top-0 pt-0">
                         <button
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-secondary px-3 rounded-3"
                             data-bs-dismiss="modal"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
-                            class="btn btn-primary"
+                            class="btn btn-primary px-4 rounded-3"
                         >
                             Simpan
                         </button>
@@ -425,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 showCancelButton: true,
                 confirmButtonColor: '#dc3545',
                 cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Iya',
+                confirmButtonText: 'Iya, Hapus',
                 cancelButtonText: 'Batal',
                 reverseButtons: true
             }).then((result) => {
@@ -439,10 +406,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function togglePassword(id) {
     let input = document.getElementById(id);
-    if(input.type === 'password') {
-        input.type = 'text';
-    } else {
-        input.type = 'password';
+    if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
     }
 }
 </script>
