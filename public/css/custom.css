@@ -2742,4 +2742,10 @@ REPORT MODERN UI
     .dots-line {
         display: none;
     }
+
+    .header-action-mobile-full,
+    .header-action-mobile-full form,
+    .header-action-mobile-full .btn {
+        width: 100% !important;
+    }
 }

@@ -29,7 +29,7 @@
             </small>
         </div>
 
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="header-action-mobile-full d-flex flex-column flex-md-row align-items-center gap-2">
             {{-- ADMIN FINALISASI BUTTON --}}
             @if(auth()->user()->role == 'admin')
                 @if($laporanAktif)
