@@ -1,30 +1,34 @@
 <div class="dash-panel-card-pro mb-4">
-    <div class="dash-panel-body">
+    <div class="dash-panel-body py-3 px-4">
         <form method="GET" action="{{ $action }}">
-            <div class="row align-items-end g-3">
-                {{-- INPUT PERIODE (KIRI) --}}
-                <div class="col-12 col-md-6 col-lg-4">
-                    <label class="form-label fw-semibold">Pilih Periode</label>
+            <div class="d-flex align-items-center flex-wrap gap-2 gap-sm-3">
+                <label for="filterBulan" class="form-label fw-semibold mb-0 text-nowrap me-1">
+                    Pilih Periode
+                </label>
+
+                <div class="input-group" style="width: auto;">
                     <input
                         type="month"
                         name="bulan"
+                        id="filterBulan"
                         class="form-control"
+                        style="max-width: 190px;"
                         value="{{ request('bulan', now()->format('Y-m')) }}"
+                        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); this.form.submit(); }"
+                        onchange="this.form.submit()"
                     >
-                </div>
-
-                {{-- TOMBOL TAMPILKAN & RESET (KANAN DI DESKTOP) --}}
-                <div class="col-12 col-md-auto ms-md-auto d-flex align-items-center gap-2">
-                    <button type="submit" class="btn btn-primary px-4 py-2 flex-fill flex-md-grow-0">
-                        <i class="bi bi-search me-1"></i> Tampilkan
+                    <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-1 px-3">
+                        <i class="bi bi-search"></i>
+                        <span>Tampilkan</span>
                     </button>
-
-                    @if(!empty($showReset))
-                        <a href="{{ $action }}" class="btn btn-secondary px-4 py-2 flex-fill flex-md-grow-0">
-                            <i class="bi bi-arrow-clockwise me-1"></i> Reset
-                        </a>
-                    @endif
                 </div>
+
+                @if(!empty($showReset))
+                    <a href="{{ $action }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 px-3">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <span>Reset</span>
+                    </a>
+                @endif
             </div>
         </form>
     </div>
