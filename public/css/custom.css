@@ -865,50 +865,43 @@ body {
     box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
 }
 
-.chart-card .card-header {
-    background: #ffffff;
+.chart-card .card-header{
 
-    border-bottom: 1px solid #edf2f7;
+    background:#ffffff;
 
-    padding: 18px 22px;
+    border-bottom:1px solid #edf2f7;
+
+    padding:18px 22px;
+
 }
 
-.chart-card .card-header h5 {
-    margin: 0;
+.chart-card .card-header h5{
 
-    font-size: 18px;
+    margin:0;
 
-    font-weight: 700;
+    font-size:18px;
 
-    color: #12365f;
+    font-weight:700;
+
+    color:#12365f;
+
 }
 
-.chart-card .card-body {
-    background: #ffffff;
+.chart-card .card-body{
 
-    padding: 20px 22px;
+    background:#ffffff;
+
+    padding:20px 22px;
+
 }
 
-/* ===========================================================
-   GRAFIK DASHBOARD DIREKTUR
-=========================================================== */
+#adminFinanceChart{
 
-.direktur-chart-wrapper{
-    position:relative;
-    width:100%;
-    height:220px;
-}
+    width:100%!important;
 
-#direkturFinanceChart{
-    width:100% !important;
-    height:100% !important;
-}
+    height:1600px!important;
 
-@media (max-width:991px){
-
-    .direktur-chart-wrapper{
-        height:220px;
-    }
+    max-height:160px;
 
 }
 
@@ -1022,10 +1015,24 @@ body {
    TABLE TRANSAKSI
 ========================================================== */
 
-.table-responsive {
-    border-radius: 16px;
+.table-responsive{
 
-    overflow: hidden;
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.dash-table-pro{
+
+    width:100%;
+
+    margin-bottom:0;
+
+    border-collapse:collapse;
+
+    table-layout:fixed;
+
 }
 
 /* ==========================
@@ -1036,8 +1043,9 @@ body {
     background: #f8fafc;
 }
 
-.dash-table-pro thead th {
-    padding: 14px 16px;
+.dash-table-pro thead th{
+
+    padding:15px 10px;
 
     text-align: center;
 
@@ -1060,8 +1068,9 @@ body {
    BODY
 ========================== */
 
-.dash-table-pro tbody td {
-    padding: 14px 16px;
+.dash-table-pro tbody td{
+
+    padding:16px 10px;
 
     text-align: center;
 
@@ -1080,44 +1089,10 @@ body {
     border-bottom: none;
 }
 
-.dash-table-pro tbody tr:hover {
-    background: #f8fbff;
-}
+.dash-table-pro tbody tr:hover{
 
-/* ==========================
-   TABEL TRANSAKSI
-========================== */
+    background:#f8fbff;
 
-.dash-table-pro{
-    width:100%;
-    margin-bottom:0;
-    border-collapse:collapse;
-    table-layout:fixed;
-}
-
-.dash-table-pro th,
-.dash-table-pro td{
-    padding:16px 18px;
-    vertical-align:middle;
-}
-
-/* ---------- HEADER ---------- */
-
-.dash-table-pro thead th{
-    background:#f8fafc;
-    color:#475569;
-    font-size:14px;
-    font-weight:700;
-    border-bottom:1px solid #e5e7eb;
-    white-space:nowrap;
-}
-
-/* ---------- BODY ---------- */
-
-.dash-table-pro tbody td{
-    font-size:15px;
-    color:#1e293b;
-    border-bottom:1px solid #eef2f7;
 }
 
 /* ==========================
@@ -1148,21 +1123,21 @@ body {
     width: 18%;
 }
 
-.col-keterangan {
-    width: 16%;
+.col-keterangan{
+
+    width:29%;
+
+    text-align:center;
 
     font-weight: 500;
 
-    word-break: break-word;
+    word-break:break-word;
+
 }
 
-.dash-table-pro tbody td.col-keterangan{
-     text-align: left !important;
-     padding: 0;
-}
+.col-nominal{
 
-.col-nominal {
-    width: 29%;
+    width:20%;
 
     white-space: nowrap;
 
@@ -1506,9 +1481,12 @@ body {
 #adminFinanceChart {
     width: 100% !important;
 
-    height: 220px !important;
+    width:100%!important;
 
-    max-height: 220px;
+    height:180px!important;
+
+    max-height:180px;
+
 }
 
 /* ==========================
@@ -1547,32 +1525,64 @@ body {
    TABEL
 ========================== */
 
-.nominal-pendapatan {
-    color: #16a34a;
+.dash-table-pro thead th{
 
-    font-size: 14px;
+    background:#f8fafc;
 
-    font-weight: 700;
+    color:#475569;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    padding:10px 8px;
+
+    border-bottom:1px solid #e5e7eb;
+
 }
 
-.nominal-pengeluaran {
-    color: #dc2626;
+.dash-table-pro tbody td{
 
-    font-size: 14px;
+    padding:10px 8px;
 
-    font-weight: 700;
+    font-size:13px;
+
+    border-bottom:1px solid #f1f5f9;
+
 }
 
-.dash-badge {
-    min-width: 88px;
+.nominal-pendapatan{
 
-    height: 28px;
+    color:#16a34a;
 
-    border-radius: 999px;
+    font-size:14px;
 
-    font-size: 12px;
+    font-weight:700;
 
-    font-weight: 700;
+}
+
+.nominal-pengeluaran{
+
+    color:#dc2626;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+.dash-badge{
+
+    min-width:88px;
+
+    height:28px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
 }
 
 /* ==========================
@@ -2893,115 +2903,46 @@ REPORT MODERN UI
 
     font-size: 13px;
 
-    font-weight: 700;
+    font-weight:600;
 
-    border-bottom: 1px solid #e5e7eb;
+    transition:all .25s ease;
 
-    white-space: nowrap;
 }
 
-.table-pendapatan tbody td {
-    padding: 13px 10px;
+.dash-logout-btn:hover{
 
-    vertical-align: middle;
+    background:rgba(255,255,255,.14);
 
-    font-size: 14px;
+    color:#ffffff;
 
-    color: #1e293b;
+    transform:translateX(2px);
 
-    border-bottom: 1px solid #eef2f7;
-
-    white-space: nowrap;
 }
 
-.table-pendapatan tbody tr:hover {
-    background: #f8fbff;
+.dash-logout-btn:focus{
+
+    outline:none;
+
+    box-shadow:none;
+
 }
 
-@media (max-width: 768px) {
-    .btn-form-mobile-full,
-    .btn-form-mobile-full .btn {
-        width: 100% !important;
-    }
+.dash-logout-btn i{
+
+    width:20px;
+
+    text-align:center;
+
+    font-size:17px;
+
+    flex-shrink:0;
+
 }
 
-.badge-fixed {
-    display: inline-block;
+.dash-logout-btn span{
 
-    min-width: 110px;
+    flex:1;
 
-    text-align: center;
-}
+    text-align:left;
 
-/* ==========================================================
-   PERBAIKAN HALAMAN PENDAPATAN
-========================================================== */
-
-/* Memperpendek kolom pencarian */
-.search-box{
-    width: 260px;
-    min-width: 260px;
-}
-
-/* Memperkecil jarak antar kolom Jumlah, Harga, dan Total */
-.table-pendapatan th:nth-child(5),
-.table-pendapatan td:nth-child(5),
-.table-pendapatan th:nth-child(6),
-.table-pendapatan td:nth-child(6),
-.table-pendapatan th:nth-child(7),
-.table-pendapatan td:nth-child(7){
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
-/* Memperbesar sedikit tulisan pada badge kategori */
-.badge-fixed{
-    font-size: 14px;
-    font-weight: 700;
-}
-
-/* ==========================================================
-   MOBILE STICKY TOP NAVBAR HEADER
-========================================================== */
-
-.dash-mobile-navbar {
-    position: sticky;
-
-    top: 0;
-
-    z-index: 1020;
-
-    background: #ffffff;
-
-    padding: 10px 16px;
-
-    margin-top: -24px;
-
-    margin-left: -24px;
-
-    margin-right: -24px;
-
-    border-bottom: 1px solid #e2e8f0;
-
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-}
-
-.dash-mobile-page-title {
-    font-size: 16px;
-
-    color: #0f172a;
-
-    font-weight: 700;
-}
-
-@media (max-width: 768px) {
-    .dash-mobile-navbar {
-        margin-top: -16px;
-
-        margin-left: -16px;
-
-        margin-right: -16px;
-
-        padding: 10px 14px;
-    }
 }

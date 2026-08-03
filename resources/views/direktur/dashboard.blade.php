@@ -192,6 +192,7 @@ if (direkturCtx) {
     maintainAspectRatio: false,
 
 
+            responsive: true,
             plugins: {
                 legend: {
                     position: 'top'

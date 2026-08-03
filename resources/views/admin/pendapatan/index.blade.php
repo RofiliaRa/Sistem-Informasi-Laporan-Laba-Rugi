@@ -52,16 +52,15 @@
                 {{-- TANGGAL --}}
                 <div class="col-12 col-md-4">
                     <label class="form-label fw-semibold">Tanggal</label>
-<input
-    type="text"
-    name="tanggal"
-    id="tanggalInput"
-    class="form-control"
-    value="{{ date('Y-m-d') }}"
-    autocomplete="off"
-    required
-    {{ isset($laporanFinal) && $laporanFinal ? 'disabled' : '' }}
->
+                    <input
+                        type="date"
+                        name="tanggal"
+                        id="tanggalInput"
+                        class="form-control"
+                        value="{{ date('Y-m-d') }}"
+                        required
+                        {{ isset($laporanFinal) && $laporanFinal ? 'disabled' : '' }}
+                    >
                 </div>
 
                 {{-- KATEGORI --}}
@@ -213,7 +212,18 @@
             class="form-control"
             style="width: 300px;"
             value="{{ request('search') }}"
+            class="d-flex align-items-center gap-2 w-100 w-md-auto"
+            method="GET"
+            action="{{ route('admin.pendapatan.index') }}"
         >
+            <input
+                type="text"
+                id="searchInput"
+                name="search"
+                class="form-control"
+                placeholder="Cari Transaksi..."
+                value="{{ request('search') }}"
+            >
 
             <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 px-3">
             <i class="bi bi-search"></i>
@@ -336,12 +346,128 @@
             {{ $pendapatans->links() }}
         </div>
     </div>
+            <button type="submit" class="btn btn-primary text-nowrap px-3">
+                <i class="bi bi-search me-1"></i> Cari
+            </button>
+
+            @if(request('search'))
+                <a href="{{ route('admin.pendapatan.index') }}" class="btn btn-secondary text-nowrap px-3">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Reset
+                </a>
+            @endif
+        </form>
+    </div>
+
+    <div class="dash-panel-body">
+        <div class="table-responsive">
+            <table class="table table-pendapatan text-nowrap align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th width="60" class="text-center">No</th>
+                        <th width="120" class="text-center">Tanggal</th>
+                        <th width="140" class="text-center">Kategori</th>
+                        <th class="text-start">Nama Barang / Jasa</th>
+                        <th width="80" class="text-center">Jumlah</th>
+                        <th width="140" class="text-end">Harga</th>
+                        <th width="160" class="text-end">Total</th>
+                        <th width="160" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse($pendapatans as $item)
+                    <tr>
+                        <td class="text-center">
+                            {{ $pendapatans->firstItem() + $loop->index }}
+                        </td>
+
+                        <td class="text-center">
+                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}
+                        </td>
+
+                        <td class="text-center">
+                            @if(strtolower($item->category->nama_kategori ?? '') == 'jasa')
+                                <span class="badge bg-primary rounded-pill px-3 py-2 badge-fixed">
+                                    Jasa
+                                </span>
+                            @else
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2 badge-fixed">
+                                    {{ $item->category->nama_kategori ?? 'ATK & Lainnya' }}
+                                </span>
+                            @endif
+                        </td>
+
+                        <td class="text-start fw-semibold">
+                            {{ $item->nama_barang }}
+                        </td>
+
+                        <td class="text-center">
+                            {{ number_format($item->jumlah, 0, ',', '.') }}
+                        </td>
+
+                        <td class="text-end">
+                            Rp {{ number_format($item->harga, 0, ',', '.') }}
+                        </td>
+
+                        <td class="text-end fw-bold text-success">
+                            Rp {{ number_format($item->total, 0, ',', '.') }}
+                        </td>
+
+                        <td class="text-center">
+                            @if(isset($laporanFinal) && $laporanFinal)
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    Terkunci
+                                </span>
+                            @else
+                                <div class="action-group justify-content-center">
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-primary btn-action btn-edit"
+                                        data-update-url="{{ route('admin.pendapatan.update', $item->id) }}"
+                                        data-tanggal="{{ $item->tanggal }}"
+                                        data-category-id="{{ $item->category_id }}"
+                                        data-category-name="{{ strtolower($item->category->nama_kategori ?? '') }}"
+                                        data-nama-barang="{{ $item->nama_barang }}"
+                                        data-jumlah="{{ $item->jumlah }}"
+                                        data-harga="{{ $item->harga }}"
+                                    >
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+
+                                    <form
+                                        action="{{ route('admin.pendapatan.destroy', $item->id) }}"
+                                        method="POST"
+                                        class="form-hapus d-inline"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger btn-action btn-hapus"
+                                        >
+                                            <i class="bi bi-trash me-1"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    @include('partials.empty-table', [
+                        'colspan' => 8,
+                        'message' => request('search') ? 'Data pendapatan yang dicari tidak ditemukan.' : 'Belum ada data pendapatan.'
+                    ])
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-center justify-content-md-end">
+            {{ $pendapatans->links() }}
+        </div>
+    </div>
 </div>
 
-@endsection
-
 @push('scripts')
-
 <script>
     
     /*
@@ -369,279 +495,159 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+document.addEventListener('DOMContentLoaded', function () {
+    const storeUrl = "{{ route('admin.pendapatan.store') }}";
 
-const categorySelect = document.getElementById('categorySelect');
+    const formTitle = document.getElementById('formTitle');
+    const pendapatanForm = document.getElementById('pendapatanForm');
+    const formMethod = document.getElementById('formMethod');
+    const submitButton = document.getElementById('submitButton');
+    const cancelEditButton = document.getElementById('cancelEditButton');
 
-const jasaSelectWrapper = document.getElementById('jasaSelectWrapper');
-const jasaSelect = document.getElementById('jasaSelect');
+    const tanggalInput = document.getElementById('tanggalInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const jasaSelectWrapper = document.getElementById('jasaSelectWrapper');
+    const jasaSelect = document.getElementById('jasaSelect');
+    const manualNamaWrapper = document.getElementById('manualNamaWrapper');
+    const namaBarangInput = document.getElementById('namaBarangInput');
+    const jumlahInput = document.getElementById('jumlahInput');
+    const hargaInput = document.getElementById('hargaInput');
+    const totalHargaView = document.getElementById('totalHargaView');
 
-const manualNamaWrapper = document.getElementById('manualNamaWrapper');
-
-const namaBarangInput = document.getElementById('namaBarangInput');
-
-const jumlahInput = document.getElementById('jumlahInput');
-const hargaInput = document.getElementById('hargaInput');
-
-const totalHargaView = document.getElementById('totalHargaView');
-
-function formatRupiah(angka) {
-
-    return 'Rp ' + Number(angka || 0).toLocaleString('id-ID');
-
-}
-
-function isKategoriJasa(namaKategori) {
-
-    return namaKategori.includes('jasa');
-
-}
-
-function hitungHargaFotokopi(jumlah) {
-
-    if (jumlah >= 1 && jumlah <= 10) return 500;
-    if (jumlah >= 11 && jumlah <= 20) return 300;
-    if (jumlah > 20) return 250;
-
-    return 0;
-
-}
-
-function tampilkanModeForm() {
-
-    const selected = categorySelect.options[categorySelect.selectedIndex];
-
-    const namaKategori = selected
-        ? (selected.getAttribute('data-name') || '')
-        : '';
-
-    if (isKategoriJasa(namaKategori)) {
-
-        jasaSelectWrapper.classList.remove('d-none');
-
-        manualNamaWrapper.classList.add('d-none');
-
-        namaBarangInput.removeAttribute('required');
-
-        hargaInput.readOnly = true;
-
-    } else {
-
-        jasaSelectWrapper.classList.add('d-none');
-
-        manualNamaWrapper.classList.remove('d-none');
-
-        namaBarangInput.setAttribute('required', true);
-
-        hargaInput.readOnly = false;
-
+    function formatRupiah(angka) {
+        return 'Rp ' + Number(angka || 0).toLocaleString('id-ID');
     }
 
-}
+    function hitungTotal() {
+        const jumlah = parseInt(jumlahInput.value) || 0;
+        const harga = parseFloat(hargaInput.value) || 0;
+        totalHargaView.value = formatRupiah(jumlah * harga);
+    }
 
-function hitungTotal() {
+    function handleCategoryChange() {
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+        const categoryName = selectedOption ? selectedOption.dataset.name : '';
 
-    const jumlah = parseInt(jumlahInput.value) || 0;
-
-    let harga = parseFloat(hargaInput.value) || 0;
-
-    const selectedJasa = jasaSelect.options[jasaSelect.selectedIndex];
-
-    if (selectedJasa) {
-
-        const type = selectedJasa.getAttribute('data-type');
-
-        if (type === 'fotokopi') {
-
-            harga = hitungHargaFotokopi(jumlah);
-
-            hargaInput.value = harga;
-
+        if (categoryName === 'jasa') {
+            jasaSelectWrapper.classList.remove('d-none');
+            manualNamaWrapper.classList.add('d-none');
+            namaBarangInput.removeAttribute('required');
         } else {
-
-            const hargaJasa = selectedJasa.getAttribute('data-harga');
-
-            if (hargaJasa) {
-
-                harga = hargaJasa;
-
-                hargaInput.value = hargaJasa;
-
-            }
-
+            jasaSelectWrapper.classList.add('d-none');
+            manualNamaWrapper.classList.remove('d-none');
+            namaBarangInput.setAttribute('required', 'required');
         }
-
     }
 
-    totalHargaView.value = formatRupiah(jumlah * harga);
+    function handleJasaChange() {
+        const selectedOption = jasaSelect.options[jasaSelect.selectedIndex];
+        if (selectedOption && selectedOption.value !== '') {
+            namaBarangInput.value = selectedOption.value;
+            const harga = selectedOption.dataset.harga;
+            if (harga !== undefined && harga !== '0') {
+                hargaInput.value = harga;
+            }
+            hitungTotal();
+        }
+    }
 
-}
+    function resetForm() {
+        pendapatanForm.action = storeUrl;
+        formMethod.value = 'POST';
+        formTitle.textContent = 'Input Pendapatan';
 
-categorySelect.addEventListener('change', tampilkanModeForm);
-
-jasaSelect.addEventListener('change', function () {
-
-    namaBarangInput.value = this.value;
-
-    hitungTotal();
-
-});
-
-jumlahInput.addEventListener('input', hitungTotal);
-
-hargaInput.addEventListener('input', hitungTotal);
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    tampilkanModeForm();
-
-    hitungTotal();
-
-});
-
-/*
-|--------------------------------------------------------------------------
-| EDIT DATA
-|--------------------------------------------------------------------------
-*/
-
-const pendapatanForm = document.getElementById('pendapatanForm');
-const formMethod = document.getElementById('formMethod');
-
-const formTitle = document.getElementById('formTitle');
-
-const submitButton = document.getElementById('submitButton');
-const cancelEditButton = document.getElementById('cancelEditButton');
-
-document.querySelectorAll('.btn-edit').forEach(button => {
-
-    button.addEventListener('click', function () {
-
-        pendapatanForm.action = this.dataset.updateUrl;
-
-        formMethod.value = 'PUT';
-
-        formTitle.textContent = 'Edit Pendapatan';
-
-        submitButton.textContent = 'Simpan Perubahan';
-
-        cancelEditButton.classList.remove('d-none');
-
-        document.getElementById('tanggalInput').value = this.dataset.tanggal;
-
-        categorySelect.value = this.dataset.categoryId;
-
-        document.getElementById('namaBarangInput').value = this.dataset.namaBarang;
-
-        jumlahInput.value = this.dataset.jumlah;
-
-        hargaInput.value = this.dataset.harga;
-
-        tampilkanModeForm();
-
-        if (isKategoriJasa(this.dataset.categoryName)) {
-
-            jasaSelect.value = this.dataset.namaBarang;
-
+        if(submitButton){
+            submitButton.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Pendapatan';
         }
 
-        hitungTotal();
+        if(cancelEditButton){
+            cancelEditButton.classList.add('d-none');
+        }
 
-        window.scrollTo({
+        tanggalInput.value = "{{ date('Y-m-d') }}";
+        categorySelect.value = '';
+        jasaSelect.value = '';
+        namaBarangInput.value = '';
+        jumlahInput.value = '';
+        hargaInput.value = '';
+        totalHargaView.value = 'Rp 0';
+        handleCategoryChange();
+    }
 
-            top: 0,
-            behavior: 'smooth'
+    categorySelect?.addEventListener('change', handleCategoryChange);
+    jasaSelect?.addEventListener('change', handleJasaChange);
+    jumlahInput?.addEventListener('input', hitungTotal);
+    hargaInput?.addEventListener('input', hitungTotal);
 
-        });
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            pendapatanForm.action = this.dataset.updateUrl;
+            formMethod.value = 'PUT';
+            formTitle.textContent = 'Edit Pendapatan';
 
-    });
-
-});
-
-/*
-|--------------------------------------------------------------------------
-| BATAL EDIT
-|--------------------------------------------------------------------------
-*/
-
-cancelEditButton.addEventListener('click', function () {
-
-    pendapatanForm.action = "{{ route('admin.pendapatan.store') }}";
-
-    formMethod.value = 'POST';
-
-    formTitle.textContent = 'Input Pendapatan';
-
-    submitButton.textContent = 'Simpan Pendapatan';
-
-    cancelEditButton.classList.add('d-none');
-
-    pendapatanForm.reset();
-
-    document.getElementById('totalHargaView').value = 'Rp 0';
-
-    tampilkanModeForm();
-
-});
-
-document.querySelectorAll('.btn-hapus').forEach(button => {
-
-    button.addEventListener('click', function () {
-
-        let form = this.closest('.form-hapus');
-
-        Swal.fire({
-
-            title: 'Hapus Data?',
-            text: 'Apakah Anda yakin ingin menghapus data ini?',
-            icon: 'warning',
-
-            showCancelButton: true,
-
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-
-            confirmButtonText: 'Ya, Hapus',
-            cancelButtonText: 'Batal'
-
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                form.submit();
-
+            if(submitButton){
+                submitButton.innerHTML = '<i class="bi bi-pencil-square me-1"></i> Simpan Perubahan';
             }
 
-        });
+            if(cancelEditButton){
+                cancelEditButton.classList.remove('d-none');
+            }
 
+            tanggalInput.value = this.dataset.tanggal;
+            categorySelect.value = this.dataset.categoryId;
+            handleCategoryChange();
+
+            namaBarangInput.value = this.dataset.namaBarang;
+            jumlahInput.value = this.dataset.jumlah;
+            hargaInput.value = this.dataset.harga;
+
+            hitungTotal();
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     });
 
-});
+    if(cancelEditButton){
+        cancelEditButton.addEventListener('click', resetForm);
+    }
 
-/*
-|--------------------------------------------------------------------------
-| PENCARIAN OTOMATIS
-|--------------------------------------------------------------------------
-*/
+    document.querySelectorAll('.btn-hapus').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('.form-hapus');
 
-document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'Apakah Anda yakin ingin menghapus data pendapatan ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
 
     const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            if (this.value.trim() === '') {
+                window.location.href = "{{ route('admin.pendapatan.index') }}";
+            }
+        });
+    }
 
-    if (!searchInput) return;
-
-    searchInput.addEventListener('input', function () {
-
-        // jika kolom dikosongkan
-        if (this.value.trim() === '') {
-
-            window.location.href = "{{ route('admin.pendapatan.index') }}";
-
-        }
-
-    });
-
+    hitungTotal();
 });
-
 </script>
-
 @endpush
+
+@endsection
