@@ -8,15 +8,14 @@
 
                 <div class="d-flex align-items-center gap-2">
     <input
-        type="month"
-        name="bulan"
-        id="filterBulan"
-        class="form-control"
-        style="width: 190px;"
-        value="{{ request('bulan', now()->format('Y-m')) }}"
-        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); this.form.submit(); }"
-        onchange="this.form.submit()"
-    >
+    type="text"
+    id="filterBulan"
+    name="bulan"
+    class="form-control"
+    style="width:190px;"
+    value="{{ request('bulan', now()->format('Y-m')) }}"
+    autocomplete="off"
+>
                     <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-1 px-3">
         <i class="bi bi-search"></i>
         <span>Tampilkan</span>
@@ -33,3 +32,33 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    flatpickr.localize(flatpickr.l10ns.id);
+
+    flatpickr("#filterBulan", {
+        locale: "id",
+
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: false,
+                dateFormat: "Y-m",
+                altFormat: "F Y"
+            })
+        ],
+
+        dateFormat: "Y-m",
+        altInput: true,
+        altFormat: "F Y",
+
+        defaultDate: document.getElementById("filterBulan").value,
+
+        allowInput: false
+    });
+
+});
+</script>
+@endpush

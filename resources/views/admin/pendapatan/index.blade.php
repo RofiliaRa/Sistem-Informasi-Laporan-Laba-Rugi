@@ -333,6 +333,10 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="d-flex justify-content-center mt-4">
+    {{ $pendapatans->links('pagination::bootstrap-5') }}
+</div>
 
 @push('scripts')
 <script>
