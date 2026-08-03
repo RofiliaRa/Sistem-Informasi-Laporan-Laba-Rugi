@@ -15,6 +15,9 @@
         {{ $title ?? 'Dashboard Sistem Laporan Laba Rugi' }}
 
     </title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
     <link
         rel="icon"
@@ -63,23 +66,56 @@
     <div class="dash-main">
 
         <main class="dash-content">
+            @php
+                $routeName = request()->route() ? request()->route()->getName() : '';
+                $pageTitle = 'Dashboard';
 
-            <div class="d-lg-none mb-3">
+                if (str_contains($routeName, 'dashboard')) {
+                    $pageTitle = 'Dashboard';
+                } elseif (str_contains($routeName, 'akun')) {
+                    $pageTitle = 'Kelola Akun';
+                } elseif (str_contains($routeName, 'pendapatan')) {
+                    $pageTitle = 'Data Pendapatan';
+                } elseif (str_contains($routeName, 'pengeluaran')) {
+                    $pageTitle = 'Data Pengeluaran';
+                } elseif (str_contains($routeName, 'laporan') && !str_contains($routeName, 'riwayat')) {
+                    $pageTitle = 'Laporan Laba Rugi';
+                } elseif (str_contains($routeName, 'riwayat')) {
+                    $pageTitle = 'Riwayat Laporan';
+                }
+            @endphp
 
-                <button
-                    class="btn dash-menu-btn"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#mobileSidebar">
+            {{-- MOBILE STICKY TOP NAVBAR HEADER --}}
+            <div class="dash-mobile-navbar d-lg-none mb-3">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="d-flex align-items-center gap-2">
+                        <button
+                            class="btn dash-menu-btn"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#mobileSidebar"
+                            aria-label="Navigasi Menu"
+                        >
+                            <i class="bi bi-list fs-4"></i>
+                        </button>
 
-                    <i class="bi bi-list"></i>
+                        <h5 class="dash-mobile-page-title mb-0">
+                            {{ $pageTitle }}
+                        </h5>
+                    </div>
 
-                </button>
-
+                    @auth
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-semibold">
+                                <i class="bi bi-person-circle me-1"></i>
+                                {{ auth()->user()->role == 'admin' ? 'Ketua Unit' : 'Direktur' }}
+                            </span>
+                        </div>
+                    @endauth
+                </div>
             </div>
 
             @yield('content')
-
         </main>
 
     </div>
@@ -94,15 +130,16 @@
     class="offcanvas offcanvas-start dash-offcanvas"
     tabindex="-1"
     id="mobileSidebar"
+    aria-labelledby="mobileSidebarLabel"
 >
 
     <div class="offcanvas-body p-0">
 
-        <aside class="dash-sidebar d-flex w-100">
+        <div class="dash-sidebar-mobile-container h-100">
 
             @include('partials.dashboard-sidebar')
 
-        </aside>
+        </div>
 
     </div>
 
@@ -213,6 +250,10 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 @stack('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 
 </body>
 </html>

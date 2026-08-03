@@ -400,7 +400,14 @@
 
             </td>
 
-            <td style="border:none; padding:0; text-align:right; font-size:20px; font-weight:700; color:#c62828;">
+            <td style="
+            border:none;
+            padding:0;
+            text-align:right;
+            font-size:20px;
+            font-weight:700;
+            color:{{ $labaBersih >= 0 ? '#16a34a' : '#dc2626' }};
+            ">
 
                 Rp {{ number_format(abs($labaBersih),0,',','.') }}
 
@@ -497,6 +504,18 @@
         </p>
 
     </div>
+    
+    <table style="margin-top:12px;">
+    <tr class="total">
+        <td>
+            Jumlah Total Transaksi Pendapatan
+        </td>
+
+        <td width="25%" class="text-end">
+            {{ $pendapatan->count() }} Transaksi
+        </td>
+    </tr>
+</table>
 
     <table>
 
@@ -504,9 +523,9 @@
 
             <tr>
 
-                <th width="15%" class="text-center">
-    Tanggal
-</th>
+<th width="8%">No</th>
+
+<th width="17%">Tanggal</th>
 
 <th width="25%" class="text-center">
     Kategori
@@ -527,10 +546,14 @@
 
         @foreach($pendapatan as $item)
 
-            <tr>
+        <tr>
+
+                <td class="text-center">
+                    {{ $loop->iteration }}
+                </td>
 
                 <td>
-                    {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                 </td>
 
                 <td>
@@ -569,15 +592,29 @@
 
     </div>
 
+<table style="margin-top:12px;">
+    <tr class="total">
+
+        <td>
+            Jumlah Total Transaksi Pengeluaran
+        </td>
+
+        <td width="25%" class="text-end">
+            {{ $pengeluaran->count() }} Transaksi
+        </td>
+
+    </tr>
+</table>
+
     <table>
 
         <thead>
 
 <tr>
 
-    <th width="18%" class="text-center">
-        Tanggal
-    </th>
+    <th width="8%">No</th>
+   
+    <th width="16%">Tanggal</th>
 
     <th width="25%" class="text-center">
         Jenis Pengeluaran
@@ -599,12 +636,16 @@
 
         @foreach($pengeluaran as $item)
 
-<tr>
+    <tr>
+
+    <td class="text-center">
+        {{ $loop->iteration }}
+    </td>
 
     <td class="text-center">
         {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
     </td>
-
+    
     <td class="text-center">
         {{ $item->jenis_pengeluaran }}
     </td>

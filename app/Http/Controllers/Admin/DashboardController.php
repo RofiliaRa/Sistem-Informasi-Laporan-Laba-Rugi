@@ -12,8 +12,29 @@ use Carbon\CarbonPeriod;
 class DashboardController extends Controller
 {
     public function index()
+    
     {
         Carbon::setLocale('id');
+        
+        /*
+|--------------------------------------------------------------------------
+| FINALISASI OTOMATIS BULAN SEBELUMNYA
+|--------------------------------------------------------------------------
+*/
+
+$today = Carbon::today();
+
+if ($today->day == 1) {
+
+    $bulanSebelumnya = $today->copy()->subMonth();
+
+    Laporan::where('bulan', $bulanSebelumnya->month)
+        ->where('tahun', $bulanSebelumnya->year)
+        ->where('status', 'draft')
+        ->update([
+            'status' => 'final'
+        ]);
+}
 
         $now = Carbon::now();
 
@@ -144,15 +165,26 @@ $transaksiTerbaru = $pendapatanTerbaru
     ->values();
 
         /*
-        |--------------------------------------------------------------------------
-        | LAPORAN TERAKHIR
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| STATUS LAPORAN BULAN BERJALAN
+|--------------------------------------------------------------------------
+*/
 
-        $laporanTerakhir = Laporan::orderByDesc('tahun')
-            ->orderByDesc('bulan')
-            ->first();
+$laporanTerakhir = Laporan::firstOrCreate(
 
+    [
+        'bulan' => $bulanAktif,
+        'tahun' => $tahunAktif,
+    ],
+
+    [
+        'total_pendapatan' => 0,
+        'total_pengeluaran' => 0,
+        'laba_bersih' => 0,
+        'status' => 'draft',
+    ]
+
+);
         /*
         |--------------------------------------------------------------------------
         | TOTAL DATA

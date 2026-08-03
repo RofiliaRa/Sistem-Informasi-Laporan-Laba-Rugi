@@ -15,6 +15,26 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         Carbon::setLocale('id');
+        
+        /*
+|--------------------------------------------------------------------------
+| FINALISASI OTOMATIS BULAN SEBELUMNYA
+|--------------------------------------------------------------------------
+*/
+
+$today = Carbon::today();
+
+if ($today->day == 1) {
+
+    $bulanSebelumnya = $today->copy()->subMonth();
+
+    Laporan::where('bulan', $bulanSebelumnya->month)
+        ->where('tahun', $bulanSebelumnya->year)
+        ->where('status', 'draft')
+        ->update([
+            'status' => 'final'
+        ]);
+}
 
         $bulan = $request->bulan ?? now()->format('Y-m');
 
@@ -193,6 +213,7 @@ $pengeluaranKategori = collect([
         $pendapatan = Pendapatan::with('category')
             ->whereYear('tanggal', date('Y', strtotime($bulan)))
             ->whereMonth('tanggal', date('m', strtotime($bulan)))
+            ->orderBy('tanggal', 'asc')
             ->get();
 
         /*
@@ -203,6 +224,8 @@ $pengeluaranKategori = collect([
 
         $pengeluaran = Pengeluaran::whereYear('tanggal', date('Y', strtotime($bulan)))
             ->whereMonth('tanggal', date('m', strtotime($bulan)))
+            ->whereMonth('tanggal', date('m', strtotime($bulan)))
+            ->orderBy('tanggal', 'asc')
             ->get();
 
         /*
@@ -269,18 +292,18 @@ if ($pendapatan->isEmpty() && $pengeluaran->isEmpty()) {
         }
 
         /*
-        |--------------------------------------------------------------------------
-        | TOTAL PER KATEGORI
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| TOTAL PER KATEGORI
+|--------------------------------------------------------------------------
+*/
 
-        $pendapatanJasa = $pendapatan
-            ->where('category_id', 2)
-            ->sum('total');
+$pendapatanJasa = $pendapatan
+    ->where('category_id', 1)
+    ->sum('total');
 
-        $pendapatanBarang = $pendapatan
-            ->where('category_id', 8)
-            ->sum('total');
+$pendapatanBarang = $pendapatan
+    ->where('category_id', 2)
+    ->sum('total');
 
         /*
 |--------------------------------------------------------------------------

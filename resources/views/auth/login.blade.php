@@ -8,7 +8,7 @@
                 <div class="card login-card shadow-lg border-0">
                     <div class="row g-0 h-100">
 
-                        <div class="col-lg-6 login-left">
+                        <div class="col-12 col-lg-6 login-left">
                             <div class="login-left-inner">
                                 <div class="login-logo-wrap">
                                     <img src="{{ asset('images/logo fc.jpeg') }}" alt="Logo Jayadirana" class="login-logo-jaya">
@@ -29,7 +29,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6 login-right">
+                        <div class="col-12 col-lg-6 login-right">
                             <div class="login-form-box">
                                 <h2 class="login-title">Masuk Ke Sistem</h2>
 

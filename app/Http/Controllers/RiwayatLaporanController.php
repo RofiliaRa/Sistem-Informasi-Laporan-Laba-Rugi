@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Laporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class RiwayatLaporanController extends Controller
 {
@@ -24,6 +25,26 @@ class RiwayatLaporanController extends Controller
     public function index(Request $request)
     {
         $query = Laporan::query();
+        
+        /*
+|--------------------------------------------------------------------------
+| FINALISASI OTOMATIS BULAN SEBELUMNYA
+|--------------------------------------------------------------------------
+*/
+
+$today = Carbon::today();
+
+if ($today->day == 1) {
+
+    $bulanSebelumnya = $today->copy()->subMonth();
+
+    Laporan::where('bulan', $bulanSebelumnya->month)
+        ->where('tahun', $bulanSebelumnya->year)
+        ->where('status', 'draft')
+        ->update([
+            'status' => 'final'
+        ]);
+}
 
         /*
         |--------------------------------------------------------------------------
