@@ -65,14 +65,6 @@
     autocomplete="off"
     required
     {{ isset($laporanFinal) && $laporanFinal ? 'disabled' : '' }}
->
-                        type="date"
-                        name="tanggal"
-                        id="tanggalInput"
-                        class="form-control"
-                        value="{{ date('Y-m-d') }}"
-                        required
-                        {{ isset($laporanFinal) && $laporanFinal ? 'disabled' : '' }}
                     >
                 </div>
 
@@ -107,7 +99,7 @@
                 </div>
 
                 {{-- JUMLAH --}}
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-md-4">
                     <label class="form-label fw-semibold">Jumlah</label>
                     <input
                         type="number"
@@ -135,7 +127,7 @@
                 </div>
 
                 {{-- TOTAL --}}
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-4">
                     <label class="form-label fw-semibold">Total Harga</label>
                     <input
                         type="text"
@@ -181,26 +173,32 @@
         </div>
 
         <form
-            class="d-flex align-items-center gap-2 w-100 w-md-auto"
+            class="d-flex align-items-center justify-content-end gap-2"
             method="GET"
             action="{{ route('admin.pengeluaran.index') }}"
         >
             <input
-                type="text"
-                id="searchInput"
-                name="search"
-                class="form-control"
-                placeholder="Cari Transaksi..."
-                value="{{ request('search') }}"
-            >
+            type="text"
+            id="searchInput"
+            name="search"
+            placeholder="Cari Transaksi..."
+            class="form-control"
+            style="width: 300px;"
+            value="{{ request('search') }}"
+            class="d-flex align-items-center gap-2 w-100 w-md-auto"
+            method="GET"
+            action="{{ route('admin.pendapatan.index') }}"
+        >
 
-            <button type="submit" class="btn btn-primary text-nowrap px-3">
-                <i class="bi bi-search me-1"></i> Cari
+            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 px-3">
+            <i class="bi bi-search"></i>
+            <span>Cari</span>
             </button>
 
             @if(request('search'))
-                <a href="{{ route('admin.pengeluaran.index') }}" class="btn btn-secondary text-nowrap px-3">
-                    <i class="bi bi-arrow-clockwise me-1"></i> Reset
+                <a href="{{ route('admin.pendapatan.index') }}" class="btn btn-secondary d-flex align-items-center justify-content-center gap-2 px-3">
+                <i class="bi bi-arrow-clockwise"></i>
+                    <span>Reset</span>
                 </a>
             @endif
         </form>
@@ -216,8 +214,8 @@
                         <th class="text-start">Nama Pengeluaran</th>
                         <th width="160" class="text-center">Jenis</th>
                         <th width="80" class="text-center">Jumlah</th>
-                        <th width="140" class="text-end">Harga</th>
-                        <th width="160" class="text-end">Total</th>
+                        <th width="140" class="text-center">Harga</th>
+                        <th width="160" class="text-center">Total</th>
                         <th width="160" class="text-center">Aksi</th>
                     </tr>
                 </thead>
