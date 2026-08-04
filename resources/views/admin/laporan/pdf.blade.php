@@ -255,7 +255,7 @@
     {{-- RINGKASAN PENDAPATAN --}}
 
     <div class="section-title">
-        Ringkasan Pendapatan Usaha
+        Ringkasan Pendapatan
     </div>
 
     <table style="margin-bottom:15px;">
@@ -321,7 +321,7 @@
     {{-- RINGKASAN PENGELUARAN --}}
 
     <div class="section-title">
-        Ringkasan Pengeluaran
+        Ringkasan Beban Usaha
     </div>
 
     <table>
@@ -373,7 +373,7 @@
 <tr class="total">
 
     <td>
-        Total Pengeluaran
+        Total Beban Usaha
     </td>
 
     <td class="text-end">
@@ -583,7 +583,7 @@
     <div class="text-center mb-20">
 
         <h2 style="font-size:24px; font-weight:bold;">
-            DETAIL PENGELUARAN
+            DETAIL BEBAN USAHA
         </h2>
 
         <p style="margin-top:5px; font-size:13px;">
@@ -596,7 +596,7 @@
     <tr class="total">
 
         <td>
-            Jumlah Total Transaksi Pengeluaran
+            Jumlah Total Transaksi Beban Usaha
         </td>
 
         <td width="25%" class="text-end">
