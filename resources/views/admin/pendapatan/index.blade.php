@@ -367,6 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 document.addEventListener('DOMContentLoaded', function () {
+
     const storeUrl = "{{ route('admin.pendapatan.store') }}";
 
     const formTitle = document.getElementById('formTitle');
@@ -391,132 +392,279 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function hitungTotal() {
         const jumlah = parseInt(jumlahInput.value) || 0;
-        const harga = parseFloat(hargaInput.value) || 0;
+        const harga = parseInt(hargaInput.value) || 0;
+
         totalHargaView.value = formatRupiah(jumlah * harga);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | TARIF KHUSUS FOTOKOPI
+    |--------------------------------------------------------------------------
+    */
+
+    function updateHargaFotokopi() {
+
+        const selected = jasaSelect.options[jasaSelect.selectedIndex];
+
+        if (!selected) return;
+
+        if (selected.dataset.type !== 'fotokopi') return;
+
+        const jumlah = parseInt(jumlahInput.value) || 0;
+
+        let harga = 0;
+
+        if (jumlah >= 1 && jumlah <= 10) {
+
+            harga = 500;
+
+        } else if (jumlah >= 11 && jumlah <= 20) {
+
+            harga = 300;
+
+        } else if (jumlah > 20) {
+
+            harga = 250;
+
+        }
+
+        hargaInput.value = harga;
+
+        hitungTotal();
+
+    }
+
     function handleCategoryChange() {
+
         const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+
         const categoryName = selectedOption ? selectedOption.dataset.name : '';
 
         if (categoryName === 'jasa') {
+
             jasaSelectWrapper.classList.remove('d-none');
+
             manualNamaWrapper.classList.add('d-none');
+
             namaBarangInput.removeAttribute('required');
+
         } else {
+
             jasaSelectWrapper.classList.add('d-none');
+
             manualNamaWrapper.classList.remove('d-none');
+
             namaBarangInput.setAttribute('required', 'required');
+
         }
+
     }
 
     function handleJasaChange() {
+
         const selectedOption = jasaSelect.options[jasaSelect.selectedIndex];
-        if (selectedOption && selectedOption.value !== '') {
-            namaBarangInput.value = selectedOption.value;
-            const harga = selectedOption.dataset.harga;
-            if (harga !== undefined && harga !== '0') {
-                hargaInput.value = harga;
-            }
-            hitungTotal();
+
+        if (!selectedOption || selectedOption.value === '') {
+
+            return;
+
         }
+
+        namaBarangInput.value = selectedOption.value;
+
+        /*
+        |--------------------------------------------------------------------------
+        | FOTOKOPI
+        |--------------------------------------------------------------------------
+        */
+
+        if (selectedOption.dataset.type === 'fotokopi') {
+
+            updateHargaFotokopi();
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | JASA LAIN
+        |--------------------------------------------------------------------------
+        */
+
+        else {
+
+            hargaInput.value = selectedOption.dataset.harga || 0;
+
+            hitungTotal();
+
+        }
+
     }
 
     function resetForm() {
+
         pendapatanForm.action = storeUrl;
+
         formMethod.value = 'POST';
+
         formTitle.textContent = 'Input Pendapatan';
 
-        if(submitButton){
+        if (submitButton) {
+
             submitButton.innerHTML = '<i class="bi bi-save me-1"></i> Simpan Pendapatan';
+
         }
 
-        if(cancelEditButton){
+        if (cancelEditButton) {
+
             cancelEditButton.classList.add('d-none');
+
         }
 
         tanggalInput.value = "{{ date('Y-m-d') }}";
+
         categorySelect.value = '';
+
         jasaSelect.value = '';
+
         namaBarangInput.value = '';
+
         jumlahInput.value = '';
+
         hargaInput.value = '';
+
         totalHargaView.value = 'Rp 0';
+
         handleCategoryChange();
+
     }
 
     categorySelect?.addEventListener('change', handleCategoryChange);
+
     jasaSelect?.addEventListener('change', handleJasaChange);
-    jumlahInput?.addEventListener('input', hitungTotal);
+
+    jumlahInput?.addEventListener('input', function () {
+
+        updateHargaFotokopi();
+
+        hitungTotal();
+
+    });
+
     hargaInput?.addEventListener('input', hitungTotal);
 
     document.querySelectorAll('.btn-edit').forEach(button => {
+
         button.addEventListener('click', function () {
+
             pendapatanForm.action = this.dataset.updateUrl;
+
             formMethod.value = 'PUT';
+
             formTitle.textContent = 'Edit Pendapatan';
 
-            if(submitButton){
+            if (submitButton) {
+
                 submitButton.innerHTML = '<i class="bi bi-pencil-square me-1"></i> Simpan Perubahan';
+
             }
 
-            if(cancelEditButton){
+            if (cancelEditButton) {
+
                 cancelEditButton.classList.remove('d-none');
+
             }
 
             tanggalInput.value = this.dataset.tanggal;
+
             categorySelect.value = this.dataset.categoryId;
+
             handleCategoryChange();
 
             namaBarangInput.value = this.dataset.namaBarang;
+
             jumlahInput.value = this.dataset.jumlah;
+
             hargaInput.value = this.dataset.harga;
 
             hitungTotal();
 
             window.scrollTo({
+
                 top: 0,
+
                 behavior: 'smooth'
+
             });
+
         });
+
     });
 
-    if(cancelEditButton){
+    if (cancelEditButton) {
+
         cancelEditButton.addEventListener('click', resetForm);
+
     }
 
     document.querySelectorAll('.btn-hapus').forEach(button => {
+
         button.addEventListener('click', function () {
+
             const form = this.closest('.form-hapus');
 
             Swal.fire({
+
                 title: 'Hapus Data?',
+
                 text: 'Apakah Anda yakin ingin menghapus data pendapatan ini?',
+
                 icon: 'warning',
+
                 showCancelButton: true,
+
                 confirmButtonColor: '#ef4444',
+
                 cancelButtonColor: '#6b7280',
+
                 confirmButtonText: 'Ya, Hapus',
+
                 cancelButtonText: 'Batal',
+
                 reverseButtons: true
+
             }).then((result) => {
+
                 if (result.isConfirmed) {
+
                     form.submit();
+
                 }
+
             });
+
         });
+
     });
 
     const searchInput = document.getElementById('searchInput');
+
     if (searchInput) {
+
         searchInput.addEventListener('input', function () {
+
             if (this.value.trim() === '') {
+
                 window.location.href = "{{ route('admin.pendapatan.index') }}";
+
             }
+
         });
+
     }
 
     hitungTotal();
+
 });
 </script>
 @endpush
