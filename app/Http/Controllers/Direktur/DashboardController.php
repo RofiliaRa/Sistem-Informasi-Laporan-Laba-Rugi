@@ -14,26 +14,26 @@ class DashboardController extends Controller
     public function index()
     {
         Carbon::setLocale('id');
-        
+
         /*
 |--------------------------------------------------------------------------
 | FINALISASI OTOMATIS BULAN SEBELUMNYA
 |--------------------------------------------------------------------------
 */
 
-$today = Carbon::today();
+        $today = Carbon::today();
 
-if ($today->day == 1) {
+        if ($today->day == 1) {
 
-    $bulanSebelumnya = $today->copy()->subMonth();
+            $bulanSebelumnya = $today->copy()->subMonth();
 
-    Laporan::where('bulan', $bulanSebelumnya->month)
-        ->where('tahun', $bulanSebelumnya->year)
-        ->where('status', 'draft')
-        ->update([
-            'status' => 'final'
-        ]);
-}
+            Laporan::where('bulan', $bulanSebelumnya->month)
+                ->where('tahun', $bulanSebelumnya->year)
+                ->where('status', 'draft')
+                ->update([
+                    'status' => 'final',
+                ]);
+        }
 
         $now = Carbon::now();
 

@@ -18,13 +18,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DetailBebanSheet implements
-    FromArray,
-    WithTitle,
-    WithStyles,
-    WithColumnWidths,
-    WithDrawings,
-    WithEvents
+class DetailBebanSheet implements FromArray, WithColumnWidths, WithDrawings, WithEvents, WithStyles, WithTitle
 {
     protected string $bulan;
 
@@ -142,7 +136,7 @@ class DetailBebanSheet implements
             [
                 '',
                 '',
-                'Periode ' . $periode->translatedFormat('F Y'),
+                'Periode '.$periode->translatedFormat('F Y'),
                 '',
                 '',
                 '',
@@ -186,9 +180,9 @@ class DetailBebanSheet implements
         // =========================================================
 
         $pengeluaran = Pengeluaran::whereYear(
-                'tanggal',
-                $periode->year
-            )
+            'tanggal',
+            $periode->year
+        )
             ->whereMonth(
                 'tanggal',
                 $periode->month
@@ -314,7 +308,7 @@ class DetailBebanSheet implements
         // =========================================================
 
         $sheet->getStyle(
-            'A1:H' . $lastRow
+            'A1:H'.$lastRow
         )
             ->getFont()
             ->setName('Times New Roman');
@@ -375,8 +369,7 @@ class DetailBebanSheet implements
             ->applyFromArray([
                 'borders' => [
                     'bottom' => [
-                        'borderStyle' =>
-                            Border::BORDER_MEDIUM,
+                        'borderStyle' => Border::BORDER_MEDIUM,
 
                         'color' => [
                             'argb' => 'FF000000',
@@ -442,8 +435,7 @@ class DetailBebanSheet implements
                 ],
 
                 'fill' => [
-                    'fillType' =>
-                        Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
 
                     'startColor' => [
                         'rgb' => '1F4E78',
@@ -451,11 +443,9 @@ class DetailBebanSheet implements
                 ],
 
                 'alignment' => [
-                    'horizontal' =>
-                        Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
 
-                    'vertical' =>
-                        Alignment::VERTICAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ],
             ]);
 
@@ -492,8 +482,7 @@ class DetailBebanSheet implements
                 ],
 
                 'fill' => [
-                    'fillType' =>
-                        Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
 
                     'startColor' => [
                         'rgb' => 'EAF2F8',
@@ -686,7 +675,7 @@ class DetailBebanSheet implements
 
         if (file_exists($logoBum)) {
 
-            $logo = new Drawing();
+            $logo = new Drawing;
 
             $logo->setName(
                 'Logo BUM Desa'
@@ -725,7 +714,7 @@ class DetailBebanSheet implements
 
         if (file_exists($logoJaya)) {
 
-            $logo = new Drawing();
+            $logo = new Drawing;
 
             $logo->setName(
                 'Logo Jayadirana'
@@ -881,7 +870,7 @@ class DetailBebanSheet implements
 
                 $sheet->getPageSetup()
                     ->setPrintArea(
-                        'B1:H' . $lastRow
+                        'B1:H'.$lastRow
                     );
 
                 // =================================================

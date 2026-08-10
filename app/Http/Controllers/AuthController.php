@@ -31,6 +31,7 @@ class AuthController extends Controller
             }
 
             Auth::logout();
+
             return back()->with('error', 'Role tidak dikenali.');
         }
 
