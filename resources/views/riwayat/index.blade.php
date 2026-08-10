@@ -76,8 +76,10 @@
                         <th class="text-start">Laba / Rugi</th>
                         <th width="120" class="text-center">Status</th>
                         <th width="80" class="text-center">PDF</th>
+                        <th width="80" class="text-center">Excel</th>
+
                         @if(auth()->user()->role == 'admin')
-                            <th width="180" class="text-center">Aksi</th>
+                        <th width="180" class="text-center">Aksi</th>
                         @endif
                     </tr>
                 </thead>
@@ -137,48 +139,73 @@
                             </a>
                         </td>
 
-                        @if(auth()->user()->role == 'admin')
-                            <td class="text-center">
-                                <div class="action-group">
-                                    @if($laporan->status != 'final')
-                                        <form
-                                            action="{{ route('admin.riwayat.finalisasi', $laporan->id) }}"
-                                            method="POST"
-                                            class="form-final"
-                                        >
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="from" value="riwayat">
-                                            <button
-                                                type="submit"
-                                                class="btn btn-success btn-sm btn-action btn-final"
-                                            >
-                                                Finalkan
-                                            </button>
-                                        </form>
+                        {{-- EXCEL --}}
+<td class="text-center">
+    <a
+        href="{{ auth()->user()->role == 'admin'
+            ? route('admin.laporan.excel', ['bulan' => $laporan->tahun.'-'.str_pad($laporan->bulan, 2, '0', STR_PAD_LEFT)])
+            : route('direktur.laporan.excel', ['bulan' => $laporan->tahun.'-'.str_pad($laporan->bulan, 2, '0', STR_PAD_LEFT)]) }}"
+        class="btn btn-success btn-sm btn-action"
+        title="Download Excel"
+    >
+        <i class="bi bi-file-earmark-excel-fill"></i>
+    </a>
+</td>
 
-                                        <form
-                                            action="{{ route('admin.riwayat.destroy', $laporan->id) }}"
-                                            method="POST"
-                                            class="form-hapus"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
-                                            <button
-                                                type="submit"
-                                                class="btn btn-outline-danger btn-action"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    @else
-                                        <span class="status-badge status-lock">
-                                            Terkunci
-                                        </span>
-                                    @endif
-                                </div>
-                            </td>
-                        @endif
+                        @if(auth()->user()->role == 'admin')
+    <td class="text-center">
+        <div class="action-group">
+
+            {{-- FINALISASI / HAPUS --}}
+            @if($laporan->status != 'final')
+
+                <form
+                    action="{{ route('admin.riwayat.finalisasi', $laporan->id) }}"
+                    method="POST"
+                    class="form-final"
+                >
+                    @csrf
+                    @method('PUT')
+
+                    <input type="hidden" name="from" value="riwayat">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-sm btn-action btn-final"
+                        title="Finalkan Laporan"
+                    >
+                        Finalkan
+                    </button>
+                </form>
+
+                <form
+                    action="{{ route('admin.riwayat.destroy', $laporan->id) }}"
+                    method="POST"
+                    class="form-hapus"
+                >
+                    @csrf
+                    @method('DELETE')
+
+                    <button
+                        type="submit"
+                        class="btn btn-outline-danger btn-action"
+                        title="Hapus Laporan"
+                    >
+                        Hapus
+                    </button>
+                </form>
+
+            @else
+
+                <span class="status-badge status-lock">
+                    Terkunci
+                </span>
+
+            @endif
+
+        </div>
+    </td>
+@endif
                     </tr>
                 @empty
                     @include('partials.empty-table', [

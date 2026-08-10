@@ -104,6 +104,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])
             ->name('admin.laporan.pdf');
 
+        Route::get('/laporan/excel', [LaporanController::class, 'downloadExcel'])
+            ->name('admin.laporan.excel');
+
         /*
         |--------------------------------------------------------------------------
         | RIWAYAT LAPORAN
@@ -178,6 +181,9 @@ Route::get('/laporan', [LaporanController::class, 'index'])
 
 Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])
     ->name('direktur.laporan.pdf');
+
+Route::get('/laporan/excel', [LaporanController::class, 'downloadExcel'])
+    ->name('direktur.laporan.excel');
 
     /*
 |--------------------------------------------------------------------------

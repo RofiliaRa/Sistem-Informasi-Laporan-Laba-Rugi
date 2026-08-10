@@ -7,6 +7,8 @@ use App\Models\Pendapatan;
 use App\Models\Pengeluaran;
 use App\Models\Laporan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\LaporanExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -198,6 +200,22 @@ $pengeluaranKategori = collect([
 ]);
     }   
 
+    public function downloadExcel(Request $request)
+{
+    $bulan = $request->bulan ?? now()->format('Y-m');
+
+    Carbon::setLocale('id');
+
+    $namaFile = 'Laporan Laba Rugi Bulan ' .
+        Carbon::parse($bulan . '-01')->translatedFormat('F Y') .
+        '.xlsx';
+
+    return Excel::download(
+        new LaporanExport($bulan),
+        $namaFile
+    );
+}
+
     public function downloadPdf(Request $request)
     {
         Carbon::setLocale('id');
@@ -223,10 +241,9 @@ $pengeluaranKategori = collect([
         */
 
         $pengeluaran = Pengeluaran::whereYear('tanggal', date('Y', strtotime($bulan)))
-            ->whereMonth('tanggal', date('m', strtotime($bulan)))
-            ->whereMonth('tanggal', date('m', strtotime($bulan)))
-            ->orderBy('tanggal', 'asc')
-            ->get();
+    ->whereMonth('tanggal', date('m', strtotime($bulan)))
+    ->orderBy('tanggal', 'asc')
+    ->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -358,8 +375,6 @@ $pengeluaranKategori = collect([
 
 $pdf->render();
 
-
-
 $canvas = $pdf->getDomPDF()->getCanvas();
 
 $font = $pdf->getDomPDF()->getFontMetrics()->getFont(
@@ -377,15 +392,7 @@ $canvas->page_text(
 );
 
 Carbon::setLocale('id');
-
-$namaFile = 'Laporan Laba Rugi Bulan ' .
-    Carbon::parse($bulan . '-01')->translatedFormat('F Y') .
-    '.pdf';
-
-return $pdf->download($namaFile);
-
-        Carbon::setLocale('id');
-
+        
 $namaFile = 'Laporan Laba Rugi Bulan ' .
     Carbon::parse($bulan . '-01')->translatedFormat('F Y') .
     '.pdf';

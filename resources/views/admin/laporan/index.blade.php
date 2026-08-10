@@ -2,26 +2,167 @@
 
 @section('content')
 
+{{-- =========================================================
+     KOP LAPORAN PADA TAMPILAN WEB
+     ========================================================= --}}
+<style>
+    /* =========================
+       KOP LAPORAN
+       ========================= */
+    .laporan-kop {
+        width: 100%;
+        padding: 18px 0 12px;
+        margin-bottom: 24px;
+        border-bottom: 3px double #111;
+    }
+
+    .laporan-kop-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 24px);
+    margin: 0 auto;
+}
+
+    .laporan-kop-logo {
+        width: 78px;
+        height: 78px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+
+    .laporan-kop-tengah {
+        flex: 1;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    .laporan-kop-tengah .nama-bumdes {
+    margin: 0 0 5px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #172033;
+}
+
+.laporan-kop-tengah .nama-unit {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #172033;
+}
+
+    .laporan-kop-tengah .alamat {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #333;
+    }
+
+    /* =========================
+       JUDUL LAPORAN
+       ========================= */
+    .laporan-judul {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .laporan-judul h5 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #111111;
+        letter-spacing: .3px;
+    }
+
+    .laporan-judul p {
+        margin: 0;
+        font-size: 14px;
+        color: #6c757d;
+    }
+
+    /* =========================
+       RESPONSIVE KOP
+       ========================= */
+    @media (max-width: 768px) {
+
+        .laporan-kop {
+            padding: 14px 0 10px;
+        }
+
+        .laporan-kop-logo {
+            width: 58px;
+            height: 58px;
+        }
+
+        .laporan-kop-tengah {
+            padding: 0 10px;
+        }
+
+        .laporan-kop-tengah .nama-bumdes {
+            font-size: 13px;
+        }
+
+        .laporan-kop-tengah .nama-unit {
+            font-size: 15px;
+        }
+
+        .laporan-kop-tengah .alamat {
+            font-size: 9px;
+        }
+
+        .laporan-judul h5 {
+            font-size: 18px;
+        }
+
+        .laporan-judul p {
+            font-size: 13px;
+        }
+    }
+
+    /* Warna teks LABA/RUGI BERSIH */
+.grand-total-row td:first-child {
+    color: #111111 !important;
+}
+
+</style>
+
+
 {{-- PAGE HEADER & ACTIONS --}}
 <div class="dash-panel-card-pro mb-4">
     <div class="dash-panel-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+
         <div>
-            <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                <h3 class="fw-bold mb-0">Laporan Laba Rugi</h3>
+            <div class="d-flex align-items-center gap-2 flex-nowrap mb-1">
+
+                <h3 class="fw-bold mb-0">
+                    Laporan Laba Rugi
+                </h3>
 
                 @if(!$laporanAktif)
+
                     <span class="badge bg-secondary rounded-pill px-3 py-2 fs-6">
-                        <i class="bi bi-info-circle-fill me-1"></i> Belum Ada Transaksi
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        Belum Ada Transaksi
                     </span>
+
                 @elseif($laporanAktif->status == 'final')
+
                     <span class="badge bg-success rounded-pill px-3 py-2 fs-6">
-                        <i class="bi bi-check-circle-fill me-1"></i> Final • {{ $periode }}
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        Final • {{ $periode }}
                     </span>
+
                 @else
+
                     <span class="badge bg-warning text-dark rounded-pill px-3 py-2 fs-6">
-                        <i class="bi bi-pencil-square me-1"></i> Draft • {{ $periode }}
+                        <i class="bi bi-pencil-square me-1"></i>
+                        Draft • {{ $periode }}
                     </span>
+
                 @endif
+
             </div>
 
             <small class="text-muted">
@@ -29,36 +170,71 @@
             </small>
         </div>
 
-        <div class="header-action-mobile-full d-flex flex-column flex-md-row align-items-center gap-2">
+
+        <div class="header-action-mobile-full d-flex flex-column flex-md-row align-items-center gap-2 flex-shrink-0">
+
             {{-- ADMIN FINALISASI BUTTON --}}
             @if(auth()->user()->role == 'admin')
+
                 @if($laporanAktif)
+
                     @if($laporanAktif->status != 'final')
+
                         <form
                             action="{{ route('admin.riwayat.finalisasi', $laporanAktif->id) }}"
                             method="POST"
                             class="form-finalisasi m-0"
                         >
+
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="bulan" value="{{ $bulan }}">
-                            <input type="hidden" name="from" value="laporan">
-                            <button type="submit" class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold">
+
+                            <input
+                                type="hidden"
+                                name="bulan"
+                                value="{{ $bulan }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="from"
+                                value="laporan"
+                            >
+
+                            <button
+                                type="submit"
+                                class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
+                            >
                                 <i class="bi bi-check-circle-fill"></i>
-                                <span>Finalisasi Laporan</span>
+                                <span class="text-nowrap">
+                                    Finalisasi
+                                </span>
                             </button>
+
                         </form>
+
                     @else
-                        <button class="btn btn-secondary d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold" disabled>
+
+                        <button
+                            class="btn btn-secondary d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
+                            disabled
+                        >
                             <i class="bi bi-lock-fill"></i>
-                            <span>Laporan Sudah Final</span>
+                            <span>
+                                Laporan Sudah Final
+                            </span>
                         </button>
+
                     @endif
+
                 @endif
+
             @endif
+
 
             {{-- DOWNLOAD PDF --}}
             @if($laporanAktif)
+
                 <a
                     href="{{ auth()->user()->role == 'admin'
                         ? route('admin.laporan.pdf', ['bulan' => request('bulan', now()->format('Y-m'))])
@@ -66,30 +242,72 @@
                     class="btn btn-danger d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
                 >
                     <i class="bi bi-file-earmark-pdf-fill"></i>
-                    <span>Download PDF</span>
+                    <span>
+                        Download PDF
+                    </span>
                 </a>
+
+
+                {{-- DOWNLOAD EXCEL --}}
+                <a
+                    href="{{ auth()->user()->role == 'admin'
+                        ? route('admin.laporan.excel', ['bulan' => request('bulan', now()->format('Y-m'))])
+                        : route('direktur.laporan.excel', ['bulan' => request('bulan', now()->format('Y-m'))]) }}"
+                    class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
+                >
+                    <i class="bi bi-file-earmark-excel-fill"></i>
+                    <span>
+                        Download Excel
+                    </span>
+                </a>
+
             @else
+
+                {{-- PDF DISABLED --}}
                 <button
                     class="btn btn-danger d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
                     disabled
                 >
                     <i class="bi bi-file-earmark-pdf-fill"></i>
-                    <span>Download PDF</span>
+                    <span>
+                        Download PDF
+                    </span>
                 </button>
+
+
+                {{-- EXCEL DISABLED --}}
+                <button
+                    class="btn btn-success d-inline-flex align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 fw-bold"
+                    disabled
+                >
+                    <i class="bi bi-file-earmark-excel-fill"></i>
+                    <span>
+                        Download Excel
+                    </span>
+                </button>
+
             @endif
+
         </div>
+
     </div>
 </div>
 
+
 {{-- FILTER PERIODE --}}
 @include('partials.filter-periode', [
-    'action' => auth()->user()->role == 'admin' ? route('admin.laporan.index') : route('direktur.laporan.index')
+    'action' => auth()->user()->role == 'admin'
+        ? route('admin.laporan.index')
+        : route('direktur.laporan.index')
 ])
+
 
 {{-- CARD RINGKASAN --}}
 <div class="row g-3 mb-4">
+
     {{-- TOTAL PENDAPATAN --}}
     <div class="col-12 col-md-4">
+
         @include('partials.stat-card', [
             'icon' => 'bi bi-cash-stack text-success',
             'iconBg' => 'stat-success',
@@ -97,10 +315,13 @@
             'value' => 'Rp ' . number_format($totalPendapatan, 0, ',', '.'),
             'valueClass' => 'text-success'
         ])
+
     </div>
+
 
     {{-- TOTAL PENGELUARAN --}}
     <div class="col-12 col-md-4">
+
         @include('partials.stat-card', [
             'icon' => 'bi bi-wallet2 text-danger',
             'iconBg' => 'stat-warning',
@@ -108,157 +329,342 @@
             'value' => 'Rp ' . number_format($totalPengeluaran, 0, ',', '.'),
             'valueClass' => 'text-danger'
         ])
+
     </div>
+
 
     {{-- LABA / RUGI BERSIH --}}
     <div class="col-12 col-md-4">
+
         @include('partials.stat-card', [
-            'icon' => $labaBersih >= 0 ? 'bi bi-graph-up-arrow text-success' : 'bi bi-graph-down-arrow text-danger',
+            'icon' => $labaBersih >= 0
+                ? 'bi bi-graph-up-arrow text-success'
+                : 'bi bi-graph-down-arrow text-danger',
+
             'iconBg' => 'stat-primary',
-            'title' => $labaBersih >= 0 ? 'Laba Bersih' : 'Rugi Bersih',
+
+            'title' => $labaBersih >= 0
+                ? 'Laba Bersih'
+                : 'Rugi Bersih',
+
             'value' => 'Rp ' . number_format(abs($labaBersih), 0, ',', '.'),
+
             'valueClass' => 'text-primary'
         ])
+
     </div>
+
 </div>
+
 
 {{-- LEMBAR LAPORAN LABA RUGI --}}
 <div class="dash-panel-card-pro">
+
     <div class="dash-panel-body laporan-body">
+
+        {{-- =================================================
+             KOP LAPORAN
+             ================================================= --}}
+        <div class="laporan-kop">
+
+            <div class="laporan-kop-inner">
+
+                {{-- LOGO BUM DESA --}}
+                <img
+                    src="{{ asset('images/logo bumdes.jpeg') }}"
+                    alt="Logo BUM Desa"
+                    class="laporan-kop-logo"
+                >
+
+
+                {{-- TENGAH KOP --}}
+                <div class="laporan-kop-tengah">
+
+                    <p class="nama-bumdes">
+                        BUM DESA KALITINGGAR MAKMUR KALITINGGAR
+                    </p>
+
+                    <p class="nama-unit">
+                        UNIT USAHA FOTOKOPI JAYADIRANA
+                    </p>
+
+                    <p class="alamat">
+                        Desa Kalitinggar RT 01 RW 03, Karang Malang,
+                        Kec. Padamara, Kab. Purbalingga, 53372
+                    </p>
+
+                </div>
+
+
+                {{-- LOGO JAYADIRANA --}}
+                <img
+                    src="{{ asset('images/logo fc.jpeg') }}"
+                    alt="Logo Jayadirana"
+                    class="laporan-kop-logo"
+                >
+
+            </div>
+
+        </div>
+
+
         {{-- JUDUL LAPORAN --}}
-        <div class="text-center mb-0 pt-3">
-            <h6 class="mb-1 fw-bold text-uppercase tracking-wide">
-                BUM DESA KALITINGGAR MAKMUR KALITINGGAR
-            </h6>
-            <h4 class="fw-bold mb-1">
-                UNIT USAHA FOTOKOPI JAYADIRANA
-            </h4>
-            <h5 class="fw-bold text-primary mb-1">
+        <div class="laporan-judul">
+
+            <h5>
                 LAPORAN LABA RUGI
             </h5>
-            <p class="text-muted small mb-0">
+
+            <p>
                 Periode {{ $periode }}
             </p>
+
         </div>
+
 
         {{-- TABEL LAPORAN --}}
         <div class="table-responsive">
+
             <table class="table table-borderless laporan-table mb-0">
+
                 <tbody>
+
                     {{-- PENDAPATAN USAHA --}}
                     <tr class="section-title">
-                        <td colspan="2">Pendapatan Usaha</td>
-                    </tr>
-                    <tr>
+
                         <td colspan="2">
+                            Pendapatan Usaha
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td colspan="2">
+
                             <div class="dots-row">
-                                <span class="dots-text">Pendapatan Jasa</span>
+
+                                <span class="dots-text">
+                                    Pendapatan Jasa
+                                </span>
+
                                 <span class="dots-line"></span>
+
                                 <span class="dots-value text-end">
                                     Rp {{ number_format($pendapatanPerKategori['Jasa'] ?? 0, 0, ',', '.') }}
                                 </span>
+
                             </div>
+
                         </td>
+
                     </tr>
+
+
                     <tr>
+
                         <td colspan="2">
+
                             <div class="dots-row">
-                                <span class="dots-text">Pendapatan Penjualan ATK dan Lain-Lain</span>
+
+                                <span class="dots-text">
+                                    Pendapatan Penjualan ATK dan Lain-Lain
+                                </span>
+
                                 <span class="dots-line"></span>
+
                                 <span class="dots-value text-end">
                                     Rp {{ number_format($pendapatanPerKategori['ATK dan Lain-Lain'] ?? 0, 0, ',', '.') }}
                                 </span>
+
                             </div>
+
                         </td>
+
                     </tr>
+
+
                     <tr class="subtotal-row">
-                        <td class="fw-bold">Total Pendapatan</td>
+
+                        <td class="fw-bold">
+                            Total Pendapatan
+                        </td>
+
                         <td class="nominal text-end fw-bold text-success">
                             Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
                         </td>
+
                     </tr>
+
 
                     {{-- BEBAN USAHA --}}
                     <tr class="section-title">
-                        <td colspan="2">Beban Usaha</td>
+
+                        <td colspan="2">
+                            Beban Usaha
+                        </td>
+
                     </tr>
+
+
                     @foreach($pengeluaranKategori as $jenis => $total)
+
                         <tr>
+
                             <td colspan="2">
+
                                 <div class="dots-row">
-                                    <span class="dots-text">Beban {{ $jenis }}</span>
+
+                                    <span class="dots-text">
+                                        Beban {{ $jenis }}
+                                    </span>
+
                                     <span class="dots-line"></span>
+
                                     <span class="dots-value text-end">
                                         Rp {{ number_format($total, 0, ',', '.') }}
                                     </span>
+
                                 </div>
+
                             </td>
+
                         </tr>
+
                     @endforeach
+
+
                     <tr class="subtotal-row">
-                        <td class="fw-bold">Total Beban</td>
+
+                        <td class="fw-bold">
+                            Total Beban
+                        </td>
+
                         <td class="nominal text-end fw-bold text-danger">
                             Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                         </td>
+
                     </tr>
+
 
                     {{-- LABA BERSIH / RUGI BERSIH --}}
                     <tr class="grand-total-row">
+
                         <td class="fw-bold">
-                            {{ $labaBersih >= 0 ? 'LABA BERSIH' : 'RUGI BERSIH' }}
+
+                            {{ $labaBersih >= 0
+                                ? 'LABA BERSIH'
+                                : 'RUGI BERSIH'
+                            }}
+
                         </td>
+
                         <td class="nominal text-end fw-bold fs-5">
-                            <span class="{{ $labaBersih >= 0 ? 'text-success' : 'text-danger' }}">
+
+                            <span class="{{ $labaBersih >= 0
+                                ? 'text-success'
+                                : 'text-danger'
+                            }}">
+
                                 Rp {{ number_format(abs($labaBersih), 0, ',', '.') }}
+
                             </span>
+
                         </td>
+
                     </tr>
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
+
 </div>
 
+
 @if(session('warning'))
+
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
+
     Swal.fire({
+
         icon: 'warning',
+
         title: 'Laporan tidak dapat dibuat',
+
         text: '{{ session('warning') }}',
+
         confirmButtonColor: '#f59e0b'
+
     });
+
 });
+
 </script>
+
 @endif
 
+
 @push('scripts')
+
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
+
     const forms = document.querySelectorAll('.form-finalisasi');
+
     if (forms.length > 0) {
+
         forms.forEach(form => {
+
             form.addEventListener('submit', function (e) {
+
                 e.preventDefault();
+
                 Swal.fire({
+
                     title: 'Finalisasi Laporan?',
+
                     text: 'Laporan final tidak dapat diubah lagi.',
+
                     icon: 'question',
+
                     showCancelButton: true,
+
                     confirmButtonColor: '#198754',
+
                     cancelButtonColor: '#6c757d',
+
                     confirmButtonText: 'Ya, Finalisasi',
+
                     cancelButtonText: 'Batal'
+
                 }).then((result) => {
+
                     if (result.isConfirmed) {
+
                         form.submit();
+
                     }
+
                 });
+
             });
+
         });
+
     }
+
 });
+
 </script>
+
 @endpush
 
 @endsection
