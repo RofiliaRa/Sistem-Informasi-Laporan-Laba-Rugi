@@ -29,15 +29,33 @@ class LaporanRingkasanSheet implements
 {
     protected string $bulan;
 
+    protected string $status;
+
+    protected Carbon $dicetakPada;
+
     protected int $rowBebanHeader;
+
     protected int $rowBebanTotal;
+
     protected int $rowLaba;
+
+    protected int $rowTanggal;
+
     protected int $rowTtd;
+
     protected float $labaBersih = 0;
 
-    public function __construct(string $bulan)
-    {
+    public function __construct(
+        string $bulan,
+        string $status = 'draft',
+        ?Carbon $dicetakPada = null
+    ) {
         $this->bulan = $bulan;
+
+        $this->status = $status;
+
+        $this->dicetakPada = $dicetakPada
+            ?? Carbon::now('Asia/Jakarta');
     }
 
     public function title(): string
@@ -47,15 +65,26 @@ class LaporanRingkasanSheet implements
 
     public function array(): array
     {
-        $periode = Carbon::createFromFormat('Y-m', $this->bulan);
+        Carbon::setLocale('id');
+
+        $periode = Carbon::createFromFormat(
+            'Y-m',
+            $this->bulan
+        );
 
         // =========================================================
         // PENDAPATAN
         // =========================================================
 
         $pendapatan = Pendapatan::with('category')
-            ->whereYear('tanggal', $periode->year)
-            ->whereMonth('tanggal', $periode->month)
+            ->whereYear(
+                'tanggal',
+                $periode->year
+            )
+            ->whereMonth(
+                'tanggal',
+                $periode->month
+            )
             ->orderBy('tanggal')
             ->orderBy('id')
             ->get();
@@ -64,13 +93,15 @@ class LaporanRingkasanSheet implements
 
         $pendapatanJasa = $pendapatan
             ->filter(function ($item) {
-                return optional($item->category)->nama_kategori === 'Jasa';
+                return optional($item->category)
+                    ->nama_kategori === 'Jasa';
             })
             ->sum('total');
 
         $pendapatanAtk = $pendapatan
             ->filter(function ($item) {
-                return optional($item->category)->nama_kategori === 'ATK dan Lain-Lain';
+                return optional($item->category)
+                    ->nama_kategori === 'ATK dan Lain-Lain';
             })
             ->sum('total');
 
@@ -78,15 +109,37 @@ class LaporanRingkasanSheet implements
         // PENGELUARAN
         // =========================================================
 
-        $pengeluaran = Pengeluaran::whereYear('tanggal', $periode->year)
-            ->whereMonth('tanggal', $periode->month)
+        $pengeluaran = Pengeluaran::whereYear(
+                'tanggal',
+                $periode->year
+            )
+            ->whereMonth(
+                'tanggal',
+                $periode->month
+            )
             ->orderBy('tanggal')
             ->orderBy('id')
             ->get();
 
         $totalPengeluaran = $pengeluaran->sum('total');
-        $labaBersih = $totalPendapatan - $totalPengeluaran;
+
+        $labaBersih =
+            $totalPendapatan -
+            $totalPengeluaran;
+
         $this->labaBersih = (float) $labaBersih;
+
+        /*
+        |--------------------------------------------------------------------------
+        | STRUKTUR LAPORAN
+        |--------------------------------------------------------------------------
+        |
+        | A = margin kosong
+        | B:H = keterangan
+        | I:J = nominal
+        |
+        |--------------------------------------------------------------------------
+        */
 
         $data = [];
 
@@ -95,159 +148,457 @@ class LaporanRingkasanSheet implements
         // =========================================================
 
         $data[] = [
-            '', '', 'BUM DESA KALITINGGAR MAKMUR KALITINGGAR',
-            '', '', '', '', '', '', ''
+            '',
+            '',
+            'BUM DESA KALITINGGAR MAKMUR KALITINGGAR',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
         $data[] = [
-            '', '', 'UNIT USAHA FOTOKOPI JAYADIRANA',
-            '', '', '', '', '', '', ''
+            '',
+            '',
+            'UNIT USAHA FOTOKOPI JAYADIRANA',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
         $data[] = [
-            '', '', 'Desa Kalitinggar RT 01 RW 03, Karang Malang, Kecamatan Padamara, Kabupaten Purbalingga, 53372',
-            '', '', '', '', '', '', ''
+            '',
+            '',
+            'Desa Kalitinggar RT 01 RW 03, Karang Malang, Kecamatan Padamara, Kabupaten Purbalingga, 53372',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
 
         // =========================================================
         // JUDUL
         // =========================================================
 
         $data[] = [
-            '', '', 'LAPORAN LABA RUGI',
-            '', '', '', '', '', '', ''
+            '',
+            '',
+            'LAPORAN LABA RUGI',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
         $data[] = [
-            '', '', 'Periode ' . $periode->translatedFormat('F Y'),
-            '', '', '', '', '', '', ''
+            '',
+            '',
+            'Periode ' .
+                $periode->translatedFormat('F Y'),
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
-
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
 
         // =========================================================
-        // PENDAPATAN USAHA
-        // =========================================================
+// DICETAK PADA
+// =========================================================
+
+$data[] = [
+    '',
+    '',
+    'Dicetak pada : ' .
+        $this->dicetakPada->translatedFormat('d F Y') .
+        ' pukul ' .
+        $this->dicetakPada->format('H:i') .
+        ' WIB',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    ''
+];
+
+// Spasi setelah "Dicetak pada"
+$data[] = [
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    ''
+];
+
+// =========================================================
+// PENDAPATAN USAHA
+// =========================================================
 
         $data[] = [
-            '', 'PENDAPATAN USAHA',
-            '', '', '', '', '', '', '', ''
+            '',
+            'PENDAPATAN USAHA',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
         $data[] = [
-            '', 'Pendapatan Jasa',
-            '', '', '', '', '', '', $pendapatanJasa, ''
+            '',
+            'Pendapatan Jasa',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $pendapatanJasa,
+            ''
         ];
 
         $data[] = [
-            '', 'Pendapatan Penjualan ATK dan Lain-Lain',
-            '', '', '', '', '', '', $pendapatanAtk, ''
+            '',
+            'Pendapatan Penjualan ATK dan Lain-Lain',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $pendapatanAtk,
+            ''
         ];
 
         $data[] = [
-            '', 'TOTAL PENDAPATAN',
-            '', '', '', '', '', '', $totalPendapatan, ''
+            '',
+            'TOTAL PENDAPATAN',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $totalPendapatan,
+            ''
         ];
 
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
 
         // =========================================================
         // BEBAN USAHA
         // =========================================================
 
-        $this->rowBebanHeader = count($data) + 1;
+        $this->rowBebanHeader =
+            count($data) + 1;
 
         $data[] = [
-            '', 'BEBAN USAHA',
-            '', '', '', '', '', '', '', ''
+            '',
+            'BEBAN USAHA',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
         ];
 
-        // Ringkasan beban berdasarkan JENIS PENGELUARAN,
-        // bukan berdasarkan nama barang.
-        $bebanPembelianPersediaan = $pengeluaran
-            ->where('jenis_pengeluaran', 'Pembelian Persediaan')
-            ->sum('total');
+        // Ringkasan beban berdasarkan jenis pengeluaran.
 
-        $bebanOperasionalLainnya = $pengeluaran
-            ->where('jenis_pengeluaran', 'Operasional Lainnya')
-            ->sum('total');
+        $bebanPembelianPersediaan =
+            $pengeluaran
+                ->where(
+                    'jenis_pengeluaran',
+                    'Pembelian Persediaan'
+                )
+                ->sum('total');
+
+        $bebanOperasionalLainnya =
+            $pengeluaran
+                ->where(
+                    'jenis_pengeluaran',
+                    'Operasional Lainnya'
+                )
+                ->sum('total');
 
         if ($bebanPembelianPersediaan > 0) {
+
             $data[] = [
-                '', 'Beban Pembelian Persediaan',
-                '', '', '', '', '', '', $bebanPembelianPersediaan, ''
+                '',
+                'Beban Pembelian Persediaan',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                $bebanPembelianPersediaan,
+                ''
             ];
         }
 
         if ($bebanOperasionalLainnya > 0) {
+
             $data[] = [
-                '', 'Beban Operasional Lainnya',
-                '', '', '', '', '', '', $bebanOperasionalLainnya, ''
+                '',
+                'Beban Operasional Lainnya',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                $bebanOperasionalLainnya,
+                ''
             ];
         }
 
-        $this->rowBebanTotal = count($data) + 1;
+        $this->rowBebanTotal =
+            count($data) + 1;
 
         $data[] = [
-            '', 'TOTAL BEBAN',
-            '', '', '', '', '', '', $totalPengeluaran, ''
+            '',
+            'TOTAL BEBAN',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            $totalPengeluaran,
+            ''
         ];
 
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
 
         // =========================================================
         // LABA / RUGI
         // =========================================================
 
-        $this->rowLaba = count($data) + 1;
+        $this->rowLaba =
+            count($data) + 1;
 
         $data[] = [
             '',
-            $labaBersih >= 0 ? 'LABA BERSIH' : 'RUGI BERSIH',
-            '', '', '', '', '', '',
+            $labaBersih >= 0
+                ? 'LABA BERSIH'
+                : 'RUGI BERSIH',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             abs($labaBersih),
             ''
         ];
+        
 
-        // Jarak sebelum tanda tangan
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
+// Spasi setelah tabel laba/rugi
+$data[] = [
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    ''
+];
+
+
+        // =========================================================
+        // TANGGAL LAPORAN
+        // =========================================================
+
+        $this->rowTanggal =
+            count($data) + 1;
+
+        $data[] = [
+            '',
+            'Kalitinggar, ' .
+                $this->dicetakPada
+                    ->translatedFormat('d F Y'),
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        // Satu baris kosong sebelum tanda tangan.
+
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
 
         // =========================================================
         // TANDA TANGAN
         // =========================================================
 
-        $this->rowTtd = count($data) + 1;
+        $this->rowTtd =
+            count($data) + 1;
 
         // Baris keterangan
+
         $data[] = [
             '',
-            'Mengetahui,', '', '',
-            'Diperiksa oleh,', '', '',
-            'Disetujui oleh,', '', ''
+            'Mengetahui,',
+            '',
+            '',
+            'Diperiksa oleh,',
+            '',
+            '',
+            'Disetujui oleh,',
+            '',
+            ''
         ];
 
         // Baris jabatan
+
         $data[] = [
             '',
-            'Ketua Unit Usaha Fotokokopi Jayadirana', '', '',
-            'Bendahara BUM Desa', '', '',
-            'Direktur BUM Desa', '', ''
+            'Ketua Unit Usaha Fotokokopi Jayadirana',
+            '',
+            '',
+            'Bendahara BUM Desa',
+            '',
+            '',
+            'Direktur BUM Desa',
+            '',
+            ''
         ];
 
         // Ruang tanda tangan
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
-        $data[] = ['', '', '', '', '', '', '', '', '', ''];
 
-        // Nama / tanda tangan
         $data[] = [
             '',
-            '(__________________________)', '', '',
-            '(__________________________)', '', '',
-            '(__________________________)', '', ''
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        $data[] = [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            ''
+        ];
+
+        // Nama / tanda tangan
+
+        $data[] = [
+            '',
+            '(__________________________)',
+            '',
+            '',
+            '(__________________________)',
+            '',
+            '',
+            '(__________________________)',
+            '',
+            ''
         ];
 
         return $data;
@@ -256,134 +607,254 @@ class LaporanRingkasanSheet implements
     public function styles(Worksheet $sheet)
     {
         // =========================================================
-// FONT SELURUH LAPORAN
-// =========================================================
-
-$sheet->getStyle('A1:J' . $sheet->getHighestRow())
-    ->getFont()
-    ->setName('Times New Roman');
-
-    // =========================================================
-// LEBAR KOLOM K - HANYA SEBAGAI PERPANJANGAN KOP
-// =========================================================
-$sheet->getColumnDimension('A')->setWidth(4);
-$sheet->getColumnDimension('B')->setWidth(11);
-$sheet->getColumnDimension('K')->setWidth(2);
-
-     // =========================================================
-// KOP
-// =========================================================
-
-$sheet->mergeCells('C1:I1');
-$sheet->mergeCells('C2:I2');
-$sheet->mergeCells('C3:I3');
-
-$sheet->getStyle('C1:I3')
-    ->getAlignment()
-    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-    ->setVertical(Alignment::VERTICAL_CENTER);
-
-$sheet->getStyle('C1:I1')
-    ->getFont()
-    ->setBold(true)
-    ->setSize(14);
-
-$sheet->getStyle('C2:I2')
-    ->getFont()
-    ->setBold(true)
-    ->setSize(13);
-
-$sheet->getStyle('C3:I3')
-    ->getFont()
-    ->setSize(9);
-    
+        // FONT SELURUH LAPORAN
         // =========================================================
-        // GARIS KOP PROFESIONAL
+
+        $sheet
+            ->getStyle(
+                'A1:J' .
+                $sheet->getHighestRow()
+            )
+            ->getFont()
+            ->setName('Times New Roman');
+
         // =========================================================
-        
-        $sheet->getStyle('B4:K4')->applyFromArray([
-    'borders' => [
-        'bottom' => [
-            'borderStyle' => Border::BORDER_MEDIUM,
-            'color' => [
-                'argb' => 'FF000000',
-            ],
-        ],
-    ],
-]);
+        // LEBAR KOLOM
+        // =========================================================
+
+        $sheet
+            ->getColumnDimension('A')
+            ->setWidth(3);
+
+        $sheet
+            ->getColumnDimension('B')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('C')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('D')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('E')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('F')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('G')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('H')
+            ->setWidth(13);
+
+        $sheet
+            ->getColumnDimension('I')
+            ->setWidth(9);
+
+        $sheet
+            ->getColumnDimension('J')
+            ->setWidth(9);
+
+        $sheet
+            ->getColumnDimension('K')
+            ->setWidth(2);
+
+        // =========================================================
+        // KOP
+        // =========================================================
+
+        $sheet->mergeCells('C1:I1');
+
+        $sheet->mergeCells('C2:I2');
+
+        $sheet->mergeCells('C3:I3');
+
+        $sheet
+            ->getStyle('C1:I3')
+            ->getAlignment()
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
+
+        $sheet
+            ->getStyle('C1:I1')
+            ->getFont()
+            ->setBold(true)
+            ->setSize(14);
+
+        $sheet
+            ->getStyle('C2:I2')
+            ->getFont()
+            ->setBold(true)
+            ->setSize(13);
+
+        $sheet
+            ->getStyle('C3:I3')
+            ->getFont()
+            ->setSize(9);
+
+        // =========================================================
+        // GARIS KOP
+        // =========================================================
+
+        $sheet
+            ->getStyle('B4:K4')
+            ->applyFromArray([
+                'borders' => [
+                    'bottom' => [
+                        'borderStyle' =>
+                            Border::BORDER_MEDIUM,
+                        'color' => [
+                            'argb' => 'FF000000',
+                        ],
+                    ],
+                ],
+            ]);
 
         // =========================================================
         // JUDUL
         // =========================================================
 
         $sheet->mergeCells('C5:I5');
+
         $sheet->mergeCells('C6:I6');
 
-        $sheet->getStyle('C5:I5')
-            ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->mergeCells('C7:I7');
 
-        $sheet->getStyle('C5:I5')
+        $sheet
+            ->getStyle('C5:I5')
+            ->getAlignment()
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
+
+        $sheet
+            ->getStyle('C5:I5')
             ->getFont()
             ->setBold(true)
             ->setSize(17);
 
-        $sheet->getStyle('C6:I6')
+        $sheet
+            ->getStyle('C6:I6')
             ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
 
-        $sheet->getStyle('C6:I6')
+        $sheet
+            ->getStyle('C6:I6')
             ->getFont()
             ->setItalic(true)
             ->setSize(11);
 
         // =========================================================
+        // DICETAK PADA
+        // =========================================================
+
+        $sheet
+            ->getStyle('C7:I7')
+            ->getAlignment()
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
+
+        $sheet
+            ->getStyle('C7:I7')
+            ->getFont()
+            ->setSize(12);
+
+        // =========================================================
         // HEADER PENDAPATAN
         // =========================================================
 
-        $sheet->mergeCells('B8:J8');
+        $sheet->mergeCells('B9:J9');
 
-        $sheet->getStyle('B8:J8')->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'color' => ['rgb' => 'FFFFFF'],
-                'size' => 11,
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '1F4E78'],
-            ],
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_LEFT,
-                'vertical' => Alignment::VERTICAL_CENTER,
-            ],
-        ]);
+        $sheet
+            ->getStyle('B9:J9')
+            ->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                    'color' => [
+                        'rgb' => 'FFFFFF'
+                    ],
+                    'size' => 11,
+                ],
+
+                'fill' => [
+                    'fillType' =>
+                        Fill::FILL_SOLID,
+                    'startColor' => [
+                        'rgb' => '1F4E78'
+                    ],
+                ],
+
+                'alignment' => [
+                    'horizontal' =>
+                        Alignment::HORIZONTAL_LEFT,
+
+                    'vertical' =>
+                        Alignment::VERTICAL_CENTER,
+                ],
+            ]);
 
         // =========================================================
         // BARIS PENDAPATAN
         // =========================================================
 
-        for ($row = 9; $row <= 11; $row++) {
-            $sheet->mergeCells("B{$row}:H{$row}");
-            $sheet->mergeCells("I{$row}:J{$row}");
+        for ($row = 10; $row <= 12; $row++) {
+
+            $sheet->mergeCells(
+                "B{$row}:H{$row}"
+            );
+
+            $sheet->mergeCells(
+                "I{$row}:J{$row}"
+            );
         }
 
-        $sheet->getStyle('B8:J11')
+        $sheet
+            ->getStyle('B9:J12')
             ->getBorders()
             ->getAllBorders()
-            ->setBorderStyle(Border::BORDER_THIN);
+            ->setBorderStyle(
+                Border::BORDER_THIN
+            );
 
-        $sheet->getStyle('B11:J11')->applyFromArray([
-            'font' => [
-                'bold' => true,
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'EAF2F8'],
-            ],
-        ]);
+        $sheet
+            ->getStyle('B12:J12')
+            ->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                ],
+
+                'fill' => [
+                    'fillType' =>
+                        Fill::FILL_SOLID,
+
+                    'startColor' => [
+                        'rgb' => 'EAF2F8'
+                    ],
+                ],
+            ]);
 
         // =========================================================
         // HEADER BEBAN
@@ -393,34 +864,62 @@ $sheet->getStyle('C3:I3')
             "B{$this->rowBebanHeader}:J{$this->rowBebanHeader}"
         );
 
-        $sheet->getStyle(
-            "B{$this->rowBebanHeader}:J{$this->rowBebanHeader}"
-        )->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'color' => ['rgb' => 'FFFFFF'],
-                'size' => 11,
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => '1F4E78'],
-            ],
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_LEFT,
-                'vertical' => Alignment::VERTICAL_CENTER,
-            ],
-        ]);
+        $sheet
+            ->getStyle(
+                "B{$this->rowBebanHeader}:J{$this->rowBebanHeader}"
+            )
+            ->applyFromArray([
 
-        $startBeban = $this->rowBebanHeader + 1;
+                'font' => [
+                    'bold' => true,
+                    'color' => [
+                        'rgb' => 'FFFFFF'
+                    ],
+                    'size' => 11,
+                ],
 
-        for ($row = $startBeban; $row < $this->rowBebanTotal; $row++) {
-            $sheet->mergeCells("B{$row}:H{$row}");
-            $sheet->mergeCells("I{$row}:J{$row}");
+                'fill' => [
+                    'fillType' =>
+                        Fill::FILL_SOLID,
 
-            $sheet->getStyle("B{$row}:J{$row}")
+                    'startColor' => [
+                        'rgb' => '1F4E78'
+                    ],
+                ],
+
+                'alignment' => [
+                    'horizontal' =>
+                        Alignment::HORIZONTAL_LEFT,
+
+                    'vertical' =>
+                        Alignment::VERTICAL_CENTER,
+                ],
+            ]);
+
+        $startBeban =
+            $this->rowBebanHeader + 1;
+
+        for (
+            $row = $startBeban;
+            $row < $this->rowBebanTotal;
+            $row++
+        ) {
+
+            $sheet->mergeCells(
+                "B{$row}:H{$row}"
+            );
+
+            $sheet->mergeCells(
+                "I{$row}:J{$row}"
+            );
+
+            $sheet
+                ->getStyle("B{$row}:J{$row}")
                 ->getBorders()
                 ->getAllBorders()
-                ->setBorderStyle(Border::BORDER_THIN);
+                ->setBorderStyle(
+                    Border::BORDER_THIN
+                );
         }
 
         $sheet->mergeCells(
@@ -431,85 +930,170 @@ $sheet->getStyle('C3:I3')
             "I{$this->rowBebanTotal}:J{$this->rowBebanTotal}"
         );
 
-        $sheet->getStyle(
-            "B{$this->rowBebanTotal}:J{$this->rowBebanTotal}"
-        )->applyFromArray([
-            'font' => [
-                'bold' => true,
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'EAF2F8'],
-            ],
-            'borders' => [
-                'top' => [
-                    'borderStyle' => Border::BORDER_THIN,
+        $sheet
+            ->getStyle(
+                "B{$this->rowBebanTotal}:J{$this->rowBebanTotal}"
+            )
+            ->applyFromArray([
+
+                'font' => [
+                    'bold' => true,
                 ],
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THIN,
+
+                'fill' => [
+                    'fillType' =>
+                        Fill::FILL_SOLID,
+
+                    'startColor' => [
+                        'rgb' => 'EAF2F8'
+                    ],
                 ],
-                'left' => [
-                    'borderStyle' => Border::BORDER_THIN,
+
+                'borders' => [
+
+                    'top' => [
+                        'borderStyle' =>
+                            Border::BORDER_THIN,
+                    ],
+
+                    'bottom' => [
+                        'borderStyle' =>
+                            Border::BORDER_THIN,
+                    ],
+
+                    'left' => [
+                        'borderStyle' =>
+                            Border::BORDER_THIN,
+                    ],
+
+                    'right' => [
+                        'borderStyle' =>
+                            Border::BORDER_THIN,
+                    ],
                 ],
-                'right' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-            ],
-        ]);
+            ]);
 
         // =========================================================
-        // LABA BERSIH
-        // =========================================================
+// LABA BERSIH
+// =========================================================
 
-        $sheet->mergeCells("B{$this->rowLaba}:H{$this->rowLaba}");
-        $sheet->mergeCells("I{$this->rowLaba}:J{$this->rowLaba}");
+$sheet->mergeCells(
+    "B{$this->rowLaba}:H{$this->rowLaba}"
+);
 
-        $sheet->getStyle(
-            "B{$this->rowLaba}:J{$this->rowLaba}"
-        )->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'size' => 13,
-            ],
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => $this->labaBersih >= 0 ? 'E2F0D9' : 'FCE4D6'],
-            ],
-            'borders' => [
-                'top' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-                'left' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-                'right' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-            ],
-        ]);
+$sheet->mergeCells(
+    "I{$this->rowLaba}:J{$this->rowLaba}"
+);
 
-        // Warna nominal laba/rugi:
-        // laba = hijau, rugi = merah.
-        $sheet->getStyle("I{$this->rowLaba}:J{$this->rowLaba}")
+$sheet
+    ->getStyle(
+        "B{$this->rowLaba}:J{$this->rowLaba}"
+    )
+    ->applyFromArray([
+
+        'font' => [
+            'bold' => true,
+            'size' => 13,
+        ],
+
+        'fill' => [
+            'fillType' => Fill::FILL_SOLID,
+
+            'startColor' => [
+                'rgb' => $this->labaBersih >= 0
+                    ? 'E2F0D9'
+                    : 'FCE4D6',
+            ],
+        ],
+
+        'borders' => [
+
+            'top' => [
+                'borderStyle' =>
+                    Border::BORDER_THIN,
+            ],
+
+            'bottom' => [
+                'borderStyle' =>
+                    Border::BORDER_THIN,
+            ],
+
+            'left' => [
+                'borderStyle' =>
+                    Border::BORDER_THIN,
+            ],
+
+            'right' => [
+                'borderStyle' =>
+                    Border::BORDER_THIN,
+            ],
+        ],
+    ]);
+        // Warna nominal laba/rugi
+        // laba = hijau
+        // rugi = merah
+
+        $sheet
+            ->getStyle(
+                "I{$this->rowLaba}:J{$this->rowLaba}"
+            )
             ->getFont()
             ->getColor()
-            ->setRGB($this->labaBersih >= 0 ? '008000' : 'C00000');
+            ->setRGB(
+                $this->labaBersih >= 0
+                    ? '008000'
+                    : 'C00000'
+            );
 
         // =========================================================
         // NOMINAL
         // =========================================================
 
-        $sheet->getStyle("I9:J{$this->rowLaba}")
+        $sheet
+            ->getStyle(
+                "I9:J{$this->rowLaba}"
+            )
             ->getNumberFormat()
             ->setFormatCode('#,##0');
 
-        $sheet->getStyle("I9:J{$this->rowLaba}")
+        $sheet
+            ->getStyle(
+                "I9:J{$this->rowLaba}"
+            )
             ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_RIGHT)
-            ->setVertical(Alignment::VERTICAL_CENTER);
+            ->setHorizontal(
+                Alignment::HORIZONTAL_RIGHT
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
+
+        // =========================================================
+        // TANGGAL DI ATAS TANDA TANGAN
+        // =========================================================
+
+        $sheet->mergeCells(
+            "B{$this->rowTanggal}:J{$this->rowTanggal}"
+        );
+
+        $sheet
+            ->getStyle(
+                "B{$this->rowTanggal}:J{$this->rowTanggal}"
+            )
+            ->getAlignment()
+            ->setHorizontal(
+                Alignment::HORIZONTAL_RIGHT
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
+
+        $sheet
+            ->getStyle(
+                "B{$this->rowTanggal}:J{$this->rowTanggal}"
+            )
+            ->getFont()
+            ->setSize(12);
 
         // =========================================================
         // TANDA TANGAN
@@ -517,24 +1101,58 @@ $sheet->getStyle('C3:I3')
 
         $r = $this->rowTtd;
 
-        $sheet->mergeCells("B{$r}:D{$r}");
-        $sheet->mergeCells("E{$r}:G{$r}");
-        $sheet->mergeCells("H{$r}:J{$r}");
+        $sheet->mergeCells(
+            "B{$r}:D{$r}"
+        );
 
-        $sheet->mergeCells("B" . ($r + 1) . ":D" . ($r + 1));
-        $sheet->mergeCells("E" . ($r + 1) . ":G" . ($r + 1));
-        $sheet->mergeCells("H" . ($r + 1) . ":J" . ($r + 1));
+        $sheet->mergeCells(
+            "E{$r}:G{$r}"
+        );
 
-        $sheet->mergeCells("B" . ($r + 5) . ":D" . ($r + 5));
-        $sheet->mergeCells("E" . ($r + 5) . ":G" . ($r + 5));
-        $sheet->mergeCells("H" . ($r + 5) . ":J" . ($r + 5));
+        $sheet->mergeCells(
+            "H{$r}:J{$r}"
+        );
 
-        $sheet->getStyle("B{$r}:J" . ($r + 5))
+        $sheet->mergeCells(
+            "B" . ($r + 1) . ":D" . ($r + 1)
+        );
+
+        $sheet->mergeCells(
+            "E" . ($r + 1) . ":G" . ($r + 1)
+        );
+
+        $sheet->mergeCells(
+            "H" . ($r + 1) . ":J" . ($r + 1)
+        );
+
+        $sheet->mergeCells(
+            "B" . ($r + 5) . ":D" . ($r + 5)
+        );
+
+        $sheet->mergeCells(
+            "E" . ($r + 5) . ":G" . ($r + 5)
+        );
+
+        $sheet->mergeCells(
+            "H" . ($r + 5) . ":J" . ($r + 5)
+        );
+
+        $sheet
+            ->getStyle(
+                "B{$r}:J" . ($r + 5)
+            )
             ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
-            ->setVertical(Alignment::VERTICAL_CENTER);
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            )
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
 
-        $sheet->getStyle("B" . ($r + 1) . ":J" . ($r + 1))
+        $sheet
+            ->getStyle(
+                "B" . ($r + 1) . ":J" . ($r + 1)
+            )
             ->getFont()
             ->setBold(true);
 
@@ -544,10 +1162,11 @@ $sheet->getStyle('C3:I3')
     public function columnWidths(): array
     {
         return [
-            // A = margin kiri
+
+            // Margin kiri
             'A' => 3,
 
-            // Area utama dimulai B
+            // Area utama
             'B' => 13,
             'C' => 13,
             'D' => 13,
@@ -570,18 +1189,32 @@ $sheet->getStyle('C3:I3')
         // LOGO BUM DESA
         // =========================================================
 
-        $logoBum = public_path('images/logo bumdes.jpeg');
+        $logoBum = public_path(
+            'images/logo bumdes.jpeg'
+        );
 
         if (file_exists($logoBum)) {
+
             $logo = new Drawing();
-            $logo->setName('Logo BUM Desa');
-            $logo->setDescription('Logo BUM Desa Kalitinggar Makmur');
+
+            $logo->setName(
+                'Logo BUM Desa'
+            );
+
+            $logo->setDescription(
+                'Logo BUM Desa Kalitinggar Makmur'
+            );
+
             $logo->setPath($logoBum);
 
-           $logo->setHeight(90);
-$logo->setCoordinates('B1');
-$logo->setOffsetX(13);
-$logo->setOffsetY(13);
+            $logo->setHeight(90);
+
+            $logo->setCoordinates('B1');
+
+            $logo->setOffsetX(18);
+
+            $logo->setOffsetY(13);
+
             $drawings[] = $logo;
         }
 
@@ -589,18 +1222,31 @@ $logo->setOffsetY(13);
         // LOGO JAYADIRANA
         // =========================================================
 
-        $logoJaya = public_path('images/logo fc.jpeg');
+        $logoJaya = public_path(
+            'images/logo fc.jpeg'
+        );
 
         if (file_exists($logoJaya)) {
+
             $logo = new Drawing();
-            $logo->setName('Logo Jayadirana');
-            $logo->setDescription('Logo Unit Fotokopi Jayadirana');
+
+            $logo->setName(
+                'Logo Jayadirana'
+            );
+
+            $logo->setDescription(
+                'Logo Unit Fotokopi Jayadirana'
+            );
+
             $logo->setPath($logoJaya);
 
-          $logo->setHeight(90);
-$logo->setCoordinates('J1');
-$logo->setOffsetX(-20);
-$logo->setOffsetY(13);
+            $logo->setHeight(90);
+
+            $logo->setCoordinates('J1');
+
+            $logo->setOffsetX(-25);
+
+            $logo->setOffsetY(13);
 
             $drawings[] = $logo;
         }
@@ -611,116 +1257,242 @@ $logo->setOffsetY(13);
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function (AfterSheet $event) {
 
-                $sheet = $event->sheet->getDelegate();
+            AfterSheet::class =>
+                function (AfterSheet $event) {
 
-                // =================================================
-                // TAMPILAN
-                // =================================================
+                    $sheet =
+                        $event->sheet->getDelegate();
 
-                $sheet->setShowGridlines(false);
+                    // =================================================
+                    // TAMPILAN
+                    // =================================================
 
-                // =================================================
-                // TINGGI BARIS KOP
-                // =================================================
+                    $sheet->setShowGridlines(false);
 
-                $sheet->getRowDimension(1)->setRowHeight(31);
-                $sheet->getRowDimension(2)->setRowHeight(27);
-                $sheet->getRowDimension(3)->setRowHeight(22);
+                    // =================================================
+                    // WATERMARK DRAFT
+                    // =================================================
+                    //
+                    // DRAFT hanya muncul ketika status masih draft.
+                    // Menggunakan header cetak sehingga tidak menutupi
+                    // tabel laporan.
+                    //
+                    // =================================================
 
-                // Ruang penutup kop / garis bawah
-                $sheet->getRowDimension(4)->setRowHeight(8);
+                    if ($this->status === 'draft') {
 
-                // =================================================
-                // JUDUL
-                // =================================================
+                        $sheet
+                            ->getHeaderFooter()
+                            ->setOddHeader(
+                                '&C&KCCCCCC&"Times New Roman,Bold"&36DRAFT'
+                            );
 
-                $sheet->getRowDimension(5)->setRowHeight(34);
-                $sheet->getRowDimension(6)->setRowHeight(22);
-                $sheet->getRowDimension(7)->setRowHeight(12);
+                    } else {
 
-                // =================================================
-                // TABEL
-                // =================================================
-
-                $sheet->getRowDimension(8)->setRowHeight(26);
-
-                for ($i = 9; $i <= $sheet->getHighestRow(); $i++) {
-                    if (
-                        $i !== $this->rowTtd &&
-                        $i !== $this->rowTtd + 1 &&
-                        $i !== $this->rowTtd + 5
-                    ) {
-                        $sheet->getRowDimension($i)->setRowHeight(21);
+                        $sheet
+                            ->getHeaderFooter()
+                            ->setOddHeader('');
                     }
-                }
 
-                // =================================================
-                // JARAK SEBELUM TANDA TANGAN
-                // =================================================
+                    // =================================================
+                    // TINGGI BARIS KOP
+                    // =================================================
 
-                $sheet->getRowDimension($this->rowLaba + 1)->setRowHeight(11);
-                $sheet->getRowDimension($this->rowLaba + 2)->setRowHeight(11);
+                    $sheet
+                        ->getRowDimension(1)
+                        ->setRowHeight(31);
 
-                // =================================================
-                // TANDA TANGAN
-                // =================================================
+                    $sheet
+                        ->getRowDimension(2)
+                        ->setRowHeight(27);
 
-                $sheet->getRowDimension($this->rowTtd)->setRowHeight(24);
-                $sheet->getRowDimension($this->rowTtd + 1)->setRowHeight(25);
+                    $sheet
+                        ->getRowDimension(3)
+                        ->setRowHeight(22);
 
-                // Ruang kosong untuk tanda tangan
-                $sheet->getRowDimension($this->rowTtd + 2)->setRowHeight(26);
-                $sheet->getRowDimension($this->rowTtd + 3)->setRowHeight(26);
-                $sheet->getRowDimension($this->rowTtd + 4)->setRowHeight(26);
+                    $sheet
+                        ->getRowDimension(4)
+                        ->setRowHeight(8);
 
-                $sheet->getRowDimension($this->rowTtd + 5)->setRowHeight(25);
+                    // =================================================
+                    // JUDUL
+                    // =================================================
 
-                // =================================================
-                // PAGE SETUP
-                // =================================================
+                    $sheet
+                        ->getRowDimension(5)
+                        ->setRowHeight(34);
 
-                $sheet->getPageSetup()
-                    ->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
+                    $sheet
+                        ->getRowDimension(6)
+                        ->setRowHeight(22);
 
-                $sheet->getPageSetup()
-                    ->setPaperSize(PageSetup::PAPERSIZE_A4);
+                    // Dicetak pada
 
-                $sheet->getPageSetup()
-                    ->setFitToWidth(1);
+                    $sheet
+                        ->getRowDimension(7)
+                        ->setRowHeight(20);
+                        
+                        // Spasi setelah "Dicetak pada"
+$sheet
+    ->getRowDimension(8)
+    ->setRowHeight(10);
 
-                $sheet->getPageSetup()
-                    ->setFitToHeight(1);
+                    // =================================================
+                    // TABEL
+                    // =================================================
 
-                // =================================================
-                // MARGIN CETAK
-                // =================================================
+                    $sheet
+                        ->getRowDimension(9)
+                        ->setRowHeight(26);
 
-                $sheet->getPageMargins()->setTop(0.30);
-                $sheet->getPageMargins()->setBottom(0.30);
-                $sheet->getPageMargins()->setLeft(0.40);
-                $sheet->getPageMargins()->setRight(0.40);
+                    for (
+                        $i = 10;
+                        $i <= $sheet->getHighestRow();
+                        $i++
+                    ) {
 
-                // =================================================
-                // PRINT AREA
-                // =================================================
+                        if (
+                            $i !== $this->rowTtd &&
+                            $i !== $this->rowTtd + 1 &&
+                            $i !== $this->rowTtd + 5 &&
+                            $i !== $this->rowTanggal
+                        ) {
 
-                $sheet->getPageSetup()
-    ->setPrintArea(
-        'B1:K' . $sheet->getHighestRow()
-    );
+                            $sheet
+                                ->getRowDimension($i)
+                                ->setRowHeight(21);
+                        }
+                    }
 
-                // =================================================
-                // POSISI CETAK
-                // =================================================
+                    // =================================================
+                    // TANGGAL
+                    // =================================================
 
-                $sheet->getPageSetup()
-                    ->setHorizontalCentered(true);
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTanggal
+                        )
+                        ->setRowHeight(22);
+                        
 
-                $sheet->getPageSetup()
-                    ->setVerticalCentered(false);
-            },
+                    // =================================================
+                    // JARAK SEBELUM TANDA TANGAN
+                    // =================================================
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTanggal + 1
+                        )
+                        ->setRowHeight(11);
+
+                    // =================================================
+                    // TANDA TANGAN
+                    // =================================================
+
+                    $sheet
+                        ->getRowDimension($this->rowTtd)
+                        ->setRowHeight(24);
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTtd + 1
+                        )
+                        ->setRowHeight(25);
+
+                    // Ruang tanda tangan
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTtd + 2
+                        )
+                        ->setRowHeight(26);
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTtd + 3
+                        )
+                        ->setRowHeight(26);
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTtd + 4
+                        )
+                        ->setRowHeight(26);
+
+                    $sheet
+                        ->getRowDimension(
+                            $this->rowTtd + 5
+                        )
+                        ->setRowHeight(25);
+
+                    // =================================================
+                    // PAGE SETUP
+                    // =================================================
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setOrientation(
+                            PageSetup::ORIENTATION_PORTRAIT
+                        );
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setPaperSize(
+                            PageSetup::PAPERSIZE_A4
+                        );
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setFitToWidth(1);
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setFitToHeight(1);
+
+                    // =================================================
+                    // MARGIN CETAK
+                    // =================================================
+
+                    $sheet
+                        ->getPageMargins()
+                        ->setTop(0.30);
+
+                    $sheet
+                        ->getPageMargins()
+                        ->setBottom(0.30);
+
+                    $sheet
+                        ->getPageMargins()
+                        ->setLeft(0.40);
+
+                    $sheet
+                        ->getPageMargins()
+                        ->setRight(0.40);
+
+                    // =================================================
+                    // PRINT AREA
+                    // =================================================
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setPrintArea(
+                            'B1:K' .
+                            $sheet->getHighestRow()
+                        );
+
+                    // =================================================
+                    // POSISI CETAK
+                    // =================================================
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setHorizontalCentered(true);
+
+                    $sheet
+                        ->getPageSetup()
+                        ->setVerticalCentered(false);
+                },
         ];
     }
 }
