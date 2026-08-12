@@ -4,65 +4,64 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Pendapatan;
 use App\Models\Laporan;
-use Illuminate\Http\Request;
+use App\Models\Pendapatan;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class PendapatanController extends Controller
 {
     public function index(Request $request)
-{
-    $categories = Category::orderBy('nama_kategori')
-        ->get();
+    {
+        $categories = Category::orderBy('nama_kategori')
+            ->get();
 
-    $search = $request->search;
+        $search = $request->search;
 
-   $pendapatans = Pendapatan::with('category')
+        $pendapatans = Pendapatan::with('category')
 
-    // hanya bulan berjalan
-    ->whereMonth('tanggal', now()->month)
-    ->whereYear('tanggal', now()->year)
+         // hanya bulan berjalan
+            ->whereMonth('tanggal', now()->month)
+            ->whereYear('tanggal', now()->year)
 
-    // pencarian
-    ->when($search, function ($query) use ($search) {
+         // pencarian
+            ->when($search, function ($query) use ($search) {
 
-        $query->where(function ($q) use ($search) {
+                $query->where(function ($q) use ($search) {
 
-            $q->where('nama_barang', 'like', "%{$search}%")
-              ->orWhereHas('category', function ($kategori) use ($search) {
+                    $q->where('nama_barang', 'like', "%{$search}%")
+                        ->orWhereHas('category', function ($kategori) use ($search) {
 
-                    $kategori->where('nama_kategori', 'like', "%{$search}%");
+                            $kategori->where('nama_kategori', 'like', "%{$search}%");
 
-              });
+                        });
 
-        });
+                });
 
-    })
+            })
+            ->orderByDesc('tanggal')
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
 
-    ->orderByDesc('tanggal')
-    ->orderByDesc('id')
-    ->paginate(10)
-    ->withQueryString();
+        /*
+        |--------------------------------------------------------------------------
+        | CEK LAPORAN BULAN AKTIF
+        |--------------------------------------------------------------------------
+        */
 
-    /*
-    |--------------------------------------------------------------------------
-    | CEK LAPORAN BULAN AKTIF
-    |--------------------------------------------------------------------------
-    */
+        $laporanFinal = Laporan::where('bulan', now()->format('m'))
+            ->where('tahun', now()->format('Y'))
+            ->where('status', 'final')
+            ->exists();
 
-    $laporanFinal = Laporan::where('bulan', now()->format('m'))
-        ->where('tahun', now()->format('Y'))
-        ->where('status', 'final')
-        ->exists();
-
-    return view('admin.pendapatan.index', compact(
-        'categories',
-        'pendapatans',
-        'laporanFinal',
-        'search'
-    ));
-}
+        return view('admin.pendapatan.index', compact(
+            'categories',
+            'pendapatans',
+            'laporanFinal',
+            'search'
+        ));
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -75,25 +74,25 @@ class PendapatanController extends Controller
         $data = $this->validatePendapatan($request);
 
         $tanggal = Carbon::parse($data['tanggal']);
-/*
-|--------------------------------------------------------------------------
-| HANYA BOLEH INPUT BULAN BERJALAN
-|--------------------------------------------------------------------------
-*/
+        /*
+        |--------------------------------------------------------------------------
+        | HANYA BOLEH INPUT BULAN BERJALAN
+        |--------------------------------------------------------------------------
+        */
 
-if (
-    $tanggal->month != now()->month ||
-    $tanggal->year != now()->year
-) {
+        if (
+            $tanggal->month != now()->month ||
+            $tanggal->year != now()->year
+        ) {
 
-    return redirect()
-        ->route('admin.pendapatan.index')
-        ->with(
-            'error',
-            'Data hanya dapat ditambahkan pada bulan yang sedang berjalan.'
-        );
+            return redirect()
+                ->route('admin.pendapatan.index')
+                ->with(
+                    'error',
+                    'Data hanya dapat ditambahkan pada bulan yang sedang berjalan.'
+                );
 
-}
+        }
         $laporan = Laporan::where('bulan', $tanggal->month)
             ->where('tahun', $tanggal->year)
             ->where('status', 'final')
@@ -139,27 +138,27 @@ if (
 
         $data = $this->validatePendapatan($request);
 
-$tanggalBaru = Carbon::parse($data['tanggal']);
+        $tanggalBaru = Carbon::parse($data['tanggal']);
 
-/*
-|--------------------------------------------------------------------------
-| HANYA BOLEH EDIT BULAN BERJALAN
-|--------------------------------------------------------------------------
-*/
+        /*
+        |--------------------------------------------------------------------------
+        | HANYA BOLEH EDIT BULAN BERJALAN
+        |--------------------------------------------------------------------------
+        */
 
-if (
-    $tanggalBaru->month != now()->month ||
-    $tanggalBaru->year != now()->year
-) {
+        if (
+            $tanggalBaru->month != now()->month ||
+            $tanggalBaru->year != now()->year
+        ) {
 
-    return redirect()
-        ->route('admin.pendapatan.index')
-        ->with(
-            'error',
-            'Data bulan sebelumnya sudah terkunci.'
-        );
+            return redirect()
+                ->route('admin.pendapatan.index')
+                ->with(
+                    'error',
+                    'Data bulan sebelumnya sudah terkunci.'
+                );
 
-}
+        }
         $data['total'] = $data['jumlah'] * $data['harga'];
 
         $pendapatan->update($data);
@@ -184,19 +183,19 @@ if (
 |--------------------------------------------------------------------------
 */
 
-if (
-    $tanggal->month != now()->month ||
-    $tanggal->year != now()->year
-) {
+        if (
+            $tanggal->month != now()->month ||
+            $tanggal->year != now()->year
+        ) {
 
-    return redirect()
-        ->route('admin.pendapatan.index')
-        ->with(
-            'error',
-            'Data bulan sebelumnya sudah terkunci.'
-        );
+            return redirect()
+                ->route('admin.pendapatan.index')
+                ->with(
+                    'error',
+                    'Data bulan sebelumnya sudah terkunci.'
+                );
 
-}
+        }
 
         $laporan = Laporan::where('bulan', $tanggal->month)
             ->where('tahun', $tanggal->year)

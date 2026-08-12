@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AkunController extends Controller
 {
@@ -56,21 +56,18 @@ class AkunController extends Controller
                 'required',
                 'confirmed',
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).+$/'
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).+$/',
             ],
 
-            'role' => 'required|in:admin,direktur'
+            'role' => 'required|in:admin,direktur',
 
         ], [
 
-            'password.confirmed' =>
-                'Konfirmasi password tidak sesuai.',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
 
-            'password.min' =>
-                'Password minimal 8 karakter.',
+            'password.min' => 'Password minimal 8 karakter.',
 
-            'password.regex' =>
-                'Password harus mengandung huruf, angka dan simbol.'
+            'password.regex' => 'Password harus mengandung huruf, angka dan simbol.',
 
         ]);
 
@@ -112,14 +109,14 @@ class AkunController extends Controller
 
             'name' => 'required',
 
-            'email' => 'required|email|unique:users,email,' . $akun->id,
+            'email' => 'required|email|unique:users,email,'.$akun->id,
 
             'password' => [
                 'nullable',
                 'confirmed',
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).+$/'
-            ]
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).+$/',
+            ],
 
         ];
 
@@ -132,14 +129,11 @@ class AkunController extends Controller
 
         $request->validate($rules, [
 
-            'password.confirmed' =>
-                'Konfirmasi password tidak sesuai.',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
 
-            'password.min' =>
-                'Password minimal 8 karakter.',
+            'password.min' => 'Password minimal 8 karakter.',
 
-            'password.regex' =>
-                'Password harus mengandung huruf, angka dan simbol.'
+            'password.regex' => 'Password harus mengandung huruf, angka dan simbol.',
 
         ]);
 

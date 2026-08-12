@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Laporan;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class AutoDeleteOldReports extends Command
 {
@@ -48,6 +48,6 @@ class AutoDeleteOldReports extends Command
         |--------------------------------------------------------------------------
         */
 
-        $this->info($jumlah . ' laporan berhasil dihapus.');
+        $this->info($jumlah.' laporan berhasil dihapus.');
     }
 }

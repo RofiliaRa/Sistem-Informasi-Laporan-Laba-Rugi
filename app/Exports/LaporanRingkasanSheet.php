@@ -19,13 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class LaporanRingkasanSheet implements
-    FromArray,
-    WithTitle,
-    WithStyles,
-    WithColumnWidths,
-    WithDrawings,
-    WithEvents
+class LaporanRingkasanSheet implements FromArray, WithColumnWidths, WithDrawings, WithEvents, WithStyles, WithTitle
 {
     protected string $bulan;
 
@@ -38,10 +32,9 @@ class LaporanRingkasanSheet implements
     protected int $rowBebanTotal;
 
     protected int $rowLaba;
-
+    protected int $rowTtd;
     protected int $rowTanggal;
 
-    protected int $rowTtd;
 
     protected float $labaBersih = 0;
 
@@ -148,42 +141,18 @@ class LaporanRingkasanSheet implements
         // =========================================================
 
         $data[] = [
-            '',
-            '',
-            'BUM DESA KALITINGGAR MAKMUR KALITINGGAR',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', '', 'BUM DESA KALITINGGAR MAKMUR KALITINGGAR',
+            '', '', '', '', '', '', ''
         ];
 
         $data[] = [
-            '',
-            '',
-            'UNIT USAHA FOTOKOPI JAYADIRANA',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', '', 'UNIT USAHA FOTOKOPI JAYADIRANA',
+            '', '', '', '', '', '', ''
         ];
 
         $data[] = [
-            '',
-            '',
-            'Desa Kalitinggar RT 01 RW 03, Karang Malang, Kecamatan Padamara, Kabupaten Purbalingga, 53372',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', '', 'Desa Kalitinggar RT 01 RW 03, Karang Malang, Kecamatan Padamara, Kabupaten Purbalingga, 53372',
+            '', '', '', '', '', '', ''
         ];
 
         $data[] = [
@@ -204,30 +173,13 @@ class LaporanRingkasanSheet implements
         // =========================================================
 
         $data[] = [
-            '',
-            '',
-            'LAPORAN LABA RUGI',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', '', 'LAPORAN LABA RUGI',
+            '', '', '', '', '', '', ''
         ];
 
         $data[] = [
-            '',
-            '',
-            'Periode ' .
-                $periode->translatedFormat('F Y'),
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', '', 'Periode ' . $periode->translatedFormat('F Y'),
+            '', '', '', '', '', '', ''
         ];
 
         // =========================================================
@@ -270,55 +222,23 @@ $data[] = [
 // =========================================================
 
         $data[] = [
-            '',
-            'PENDAPATAN USAHA',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', 'PENDAPATAN USAHA',
+            '', '', '', '', '', '', '', ''
         ];
 
         $data[] = [
-            '',
-            'Pendapatan Jasa',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            $pendapatanJasa,
-            ''
+            '', 'Pendapatan Jasa',
+            '', '', '', '', '', '', $pendapatanJasa, ''
         ];
 
         $data[] = [
-            '',
-            'Pendapatan Penjualan ATK dan Lain-Lain',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            $pendapatanAtk,
-            ''
+            '', 'Pendapatan Penjualan ATK dan Lain-Lain',
+            '', '', '', '', '', '', $pendapatanAtk, ''
         ];
 
         $data[] = [
-            '',
-            'TOTAL PENDAPATAN',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            $totalPendapatan,
-            ''
+            '', 'TOTAL PENDAPATAN',
+            '', '', '', '', '', '', $totalPendapatan, ''
         ];
 
         $data[] = [
@@ -342,16 +262,8 @@ $data[] = [
             count($data) + 1;
 
         $data[] = [
-            '',
-            'BEBAN USAHA',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            ''
+            '', 'BEBAN USAHA',
+            '', '', '', '', '', '', '', ''
         ];
 
         // Ringkasan beban berdasarkan jenis pengeluaran.
@@ -375,32 +287,16 @@ $data[] = [
         if ($bebanPembelianPersediaan > 0) {
 
             $data[] = [
-                '',
-                'Beban Pembelian Persediaan',
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                $bebanPembelianPersediaan,
-                ''
+                '', 'Beban Pembelian Persediaan',
+                '', '', '', '', '', '', $bebanPembelianPersediaan, ''
             ];
         }
 
         if ($bebanOperasionalLainnya > 0) {
 
             $data[] = [
-                '',
-                'Beban Operasional Lainnya',
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                $bebanOperasionalLainnya,
-                ''
+                '', 'Beban Operasional Lainnya',
+                '', '', '', '', '', '', $bebanOperasionalLainnya, ''
             ];
         }
 
@@ -408,16 +304,8 @@ $data[] = [
             count($data) + 1;
 
         $data[] = [
-            '',
-            'TOTAL BEBAN',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            $totalPengeluaran,
-            ''
+            '', 'TOTAL BEBAN',
+            '', '', '', '', '', '', $totalPengeluaran, ''
         ];
 
         $data[] = [
@@ -452,7 +340,7 @@ $data[] = [
             '',
             '',
             abs($labaBersih),
-            ''
+            '',
         ];
         
 
@@ -519,30 +407,18 @@ $data[] = [
 
         $data[] = [
             '',
-            'Mengetahui,',
-            '',
-            '',
-            'Diperiksa oleh,',
-            '',
-            '',
-            'Disetujui oleh,',
-            '',
-            ''
+            'Mengetahui,', '', '',
+            'Diperiksa oleh,', '', '',
+            'Disetujui oleh,', '', ''
         ];
 
         // Baris jabatan
 
         $data[] = [
             '',
-            'Ketua Unit Usaha Fotokokopi Jayadirana',
-            '',
-            '',
-            'Bendahara BUM Desa',
-            '',
-            '',
-            'Direktur BUM Desa',
-            '',
-            ''
+            'Ketua Unit Usaha Fotokokopi Jayadirana', '', '',
+            'Bendahara BUM Desa', '', '',
+            'Direktur BUM Desa', '', ''
         ];
 
         // Ruang tanda tangan
@@ -590,15 +466,9 @@ $data[] = [
 
         $data[] = [
             '',
-            '(__________________________)',
-            '',
-            '',
-            '(__________________________)',
-            '',
-            '',
-            '(__________________________)',
-            '',
-            ''
+            '(__________________________)', '', '',
+            '(__________________________)', '', '',
+            '(__________________________)', '', ''
         ];
 
         return $data;
@@ -610,116 +480,58 @@ $data[] = [
         // FONT SELURUH LAPORAN
         // =========================================================
 
-        $sheet
-            ->getStyle(
-                'A1:J' .
-                $sheet->getHighestRow()
-            )
-            ->getFont()
-            ->setName('Times New Roman');
+$sheet->getStyle('A1:J' . $sheet->getHighestRow())
+    ->getFont()
+    ->setName('Times New Roman');
 
-        // =========================================================
-        // LEBAR KOLOM
-        // =========================================================
-
-        $sheet
-            ->getColumnDimension('A')
-            ->setWidth(3);
-
-        $sheet
-            ->getColumnDimension('B')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('C')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('D')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('E')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('F')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('G')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('H')
-            ->setWidth(13);
-
-        $sheet
-            ->getColumnDimension('I')
-            ->setWidth(9);
-
-        $sheet
-            ->getColumnDimension('J')
-            ->setWidth(9);
-
-        $sheet
-            ->getColumnDimension('K')
-            ->setWidth(2);
+    // =========================================================
+// LEBAR KOLOM K - HANYA SEBAGAI PERPANJANGAN KOP
+// =========================================================
+$sheet->getColumnDimension('A')->setWidth(4);
+$sheet->getColumnDimension('B')->setWidth(11);
+$sheet->getColumnDimension('K')->setWidth(2);
 
         // =========================================================
         // KOP
         // =========================================================
 
-        $sheet->mergeCells('C1:I1');
+$sheet->mergeCells('C1:I1');
+$sheet->mergeCells('C2:I2');
+$sheet->mergeCells('C3:I3');
 
-        $sheet->mergeCells('C2:I2');
+$sheet->getStyle('C1:I3')
+    ->getAlignment()
+    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+    ->setVertical(Alignment::VERTICAL_CENTER);
 
-        $sheet->mergeCells('C3:I3');
+$sheet->getStyle('C1:I1')
+    ->getFont()
+    ->setBold(true)
+    ->setSize(14);
 
-        $sheet
-            ->getStyle('C1:I3')
-            ->getAlignment()
-            ->setHorizontal(
-                Alignment::HORIZONTAL_CENTER
-            )
-            ->setVertical(
-                Alignment::VERTICAL_CENTER
-            );
+$sheet->getStyle('C2:I2')
+    ->getFont()
+    ->setBold(true)
+    ->setSize(13);
 
-        $sheet
-            ->getStyle('C1:I1')
-            ->getFont()
-            ->setBold(true)
-            ->setSize(14);
-
-        $sheet
-            ->getStyle('C2:I2')
-            ->getFont()
-            ->setBold(true)
-            ->setSize(13);
-
-        $sheet
-            ->getStyle('C3:I3')
-            ->getFont()
-            ->setSize(9);
-
+$sheet->getStyle('C3:I3')
+    ->getFont()
+    ->setSize(9);
+    
         // =========================================================
         // GARIS KOP
         // =========================================================
-
-        $sheet
-            ->getStyle('B4:K4')
-            ->applyFromArray([
-                'borders' => [
-                    'bottom' => [
-                        'borderStyle' =>
-                            Border::BORDER_MEDIUM,
-                        'color' => [
-                            'argb' => 'FF000000',
-                        ],
-                    ],
-                ],
-            ]);
+        
+        $sheet->getStyle('B4:K4')->applyFromArray([
+    'borders' => [
+        'bottom' => [
+            'borderStyle' => Border::BORDER_MEDIUM,
+            'color' => [
+                'argb' => 'FF000000',
+            ],
+        ],
+    ],
+]);
 
         // =========================================================
         // JUDUL
@@ -1113,34 +925,15 @@ $sheet
             "H{$r}:J{$r}"
         );
 
-        $sheet->mergeCells(
-            "B" . ($r + 1) . ":D" . ($r + 1)
-        );
+        $sheet->mergeCells("B" . ($r + 1) . ":D" . ($r + 1));
+        $sheet->mergeCells("E" . ($r + 1) . ":G" . ($r + 1));
+        $sheet->mergeCells("H" . ($r + 1) . ":J" . ($r + 1));
 
-        $sheet->mergeCells(
-            "E" . ($r + 1) . ":G" . ($r + 1)
-        );
+        $sheet->mergeCells("B" . ($r + 5) . ":D" . ($r + 5));
+        $sheet->mergeCells("E" . ($r + 5) . ":G" . ($r + 5));
+        $sheet->mergeCells("H" . ($r + 5) . ":J" . ($r + 5));
 
-        $sheet->mergeCells(
-            "H" . ($r + 1) . ":J" . ($r + 1)
-        );
-
-        $sheet->mergeCells(
-            "B" . ($r + 5) . ":D" . ($r + 5)
-        );
-
-        $sheet->mergeCells(
-            "E" . ($r + 5) . ":G" . ($r + 5)
-        );
-
-        $sheet->mergeCells(
-            "H" . ($r + 5) . ":J" . ($r + 5)
-        );
-
-        $sheet
-            ->getStyle(
-                "B{$r}:J" . ($r + 5)
-            )
+        $sheet->getStyle("B{$r}:J" . ($r + 5))
             ->getAlignment()
             ->setHorizontal(
                 Alignment::HORIZONTAL_CENTER
@@ -1149,10 +942,7 @@ $sheet
                 Alignment::VERTICAL_CENTER
             );
 
-        $sheet
-            ->getStyle(
-                "B" . ($r + 1) . ":J" . ($r + 1)
-            )
+        $sheet->getStyle("B" . ($r + 1) . ":J" . ($r + 1))
             ->getFont()
             ->setBold(true);
 
@@ -1194,27 +984,15 @@ $sheet
         );
 
         if (file_exists($logoBum)) {
-
             $logo = new Drawing();
-
-            $logo->setName(
-                'Logo BUM Desa'
-            );
-
-            $logo->setDescription(
-                'Logo BUM Desa Kalitinggar Makmur'
-            );
-
+            $logo->setName('Logo BUM Desa');
+            $logo->setDescription('Logo BUM Desa Kalitinggar Makmur');
             $logo->setPath($logoBum);
 
-            $logo->setHeight(90);
-
-            $logo->setCoordinates('B1');
-
-            $logo->setOffsetX(18);
-
-            $logo->setOffsetY(13);
-
+           $logo->setHeight(90);
+$logo->setCoordinates('B1');
+$logo->setOffsetX(13);
+$logo->setOffsetY(13);
             $drawings[] = $logo;
         }
 
@@ -1227,26 +1005,15 @@ $sheet
         );
 
         if (file_exists($logoJaya)) {
-
             $logo = new Drawing();
-
-            $logo->setName(
-                'Logo Jayadirana'
-            );
-
-            $logo->setDescription(
-                'Logo Unit Fotokopi Jayadirana'
-            );
-
+            $logo->setName('Logo Jayadirana');
+            $logo->setDescription('Logo Unit Fotokopi Jayadirana');
             $logo->setPath($logoJaya);
 
-            $logo->setHeight(90);
-
-            $logo->setCoordinates('J1');
-
-            $logo->setOffsetX(-25);
-
-            $logo->setOffsetY(13);
+          $logo->setHeight(90);
+$logo->setCoordinates('J1');
+$logo->setOffsetX(-20);
+$logo->setOffsetY(13);
 
             $drawings[] = $logo;
         }
@@ -1474,12 +1241,10 @@ $sheet
                     // PRINT AREA
                     // =================================================
 
-                    $sheet
-                        ->getPageSetup()
-                        ->setPrintArea(
-                            'B1:K' .
-                            $sheet->getHighestRow()
-                        );
+                $sheet->getPageSetup()
+    ->setPrintArea(
+        'B1:K' . $sheet->getHighestRow()
+    );
 
                     // =================================================
                     // POSISI CETAK

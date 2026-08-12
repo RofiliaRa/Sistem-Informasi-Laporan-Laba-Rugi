@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Laporan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class RiwayatLaporanController extends Controller
 {
@@ -25,26 +25,26 @@ class RiwayatLaporanController extends Controller
     public function index(Request $request)
     {
         $query = Laporan::query();
-        
+
         /*
 |--------------------------------------------------------------------------
 | FINALISASI OTOMATIS BULAN SEBELUMNYA
 |--------------------------------------------------------------------------
 */
 
-$today = Carbon::today();
+        $today = Carbon::today();
 
-if ($today->day == 1) {
+        if ($today->day == 1) {
 
-    $bulanSebelumnya = $today->copy()->subMonth();
+            $bulanSebelumnya = $today->copy()->subMonth();
 
-    Laporan::where('bulan', $bulanSebelumnya->month)
-        ->where('tahun', $bulanSebelumnya->year)
-        ->where('status', 'draft')
-        ->update([
-            'status' => 'final'
-        ]);
-}
+            Laporan::where('bulan', $bulanSebelumnya->month)
+                ->where('tahun', $bulanSebelumnya->year)
+                ->where('status', 'draft')
+                ->update([
+                    'status' => 'final',
+                ]);
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ if ($today->day == 1) {
             $bulan = date('m', strtotime($request->bulan));
 
             $query->where('tahun', $tahun)
-                  ->where('bulan', $bulan);
+                ->where('bulan', $bulan);
         }
 
         /*
@@ -94,53 +94,51 @@ if ($today->day == 1) {
     }
 
     public function finalisasi(Request $request, Laporan $laporan)
-{
-    /*
-    |--------------------------------------------------------------------------
-    | CEGAH FINAL GANDA
-    |--------------------------------------------------------------------------
-    */
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | CEGAH FINAL GANDA
+        |--------------------------------------------------------------------------
+        */
 
-    if ($laporan->status === 'final') {
+        if ($laporan->status === 'final') {
 
-        return $this->redirectAfterFinal($request, $laporan)
-            ->with('error', 'Laporan sudah berstatus final.');
-    }
+            return $this->redirectAfterFinal($request, $laporan)
+                ->with('error', 'Laporan sudah berstatus final.');
+        }
 
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE STATUS
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE STATUS
+        |--------------------------------------------------------------------------
+        */
 
-    $laporan->update([
-        'status' => 'final'
-    ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | KEMBALI KE HALAMAN ASAL
-    |--------------------------------------------------------------------------
-    */
-
-    return $this->redirectAfterFinal($request, $laporan)
-        ->with('success', 'Laporan berhasil difinalisasi.');
-}
-
-
-private function redirectAfterFinal(Request $request, Laporan $laporan)
-{
-    if ($request->from === 'laporan') {
-
-        return redirect()->route('admin.laporan.index', [
-            'bulan' => $laporan->tahun . '-' . str_pad($laporan->bulan, 2, '0', STR_PAD_LEFT),
+        $laporan->update([
+            'status' => 'final',
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | KEMBALI KE HALAMAN ASAL
+        |--------------------------------------------------------------------------
+        */
+
+        return $this->redirectAfterFinal($request, $laporan)
+            ->with('success', 'Laporan berhasil difinalisasi.');
     }
 
-    return redirect()->route($this->redirectRoute());
-}
+    private function redirectAfterFinal(Request $request, Laporan $laporan)
+    {
+        if ($request->from === 'laporan') {
 
+            return redirect()->route('admin.laporan.index', [
+                'bulan' => $laporan->tahun.'-'.str_pad($laporan->bulan, 2, '0', STR_PAD_LEFT),
+            ]);
+
+        }
+
+        return redirect()->route($this->redirectRoute());
+    }
 
     /*
     |--------------------------------------------------------------------------

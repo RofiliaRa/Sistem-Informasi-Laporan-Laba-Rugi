@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\LaporanExport;
 use App\Http\Controllers\Controller;
+use App\Models\Laporan;
 use App\Models\Pendapatan;
 use App\Models\Pengeluaran;
-use App\Models\Laporan;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\LaporanExport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
@@ -146,20 +146,16 @@ class LaporanController extends Controller
         | PENDAPATAN PER KATEGORI
         |--------------------------------------------------------------------------
         */
-
         $pendapatanPerKategori = $pendapatan
-            ->groupBy(function ($item) {
-                return $item->category->nama_kategori ?? 'Lainnya';
-            })
-            ->map(function ($items) {
-                return $items->sum('total');
-            });
-
-        /*
-        |--------------------------------------------------------------------------
-        | PENGELUARAN PER JENIS
-        |--------------------------------------------------------------------------
-        */
+    ->groupBy(function ($item) {
+        return $item->category->nama_kategori ?? 'Lainnya';
+    })
+    ->map(function ($items) {
+        return $items->sum('total');
+    })
+    ->filter(function ($total) {
+        return $total > 0;
+    });
 
         $pengeluaranKategori = collect([
             'Pembelian Persediaan' => $pengeluaran
@@ -169,7 +165,6 @@ class LaporanController extends Controller
             'Operasional Lainnya' => $pengeluaran
                 ->where('jenis_pengeluaran', 'Operasional Lainnya')
                 ->sum('total'),
-
         ])->filter(function ($total) {
             return $total > 0;
         });
@@ -206,12 +201,6 @@ class LaporanController extends Controller
 
         ]);
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | DOWNLOAD EXCEL
-    |--------------------------------------------------------------------------
-    */
 
     public function downloadExcel(Request $request)
     {
@@ -309,14 +298,8 @@ class LaporanController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $pengeluaran = Pengeluaran::whereYear(
-                'tanggal',
-                date('Y', strtotime($bulan))
-            )
-            ->whereMonth(
-                'tanggal',
-                date('m', strtotime($bulan))
-            )
+        $pengeluaran = Pengeluaran::whereYear('tanggal', date('Y', strtotime($bulan)))
+            ->whereMonth('tanggal', date('m', strtotime($bulan)))
             ->orderBy('tanggal', 'asc')
             ->get();
 
@@ -342,12 +325,9 @@ class LaporanController extends Controller
 
             return redirect()
                 ->route('admin.laporan.index', [
-                    'bulan' => $bulan
+                    'bulan' => $bulan,
                 ])
-                ->with(
-                    'warning',
-                    'Belum terdapat transaksi pada periode yang dipilih.'
-                );
+                ->with('warning', 'Belum terdapat transaksi pada periode yang dipilih.');
         }
 
         /*
@@ -404,25 +384,16 @@ class LaporanController extends Controller
         */
 
         $pengeluaranKategori = collect([
-
             'Pembelian Persediaan' => $pengeluaran
-                ->where(
-                    'jenis_pengeluaran',
-                    'Pembelian Persediaan'
-                )
+                ->where('jenis_pengeluaran', 'Pembelian Persediaan')
                 ->sum('total'),
 
             'Operasional Lainnya' => $pengeluaran
-                ->where(
-                    'jenis_pengeluaran',
-                    'Operasional Lainnya'
-                )
+                ->where('jenis_pengeluaran', 'Operasional Lainnya')
                 ->sum('total'),
-
         ])->filter(function ($total) {
             return $total > 0;
         });
-
         /*
         |--------------------------------------------------------------------------
         | GENERATE PDF
@@ -431,9 +402,7 @@ class LaporanController extends Controller
 
         $pdf = Pdf::loadView('admin.laporan.pdf', [
 
-            'periode' => Carbon::parse(
-                $bulan . '-01'
-            )->translatedFormat('F Y'),
+            'periode' => Carbon::parse($bulan.'-01')->translatedFormat('F Y'),
 
             'bulan' => $bulan,
 
@@ -461,17 +430,15 @@ class LaporanController extends Controller
 
         $canvas = $pdf->getDomPDF()->getCanvas();
 
-        $font = $pdf->getDomPDF()
-            ->getFontMetrics()
-            ->getFont(
-                'Helvetica',
-                'normal'
-            );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont(
+            'Helvetica',
+            'normal'
+        );
 
         $canvas->page_text(
             470,
             815,
-            "Halaman {PAGE_NUM} dari {PAGE_COUNT}",
+            'Halaman {PAGE_NUM} dari {PAGE_COUNT}',
             $font,
             10,
             [0, 0, 0]
@@ -479,10 +446,8 @@ class LaporanController extends Controller
 
         Carbon::setLocale('id');
 
-        $namaFile = 'Laporan Laba Rugi Bulan ' .
-            Carbon::parse(
-                $bulan . '-01'
-            )->translatedFormat('F Y') .
+        $namaFile = 'Laporan Laba Rugi Bulan '.
+            Carbon::parse($bulan.'-01')->translatedFormat('F Y').
             '.pdf';
 
         return $pdf->download($namaFile);

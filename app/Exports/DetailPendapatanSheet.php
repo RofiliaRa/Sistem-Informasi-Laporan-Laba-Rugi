@@ -18,13 +18,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DetailPendapatanSheet implements
-    FromArray,
-    WithTitle,
-    WithStyles,
-    WithColumnWidths,
-    WithDrawings,
-    WithEvents
+class DetailPendapatanSheet implements FromArray, WithColumnWidths, WithDrawings, WithEvents, WithStyles, WithTitle
 {
     protected string $bulan;
 
@@ -141,7 +135,7 @@ class DetailPendapatanSheet implements
             [
                 '',
                 '',
-                'Periode ' . $periode->translatedFormat('F Y'),
+                'Periode '.$periode->translatedFormat('F Y'),
                 '',
                 '',
                 '',
@@ -299,7 +293,7 @@ class DetailPendapatanSheet implements
         // =========================================================
 
         $sheet->getStyle(
-            'A1:H' . $lastRow
+            'A1:H'.$lastRow
         )
             ->getFont()
             ->setName('Times New Roman');
@@ -365,8 +359,7 @@ class DetailPendapatanSheet implements
 
                     'bottom' => [
 
-                        'borderStyle' =>
-                            Border::BORDER_MEDIUM,
+                        'borderStyle' => Border::BORDER_MEDIUM,
 
                         'color' => [
                             'argb' => 'FF000000',
@@ -437,8 +430,7 @@ class DetailPendapatanSheet implements
 
                 'fill' => [
 
-                    'fillType' =>
-                        Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
 
                     'startColor' => [
                         'rgb' => '1F4E78',
@@ -447,11 +439,9 @@ class DetailPendapatanSheet implements
 
                 'alignment' => [
 
-                    'horizontal' =>
-                        Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
 
-                    'vertical' =>
-                        Alignment::VERTICAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ],
             ]);
 
@@ -492,8 +482,7 @@ class DetailPendapatanSheet implements
 
                 'fill' => [
 
-                    'fillType' =>
-                        Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
 
                     'startColor' => [
                         'rgb' => 'EAF2F8',
@@ -671,7 +660,7 @@ class DetailPendapatanSheet implements
 
         if (file_exists($logoBum)) {
 
-            $logo = new Drawing();
+            $logo = new Drawing;
 
             $logo->setName(
                 'Logo BUM Desa'
@@ -710,7 +699,7 @@ class DetailPendapatanSheet implements
 
         if (file_exists($logoJaya)) {
 
-            $logo = new Drawing();
+            $logo = new Drawing;
 
             $logo->setName(
                 'Logo Jayadirana'
@@ -871,7 +860,7 @@ class DetailPendapatanSheet implements
 
                 $sheet->getPageSetup()
                     ->setPrintArea(
-                        'B1:H' . $lastRow
+                        'B1:H'.$lastRow
                     );
 
                 // =================================================

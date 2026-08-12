@@ -12,29 +12,28 @@ use Carbon\CarbonPeriod;
 class DashboardController extends Controller
 {
     public function index()
-    
     {
         Carbon::setLocale('id');
-        
+
         /*
 |--------------------------------------------------------------------------
 | FINALISASI OTOMATIS BULAN SEBELUMNYA
 |--------------------------------------------------------------------------
 */
 
-$today = Carbon::today();
+        $today = Carbon::today();
 
-if ($today->day == 1) {
+        if ($today->day == 1) {
 
-    $bulanSebelumnya = $today->copy()->subMonth();
+            $bulanSebelumnya = $today->copy()->subMonth();
 
-    Laporan::where('bulan', $bulanSebelumnya->month)
-        ->where('tahun', $bulanSebelumnya->year)
-        ->where('status', 'draft')
-        ->update([
-            'status' => 'final'
-        ]);
-}
+            Laporan::where('bulan', $bulanSebelumnya->month)
+                ->where('tahun', $bulanSebelumnya->year)
+                ->where('status', 'draft')
+                ->update([
+                    'status' => 'final',
+                ]);
+        }
 
         $now = Carbon::now();
 
@@ -83,86 +82,86 @@ if ($today->day == 1) {
 |--------------------------------------------------------------------------
 */
 
-$pendapatanTerbaru = Pendapatan::select(
-    'id',
-    'tanggal',
-    'created_at',
-    'nama_barang',
-    'total'
-)
-->orderByDesc('created_at')
-->get()
-->map(function ($item) {
+        $pendapatanTerbaru = Pendapatan::select(
+            'id',
+            'tanggal',
+            'created_at',
+            'nama_barang',
+            'total'
+        )
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(function ($item) {
 
-    return [
+                return [
 
-        'id'          => $item->id,
+                    'id' => $item->id,
 
-        'tanggal'     => $item->tanggal,
+                    'tanggal' => $item->tanggal,
 
-        'jam'         => $item->created_at
-                            ? Carbon::parse($item->created_at)->format('H:i')
-                            : '-',
+                    'jam' => $item->created_at
+                                        ? Carbon::parse($item->created_at)->format('H:i')
+                                        : '-',
 
-        'jenis'       => 'Pendapatan',
+                    'jenis' => 'Pendapatan',
 
-        'keterangan'  => $item->nama_barang,
+                    'keterangan' => $item->nama_barang,
 
-        'nominal'     => $item->total,
+                    'nominal' => $item->total,
 
-    ];
+                ];
 
-});
+            });
 
-$pengeluaranTerbaru = Pengeluaran::select(
-    'id',
-    'tanggal',
-    'created_at',
-    'nama_barang',
-    'total'
-)
-->orderByDesc('created_at')
-->get()
-->map(function ($item) {
+        $pengeluaranTerbaru = Pengeluaran::select(
+            'id',
+            'tanggal',
+            'created_at',
+            'nama_barang',
+            'total'
+        )
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(function ($item) {
 
-    return [
+                return [
 
-        'id'          => $item->id,
+                    'id' => $item->id,
 
-        'tanggal'     => $item->tanggal,
+                    'tanggal' => $item->tanggal,
 
-        'jam'         => $item->created_at
-                            ? Carbon::parse($item->created_at)->format('H:i')
-                            : '-',
+                    'jam' => $item->created_at
+                                        ? Carbon::parse($item->created_at)->format('H:i')
+                                        : '-',
 
-        'jenis'       => 'Pengeluaran',
+                    'jenis' => 'Pengeluaran',
 
-        'keterangan'  => $item->nama_barang,
+                    'keterangan' => $item->nama_barang,
 
-        'nominal'     => $item->total,
+                    'nominal' => $item->total,
 
-    ];
+                ];
 
-});
+            });
 
-$transaksiTerbaru = $pendapatanTerbaru
-    ->merge($pengeluaranTerbaru)
-    ->sort(function ($a, $b) {
+        $transaksiTerbaru = $pendapatanTerbaru
+            ->merge($pengeluaranTerbaru)
+            ->sort(function ($a, $b) {
 
-        $tanggalA = Carbon::parse($a['tanggal']);
-        $tanggalB = Carbon::parse($b['tanggal']);
+                $tanggalA = Carbon::parse($a['tanggal']);
+                $tanggalB = Carbon::parse($b['tanggal']);
 
-        if ($tanggalA->equalTo($tanggalB)) {
+                if ($tanggalA->equalTo($tanggalB)) {
 
-            return $b['id'] <=> $a['id'];
+                    return $b['id'] <=> $a['id'];
 
-        }
+                }
 
-        return $tanggalB->timestamp <=> $tanggalA->timestamp;
+                return $tanggalB->timestamp <=> $tanggalA->timestamp;
 
-    })
-    ->take(3)
-    ->values();
+            })
+            ->take(3)
+            ->values();
 
         /*
 |--------------------------------------------------------------------------
@@ -170,21 +169,21 @@ $transaksiTerbaru = $pendapatanTerbaru
 |--------------------------------------------------------------------------
 */
 
-$laporanTerakhir = Laporan::firstOrCreate(
+        $laporanTerakhir = Laporan::firstOrCreate(
 
-    [
-        'bulan' => $bulanAktif,
-        'tahun' => $tahunAktif,
-    ],
+            [
+                'bulan' => $bulanAktif,
+                'tahun' => $tahunAktif,
+            ],
 
-    [
-        'total_pendapatan' => 0,
-        'total_pengeluaran' => 0,
-        'laba_bersih' => 0,
-        'status' => 'draft',
-    ]
+            [
+                'total_pendapatan' => 0,
+                'total_pengeluaran' => 0,
+                'laba_bersih' => 0,
+                'status' => 'draft',
+            ]
 
-);
+        );
         /*
         |--------------------------------------------------------------------------
         | TOTAL DATA
@@ -202,12 +201,12 @@ $laporanTerakhir = Laporan::firstOrCreate(
         ->whereMonth('tanggal', $bulanAktif)
         ->count();
 
-       $totalLaporan = Laporan::where('tahun', $tahunAktif)
-    ->count();
+        $totalLaporan = Laporan::where('tahun', $tahunAktif)
+            ->count();
 
         $laporanFinal = Laporan::where('tahun', $tahunAktif)
-    ->where('status', 'final')
-    ->count();
+            ->where('status', 'final')
+            ->count();
 
         /*
         |--------------------------------------------------------------------------

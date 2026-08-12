@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PendapatanController;
 use App\Http\Controllers\Admin\PengeluaranController;
-use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\RiwayatLaporanController;
-use App\Http\Controllers\Admin\AkunController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Direktur\DashboardController as DirekturDashboardController;
+use App\Http\Controllers\RiwayatLaporanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -130,16 +130,16 @@ Route::middleware(['auth', 'role:admin'])
 | FINALISASI LAPORAN
 |--------------------------------------------------------------------------
 */
-Route::put('/riwayat-laporan/{laporan}/finalisasi', [RiwayatLaporanController::class, 'finalisasi'])
-    ->name('admin.riwayat.finalisasi');
+        Route::put('/riwayat-laporan/{laporan}/finalisasi', [RiwayatLaporanController::class, 'finalisasi'])
+            ->name('admin.riwayat.finalisasi');
 
-/*
-|--------------------------------------------------------------------------
-| KELOLA AKUN
-|--------------------------------------------------------------------------
-*/
-Route::resource('akun', AkunController::class)
-    ->names('admin.akun');
+        /*
+        |--------------------------------------------------------------------------
+        | KELOLA AKUN
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('akun', AkunController::class)
+            ->names('admin.akun');
     });
 
 /*
@@ -170,28 +170,28 @@ Route::middleware(['auth', 'role:direktur'])
         Route::get('/riwayat-laporan', [RiwayatLaporanController::class, 'index'])
             ->name('direktur.riwayat.index');
 
-    /*
+        /*
 |--------------------------------------------------------------------------
 | LAPORAN LABA RUGI
 |--------------------------------------------------------------------------
 */
 
-Route::get('/laporan', [LaporanController::class, 'index'])
-    ->name('direktur.laporan.index');
+        Route::get('/laporan', [LaporanController::class, 'index'])
+            ->name('direktur.laporan.index');
 
-Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])
-    ->name('direktur.laporan.pdf');
+        Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])
+            ->name('direktur.laporan.pdf');
 
-Route::get('/laporan/excel', [LaporanController::class, 'downloadExcel'])
-    ->name('direktur.laporan.excel');
+        Route::get('/laporan/excel', [LaporanController::class, 'downloadExcel'])
+            ->name('direktur.laporan.excel');
 
-    /*
+        /*
 |--------------------------------------------------------------------------
 | KELOLA AKUN
 |--------------------------------------------------------------------------
 */
 
-Route::resource('akun', AkunController::class)
-    ->names('direktur.akun');
+        Route::resource('akun', AkunController::class)
+            ->names('direktur.akun');
 
-     });
+    });

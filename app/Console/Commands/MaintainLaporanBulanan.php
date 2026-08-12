@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 class MaintainLaporanBulanan extends Command
 {
     protected $signature = 'laporan:maintain';
+
     protected $description = 'Tutup laporan bulanan setiap tanggal 1 dan hapus data lebih dari 3 tahun';
 
     public function handle(): int
