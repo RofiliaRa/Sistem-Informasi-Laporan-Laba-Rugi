@@ -55,6 +55,12 @@
                     <i class="bi bi-people me-2"></i>
                     Kelola Akun
                 </a>
+
+                <a href="{{ url('/admin/backup-restore') }}"
+                    class="dash-nav-link {{ request()->is('admin/backup-restore*') ? 'active' : '' }}">
+                        <i class="bi bi-database me-2"></i>
+                        Backup & Restore
+                </a>
             @endif
 
             @if($user && $user->role === 'direktur')

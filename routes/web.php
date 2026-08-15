@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PendapatanController;
 use App\Http\Controllers\Admin\PengeluaranController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Direktur\DashboardController as DirekturDashboardController;
 use App\Http\Controllers\RiwayatLaporanController;
@@ -140,6 +141,21 @@ Route::middleware(['auth', 'role:admin'])
         */
         Route::resource('akun', AkunController::class)
             ->names('admin.akun');
+
+        /*
+        |--------------------------------------------------------------------------
+        | BACKUP DATABASE
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/backup-restore', function () {
+    return view('admin.backup-restore');
+})->name('admin.backup-restore');
+
+Route::get('/backup', [BackupController::class, 'backup'])
+    ->name('admin.backup');
+
+Route::post('/restore', [BackupController::class, 'restore'])
+    ->name('admin.restore');
     });
 
 /*
