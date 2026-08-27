@@ -6,7 +6,7 @@
 <div class="dash-panel-card-pro mb-4">
     <div class="dash-panel-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
         <h3 class="page-title mb-0" id="formTitle">
-            Input Pengeluaran
+            Input Beban Usaha
         </h3>
 
         @if(isset($laporanFinal) && $laporanFinal)
@@ -70,7 +70,7 @@
 
                 {{-- NAMA PENGELUARAN --}}
                 <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold">Nama Pengeluaran</label>
+                    <label class="form-label fw-semibold">Nama Beban Usaha</label>
                     <input
                         type="text"
                         name="nama_barang"
@@ -84,7 +84,7 @@
 
                 {{-- JENIS PENGELUARAN --}}
                 <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold">Jenis Pengeluaran</label>
+                    <label class="form-label fw-semibold">Jenis Beban Usaha</label>
                     <select
                         name="jenis_pengeluaran"
                         id="jenisPengeluaranInput"
@@ -92,7 +92,7 @@
                         required
                         {{ isset($laporanFinal) && $laporanFinal ? 'disabled' : '' }}
                     >
-                        <option value="">-- Pilih Jenis Pengeluaran --</option>
+                        <option value="">-- Pilih Jenis Beban Usaha --</option>
                         <option value="Pembelian Persediaan">Pembelian Persediaan</option>
                         <option value="Operasional Lainnya">Operasional Lainnya</option>
                     </select>
@@ -146,7 +146,7 @@
                         class="btn btn-primary px-4 py-2"
                         id="submitButton"
                     >
-                        <i class="bi bi-save me-1"></i> Simpan Pengeluaran
+                        <i class="bi bi-save me-1"></i> Simpan Beban Usaha
                     </button>
 
                     <button
@@ -166,7 +166,7 @@
 <div class="dash-panel-card-pro">
     <div class="dash-panel-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
         <div class="d-flex align-items-center gap-2 flex-wrap">
-            <h3 class="mb-0 fw-bold">Data Pengeluaran</h3>
+            <h3 class="mb-0 fw-bold">Data Beban Usaha</h3>
             <span class="total-data-chip">
                 Total {{ $pengeluarans->total() }} Data
             </span>
@@ -211,7 +211,7 @@
                     <tr>
                         <th width="60" class="text-center">No</th>
                         <th width="120" class="text-center">Tanggal</th>
-                        <th class="text-start">Nama Pengeluaran</th>
+                        <th class="text-start">Nama Beban Usaha</th>
                         <th width="160" class="text-center">Jenis</th>
                         <th width="80" class="text-center">Jumlah</th>
                         <th width="140" class="text-center">Harga</th>

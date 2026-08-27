@@ -325,7 +325,7 @@
         @include('partials.stat-card', [
             'icon' => 'bi bi-wallet2 text-danger',
             'iconBg' => 'stat-warning',
-            'title' => 'Total Pengeluaran',
+            'title' => 'Total Beban Usaha',
             'value' => 'Rp ' . number_format($totalPengeluaran, 0, ',', '.'),
             'valueClass' => 'text-danger'
         ])

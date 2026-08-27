@@ -34,7 +34,7 @@
                     <i class="bi bi-arrow-up-circle"></i>
                 </div>
                 <div>
-                    <div class="stat-title">Total Pengeluaran</div>
+                    <div class="stat-title">Total Beban Usaha</div>
                     <small>{{ $periodeAktif }}</small>
                 </div>
             </div>
@@ -66,7 +66,7 @@
 <div class="card chart-card mb-4 border-0 shadow-sm rounded-4">
     <div class="card-header bg-white border-0 pt-4 px-4">
         <h5 class="fw-bold text-primary mb-0">
-            <i class="bi bi-graph-up-arrow me-2"></i> Grafik Pendapatan dan Pengeluaran
+            <i class="bi bi-graph-up-arrow me-2"></i> Grafik Pendapatan dan Beban Usaha
         </h5>
     </div>
     <div class="card-body pt-2 px-4 pb-4">
@@ -119,7 +119,7 @@
                                         </span>
                                     @else
                                         <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 fw-semibold">
-                                            Pengeluaran
+                                            Beban Usaha
                                         </span>
                                     @endif
                                 </td>
@@ -197,7 +197,7 @@ if (adminCtx) {
                     fill: true
                 },
                 {
-                    label: 'Pengeluaran',
+                    label: 'Beban Usaha',
                     data: @json($chartPengeluaran),
                     borderColor: '#dc2626',
                     backgroundColor: 'rgba(220, 38, 38, 0.08)',

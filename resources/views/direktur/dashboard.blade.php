@@ -34,7 +34,7 @@
                     <i class="bi bi-arrow-up-circle"></i>
                 </div>
                 <div>
-                    <div class="stat-title">Total Pengeluaran</div>
+                    <div class="stat-title">Total Beban Usaha</div>
                     <small>{{ $periodeAktif }}</small>
                 </div>
             </div>
@@ -178,7 +178,7 @@ if (direkturCtx) {
                     fill: true
                 },
                 {
-                    label: 'Pengeluaran',
+                    label: 'Beban Usaha',
                     data: @json($chartPengeluaran ?? []),
                     borderColor: '#dc2626',
                     backgroundColor: 'rgba(220, 38, 38, 0.08)',

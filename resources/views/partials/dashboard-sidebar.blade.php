@@ -35,7 +35,7 @@
                 <a href="{{ url('/admin/pengeluaran') }}"
                    class="dash-nav-link {{ request()->is('admin/pengeluaran*') ? 'active' : '' }}">
                     <i class="bi bi-cash-stack me-2"></i>
-                    Input Pengeluaran
+                    Input Beban Usaha
                 </a>
 
                 <a href="{{ url('/admin/laporan') }}"

@@ -72,7 +72,7 @@
                         <th width="60" class="text-center">No</th>
                         <th class="text-start">Periode</th>
                         <th class="text-start">Pendapatan</th>
-                        <th class="text-start">Pengeluaran</th>
+                        <th class="text-start">Beban Usaha</th>
                         <th class="text-start">Laba / Rugi</th>
                         <th width="120" class="text-center">Status</th>
                         <th width="80" class="text-center">PDF</th>
