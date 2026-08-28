@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <meta charset="utf-8">
-
-    <title>Laporan Laba Rugi</title>
-
-
+    <title>Laporan Laba Rugi & Mutasi Kas</title>
     <style>
+        body {
+            font-family: sans-serif;
+            font-size: 11px;
+            color: #111827;
+            margin: 25px 30px;
+        }
 
-        /* =========================================================
+        /* =========================
            KOP LAPORAN
-           ========================================================= */
-
+           ========================= */
         .kop-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .kop-table td {
@@ -25,1588 +25,574 @@
             vertical-align: middle;
         }
 
-        .kop-logo-left {
+        .kop-logo-left, .kop-logo-right {
             width: 15%;
             text-align: center;
-            vertical-align: middle;
-        }
-
-        .kop-logo-right {
-            width: 15%;
-            text-align: center;
-            vertical-align: middle;
         }
 
         .kop-logo {
-            width: 68px;
-            height: 68px;
+            width: 62px;
+            height: 62px;
             object-fit: contain;
         }
 
         .kop-center {
             width: 70%;
             text-align: center;
-            vertical-align: middle;
-            padding: 0 8px;
+            padding: 0 5px;
         }
 
         .kop-instansi {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
-            line-height: 1.25;
+            line-height: 1.2;
             text-transform: uppercase;
-            white-space: nowrap;
-            margin: 0;
         }
 
         .kop-unit {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            line-height: 1.5;
+            line-height: 1.4;
             text-transform: uppercase;
-            margin-top: 5px;
-            white-space: nowrap;
+            margin-top: 3px;
         }
 
         .kop-alamat {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: normal;
-            line-height: 2;
-            margin-top: 4px;
-            text-align: center;
+            line-height: 1.4;
+            margin-top: 3px;
         }
 
         .kop-garis {
             border-top: 2px solid #000;
             border-bottom: 1px solid #000;
-            height: 4px;
+            height: 3px;
             margin-top: 4px;
             margin-bottom: 14px;
         }
 
-
-        /* =========================================================
-           TAMBAHAN KOP HALAMAN DETAIL
-           ========================================================= */
-
-        .detail-kop {
-            width: 100%;
-            margin-bottom: 0;
-        }
-
-        .detail-kop .kop-table {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .detail-kop .kop-logo {
-            width: 68px;
-            height: 68px;
-        }
-
-        .detail-kop .kop-garis {
-            margin-bottom: 18px;
-        }
-
-
-        /* =========================================================
-           BODY
-           ========================================================= */
-
-        body {
-            font-family: sans-serif;
-            font-size: 11px;
-            color: #111827;
-            margin: 30px;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        p {
-            margin: 0;
-        }
-
-
-        /* =========================================================
-           TEXT
-           ========================================================= */
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-end {
-            text-align: right;
-        }
-
-        .mb-20 {
-            margin-bottom: 20px;
-        }
-
-
-        /* =========================================================
-           HEADER
-           ========================================================= */
-
-        .header-bumdes {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .subtitle {
-            font-size: 20px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .periode {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-
-        /* =========================================================
+        /* =========================
            JUDUL LAPORAN
-           PERBAIKAN SESUAI PERMINTAAN
-           ========================================================= */
-
+           ========================= */
         .judul-laporan {
             text-align: center;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
-            line-height: 1.5;
-            margin: 0 0 6px 0;
+            margin-bottom: 4px;
         }
 
         .periode-laporan {
             text-align: center;
-            font-size: 18px;
+            font-size: 13px;
             font-weight: bold;
-            line-height: 1.5;
-            margin: 0 0 6px 0;
+            margin-bottom: 4px;
         }
 
         .dicetak-pada {
             text-align: center;
-            font-size: 14px;
-            font-weight: normal;
-            line-height: 1.5;
-            margin: 0 0 20px 0;
+            font-size: 10px;
+            color: #4b5563;
+            margin-bottom: 16px;
         }
 
-
-        /* =========================================================
-           SECTION
-           ========================================================= */
-
-        .section-title {
-            margin-top: 28px;
-            margin-bottom: 12px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #111827;
-        }
-
-
-        /* =========================================================
-           TABLE
-           ========================================================= */
-
-        table {
+        /* =========================
+           DOT LEADERS TABLE (PDF)
+           ========================= */
+        .report-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-bottom: 15px;
         }
 
-        table td,
-        table th {
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
+        .report-table td {
+            padding: 5px 2px;
+            vertical-align: bottom;
+            border: none;
+        }
+
+        .section-header {
             font-size: 12px;
+            font-weight: bold;
+            color: #1f2937;
+            padding-top: 10px;
+            padding-bottom: 4px;
         }
 
-        table th {
-            background: #f3f4f6;
-            text-align: center;
-            vertical-align: middle;
+        .item-label {
+            font-size: 11px;
+        }
+
+        .indent-1 {
+            padding-left: 18px !important;
+        }
+
+        .dot-line-cell {
+            border-bottom: 1px dotted #6b7280 !important;
+            height: 12px;
+        }
+
+        .item-value {
+            text-align: right;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .subtotal-row td {
+            font-weight: bold;
+            font-size: 11px;
+            border-top: 1px solid #9ca3af;
+            border-bottom: 1px solid #9ca3af;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        .grand-total-box {
+            margin-top: 15px;
+            padding: 10px 12px;
+            border: 2px solid #111827;
+            background-color: #f9fafb;
+            font-size: 13px;
             font-weight: bold;
         }
 
-        .total {
-            font-weight: bold;
-            background: #f3f4f6;
-        }
-
-
-        /* =========================================================
-           FINAL RESULT
-           ========================================================= */
-
-        .final {
-            margin-top: 20px;
-            padding: 12px 16px;
-            border: 2px solid #0f172a;
-            background: #ffffff;
-            color: #0f172a;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-
-        /* =========================================================
-           SIGNATURE
-           ========================================================= */
-
+        /* =========================
+           SIGNATURE BLOCK
+           ========================= */
         .signature {
-            margin-top: 18px;
+            margin-top: 25px;
         }
 
         .signature-date {
             text-align: right;
-            margin-bottom: 18px;
-            font-size: 13px;
+            margin-bottom: 15px;
+            font-size: 11px;
         }
 
         .signature-table {
             width: 100%;
-            border: none;
+            border-collapse: collapse;
         }
 
         .signature-table td {
             border: none;
             text-align: center;
             vertical-align: top;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .signature-title {
             font-weight: bold;
-            font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .signature-space {
-            height: 50px;
+            height: 45px;
         }
 
         .signature-name {
             font-weight: bold;
-            margin-top: 10px;
         }
 
-
-        /* =========================================================
-           PAGE BREAK
-           ========================================================= */
-
+        /* PAGE BREAK & WATERMARK */
         .page-break {
             page-break-after: always;
         }
-
-
-        /* =========================================================
-           WATERMARK
-           ========================================================= */
 
         .watermark {
             position: fixed;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 120px;
+            font-size: 100px;
             font-weight: bold;
             color: #999;
             opacity: 0.12;
             z-index: -1;
-            letter-spacing: 10px;
         }
 
-
-        /* =========================================================
-           TABEL DETAIL
-           ========================================================= */
-
+        /* DETAIL TABLES */
         .detail-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
 
-        .detail-table th,
-        .detail-table td {
+        .detail-table th, .detail-table td {
             border: 1px solid #d1d5db;
-            padding: 8px 9px;
-            font-size: 11px;
+            padding: 6px 8px;
+            font-size: 10px;
         }
 
         .detail-table th {
             background: #1F4E78;
             color: white;
             text-align: center;
-            vertical-align: middle;
             font-weight: bold;
         }
 
-        .detail-table td {
-            vertical-align: middle;
-        }
-
-        .detail-total {
-            font-weight: bold;
-            background: #EAF2F8;
-        }
-
-        .detail-total-label {
-            text-align: center !important;
-            font-weight: bold;
-        }
-
-        .detail-total-value {
-            text-align: right !important;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-
-        /* =========================================================
-           INFO TRANSAKSI
-           ========================================================= */
-
-        .transaction-info {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            margin-bottom: 10px;
-        }
-
-        .transaction-info td {
-            border: 1px solid #d1d5db;
-            padding: 8px 10px;
-            background: #EAF2F8;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .transaction-info .jumlah-transaksi {
-            text-align: right;
-        }
-
-
+        .text-center { text-align: center; }
+        .text-end { text-align: right; }
     </style>
-
 </head>
-
-
 <body>
 
-
 @if($status == 'draft')
-
-    <div class="watermark">
-        DRAFT
-    </div>
-
+    <div class="watermark">DRAFT</div>
 @endif
 
-
-
 {{-- =========================================================
-     =========================================================
-     HALAMAN 1
-     LAPORAN LABA RUGI
-     =========================================================
+     HALAMAN 1: LAPORAN LABA RUGI (MULTI-STEP)
      ========================================================= --}}
-
 
 <table class="kop-table">
-
     <tr>
-
-        {{-- LOGO BUM DESA --}}
-
         <td class="kop-logo-left">
-
-            <img
-                src="{{ public_path('images/logo bumdes.jpeg') }}"
-                class="kop-logo"
-                alt="Logo BUM Desa"
-            >
-
+            <img src="{{ public_path('images/logo bumdes.jpeg') }}" class="kop-logo" alt="Logo BUM Desa">
         </td>
-
-
-        {{-- NAMA INSTANSI --}}
-
         <td class="kop-center">
-
-            <div class="kop-instansi">
-                BUM DESA KALITINGGAR MAKMUR KALITINGGAR
-            </div>
-
-            <div class="kop-unit">
-                UNIT USAHA FOTOKOPI JAYADIRANA
-            </div>
-
-            <div class="kop-alamat">
-                Desa Kalitinggar RT 01 RW 03,
-                Karang Malang,
-                Kec. Padamara,
-                Kab. Purbalingga, 53372
-            </div>
-
+            <div class="kop-instansi">BUM DESA KALITINGGAR MAKMUR KALITINGGAR</div>
+            <div class="kop-unit">UNIT USAHA FOTOKOPI JAYADIRANA</div>
+            <div class="kop-alamat">Desa Kalitinggar RT 01 RW 03, Karang Malang, Kec. Padamara, Kab. Purbalingga, 53372</div>
         </td>
-
-
-        {{-- LOGO JAYADIRANA --}}
-
         <td class="kop-logo-right">
-
-            <img
-                src="{{ public_path('images/logo fc.jpeg') }}"
-                class="kop-logo"
-                alt="Logo Jayadirana"
-            >
-
+            <img src="{{ public_path('images/logo fc.jpeg') }}" class="kop-logo" alt="Logo Jayadirana">
         </td>
-
     </tr>
-
 </table>
-
-
 <div class="kop-garis"></div>
 
-
-
-{{-- =========================================================
-     JUDUL LAPORAN
-     ========================================================= --}}
-
-<div class="judul-laporan">
-
-    LAPORAN LABA RUGI
-
-</div>
-
-
-<div class="periode-laporan">
-
-    Periode {{ $periode }}
-
-</div>
-
-
+<div class="judul-laporan">LAPORAN LABA RUGI</div>
+<div class="periode-laporan">Periode {{ $periode }}</div>
 <div class="dicetak-pada">
-
-    Dicetak pada :
-    {{ \Carbon\Carbon::now()
-        ->locale('id')
-        ->translatedFormat('d F Y')
-    }}
-
-    pukul
-    {{ \Carbon\Carbon::now()->format('H:i') }}
-
-    WIB
-
+    Dicetak pada : {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }} pukul {{ \Carbon\Carbon::now()->format('H:i') }} WIB
 </div>
 
-
-
-{{-- =========================================================
-     PERBAIKAN PENDAPATAN JASA
-     =========================================================
-
-     Pendapatan Jasa dihitung langsung dari transaksi
-     yang kategori-nya bernama "Jasa".
-
-     Jadi tidak bergantung pada category_id tertentu.
-     ========================================================= --}}
-
-@php
-
-    $pendapatanJasa = $pendapatan
-        ->filter(function ($item) {
-
-            $namaKategori = strtolower(
-                trim(
-                    $item->category->nama_kategori ?? ''
-                )
-            );
-
-            return $namaKategori === 'jasa';
-
-        })
-        ->sum('total');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pendapatan Barang / ATK dan Lain-Lain
-    |--------------------------------------------------------------------------
-    */
-
-    $pendapatanBarang = $pendapatan
-        ->filter(function ($item) {
-
-            $namaKategori = strtolower(
-                trim(
-                    $item->category->nama_kategori ?? ''
-                )
-            );
-
-            return $namaKategori !== 'jasa';
-
-        })
-        ->sum('total');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Total Pendapatan
-    |--------------------------------------------------------------------------
-    */
-
-    $totalPendapatan = $pendapatan->sum('total');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Total Pengeluaran
-    |--------------------------------------------------------------------------
-    */
-
-    $totalPengeluaran = $pengeluaran->sum('total');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Laba Bersih
-    |--------------------------------------------------------------------------
-    */
-
-    $labaBersih = $totalPendapatan - $totalPengeluaran;
-
-@endphp
-
-
-
-{{-- =========================================================
-     RINGKASAN PENDAPATAN
-     ========================================================= --}}
-
-<div class="section-title">
-
-    Ringkasan Pendapatan
-
-</div>
-
-
-<table style="margin-bottom:15px;">
-
-    <thead>
-
-        <tr>
-
-            <th>
-                Keterangan
-            </th>
-
-            <th width="25%" class="text-end">
-                Nominal
-            </th>
-
-        </tr>
-
-    </thead>
-
-
-    <tbody>
-
-
-        {{-- PENDAPATAN JASA --}}
-
-        <tr>
-
-            <td>
-                Pendapatan Jasa
-            </td>
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $pendapatanJasa,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
-
-        {{-- PENDAPATAN BARANG --}}
-
-        <tr>
-
-            <td>
-                Pendapatan Barang
-            </td>
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $pendapatanBarang,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
-
-        {{-- TOTAL --}}
-
-        <tr class="total">
-
-            <td>
-                TOTAL PENDAPATAN
-            </td>
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $totalPendapatan,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
-
-    </tbody>
-
+<table class="report-table">
+    {{-- PENDAPATAN USAHA --}}
+    <tr>
+        <td colspan="3" class="section-header">Pendapatan Usaha</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1" width="45%">Pendapatan Jasa</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value" width="30%">Rp {{ number_format($pendapatanJasa, 0, ',', '.') }}</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Pendapatan ATK dan Lain-Lain</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($pendapatanBarang, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td>Total Pendapatan</td>
+        <td></td>
+        <td class="item-value" style="color:#15803d;">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
+    </tr>
+
+    {{-- HPP --}}
+    <tr>
+        <td colspan="3" class="section-header">Harga Pokok Penjualan (HPP)</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Persediaan Awal</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($persediaanAwal, 0, ',', '.') }}</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Pembelian Persediaan / Bahan</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($pembelianPersediaan, 0, ',', '.') }}</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Persediaan Akhir</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">(Rp {{ number_format($persediaanAkhir, 0, ',', '.') }})</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td>Total Harga Pokok Penjualan</td>
+        <td></td>
+        <td class="item-value">Rp {{ number_format($hpp, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td style="font-size:12px;">Laba Kotor</td>
+        <td></td>
+        <td class="item-value" style="font-size:12px; color:#1d4ed8;">Rp {{ number_format($labaKotor, 0, ',', '.') }}</td>
+    </tr>
+
+    {{-- BEBAN USAHA --}}
+    <tr>
+        <td colspan="3" class="section-header">Beban Usaha</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Beban Operasional & Lainnya</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($bebanOperasional, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td>Total Beban Usaha</td>
+        <td></td>
+        <td class="item-value" style="color:#b91c1c;">Rp {{ number_format($totalBebanUsaha, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td style="font-size:12px;">Laba Usaha</td>
+        <td></td>
+        <td class="item-value" style="font-size:12px;">Rp {{ number_format($labaUsaha, 0, ',', '.') }}</td>
+    </tr>
+
+    {{-- NON OPERASIONAL & PAJAK --}}
+    <tr>
+        <td colspan="3" class="section-header">Pendapatan Di Luar Usaha & Pajak</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Pendapatan Bunga / Non-Usaha</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($pendapatanNonUsaha, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td>Laba Bersih Sebelum Pajak</td>
+        <td></td>
+        <td class="item-value">Rp {{ number_format($labaSebelumPajak, 0, ',', '.') }}</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Pajak Penghasilan (PPh)</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($pph, 0, ',', '.') }}</td>
+    </tr>
 </table>
 
-
-
-{{-- =========================================================
-     RINGKASAN BEBAN USAHA
-     ========================================================= --}}
-
-<div class="section-title">
-
-    Ringkasan Beban Usaha
-
-</div>
-
-
-<table>
-
-    <thead>
-
+<div class="grand-total-box">
+    <table style="width:100%; border:none;">
         <tr>
-
-            <th>
-                Keterangan
-            </th>
-
-            <th width="25%" class="text-end">
-                Nominal
-            </th>
-
+            <td style="border:none; padding:0; font-size:13px; font-weight:bold;">
+                {{ $labaBersih >= 0 ? 'LABA BERSIH SETELAH PAJAK' : 'RUGI BERSIH SETELAH PAJAK' }}
+            </td>
+            <td style="border:none; padding:0; text-align:right; font-size:14px; font-weight:bold; color:{{ $labaBersih >= 0 ? '#15803d' : '#b91c1c' }};">
+                Rp {{ number_format(abs($labaBersih), 0, ',', '.') }}
+            </td>
         </tr>
-
-    </thead>
-
-
-    <tbody>
-
-
-    @forelse($pengeluaranKategori as $jenis => $total)
-
-        <tr>
-
-            <td>
-
-                Beban {{ $jenis }}
-
-            </td>
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $total,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
-    @empty
-
-        <tr>
-
-            <td
-                colspan="2"
-                class="text-center"
-            >
-
-                Tidak ada data pengeluaran
-
-            </td>
-
-        </tr>
-
-    @endforelse
-
-
-        <tr class="total">
-
-            <td>
-                TOTAL BEBAN USAHA
-            </td>
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $totalPengeluaran,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
-
-    </tbody>
-
-</table>
-
-
-
-{{-- =========================================================
-     LABA / RUGI
-     ========================================================= --}}
-
-<div class="final">
-
-    <table style="width:100%; border:none; margin:0;">
-
-        <tr>
-
-            <td
-                style="
-                    border:none;
-                    padding:0;
-                    font-size:18px;
-                    font-weight:700;
-                "
-            >
-
-                {{ $labaBersih >= 0
-                    ? 'LABA BERSIH'
-                    : 'RUGI BERSIH'
-                }}
-
-            </td>
-
-
-            <td
-                style="
-                    border:none;
-                    padding:0;
-                    text-align:right;
-                    font-size:20px;
-                    font-weight:700;
-                    color:{{ $labaBersih >= 0
-                        ? '#16a34a'
-                        : '#dc2626'
-                    }};
-                "
-            >
-
-                Rp
-                {{ number_format(
-                    abs($labaBersih),
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-        </tr>
-
     </table>
-
 </div>
 
-
-
-{{-- =========================================================
-     TANDA TANGAN
-     ========================================================= --}}
-
+{{-- SIGNATURE HALAMAN 1 --}}
 <div class="signature">
-
     <div class="signature-date">
-
-        Kalitinggar,
-
-        {{ \Carbon\Carbon::now()
-            ->locale('id')
-            ->translatedFormat('d F Y')
-        }}
-
+        Kalitinggar, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
     </div>
-
-
     <table class="signature-table">
-
         <tr>
-
             <td width="33%">
-
-                <div class="signature-title">
-    Mengetahui,<br>
-    Ketua Unit Usaha Fotokopi<br>
-    Jayadirana
-</div>
-
+                <div class="signature-title">Mengetahui,<br>Ketua Unit Usaha Fotokopi<br>Jayadirana</div>
             </td>
-
-
             <td width="33%">
-
-                <div class="signature-title">
-    Diperiksa oleh,<br>
-    Bendahara BUM Desa
-</div>
-
-
+                <div class="signature-title">Diperiksa oleh,<br>Bendahara BUM Desa</div>
             </td>
-
-
             <td width="33%">
-
-                <div class="signature-title">
-    Disetujui oleh,<br>
-    Direktur BUM Desa
-</div>
-
+                <div class="signature-title">Disetujui oleh,<br>Direktur BUM Desa</div>
             </td>
-
         </tr>
-
-
         <tr>
-
             <td class="signature-space"></td>
-
             <td class="signature-space"></td>
-
             <td class="signature-space"></td>
-
         </tr>
-
-
         <tr>
-
-            <td class="signature-name">
-                (.......................................)
-            </td>
-
-            <td class="signature-name">
-                (.......................................)
-            </td>
-
-            <td class="signature-name">
-                (.......................................)
-            </td>
-
+            <td class="signature-name">(.......................................)</td>
+            <td class="signature-name">(.......................................)</td>
+            <td class="signature-name">(.......................................)</td>
         </tr>
-
     </table>
-
 </div>
-
 
 
 <div class="page-break"></div>
 
-
-
 {{-- =========================================================
-     =========================================================
-     HALAMAN 2
-     DETAIL PENDAPATAN
-     =========================================================
+     HALAMAN 2: LAPORAN MUTASI & TOTAL KAS TERSEDIA
      ========================================================= --}}
 
-
-<div class="detail-kop">
-
-
-    <table class="kop-table">
-
-        <tr>
-
-            {{-- LOGO BUM DESA --}}
-
-            <td class="kop-logo-left">
-
-                <img
-                    src="{{ public_path('images/logo bumdes.jpeg') }}"
-                    class="kop-logo"
-                    alt="Logo BUM Desa"
-                >
-
-            </td>
-
-
-            {{-- ISI KOP --}}
-
-            <td class="kop-center">
-
-                <div class="kop-instansi">
-                    BUM DESA KALITINGGAR MAKMUR KALITINGGAR
-                </div>
-
-                <div class="kop-unit">
-                    UNIT USAHA FOTOKOPI JAYADIRANA
-                </div>
-
-                <div class="kop-alamat">
-                    Desa Kalitinggar RT 01 RW 03,
-                    Karang Malang,
-                    Kec. Padamara,
-                    Kab. Purbalingga, 53372
-                </div>
-
-            </td>
-
-
-            {{-- LOGO JAYADIRANA --}}
-
-            <td class="kop-logo-right">
-
-                <img
-                    src="{{ public_path('images/logo fc.jpeg') }}"
-                    class="kop-logo"
-                    alt="Logo Jayadirana"
-                >
-
-            </td>
-
-        </tr>
-
-    </table>
-
-
-    <div class="kop-garis"></div>
-
-</div>
-
-
-
-{{-- =========================================================
-     JUDUL DETAIL PENDAPATAN
-     ========================================================= --}}
-
-<div class="text-center mb-20">
-
-    <h2
-        style="
-            font-size:22px;
-            font-weight:bold;
-        "
-    >
-        DETAIL PENDAPATAN
-    </h2>
-
-
-    <p
-        style="
-            margin-top:5px;
-            font-size:13px;
-        "
-    >
-        Periode {{ $periode }}
-    </p>
-
-</div>
-
-
-
-{{-- =========================================================
-     INFORMASI JUMLAH TRANSAKSI
-     ========================================================= --}}
-
-<table class="transaction-info">
-
+<table class="kop-table">
     <tr>
-
-        <td>
-
-            Jumlah Total Transaksi Pendapatan
-
+        <td class="kop-logo-left">
+            <img src="{{ public_path('images/logo bumdes.jpeg') }}" class="kop-logo" alt="Logo BUM Desa">
         </td>
-
-
-        <td
-            width="25%"
-            class="jumlah-transaksi"
-        >
-
-            {{ $pendapatan->count() }}
-
-            Transaksi
-
+        <td class="kop-center">
+            <div class="kop-instansi">BUM DESA KALITINGGAR MAKMUR KALITINGGAR</div>
+            <div class="kop-unit">UNIT USAHA FOTOKOPI JAYADIRANA</div>
+            <div class="kop-alamat">Desa Kalitinggar RT 01 RW 03, Karang Malang, Kec. Padamara, Kab. Purbalingga, 53372</div>
         </td>
+        <td class="kop-logo-right">
+            <img src="{{ public_path('images/logo fc.jpeg') }}" class="kop-logo" alt="Logo Jayadirana">
+        </td>
+    </tr>
+</table>
+<div class="kop-garis"></div>
 
+<div class="judul-laporan">LAPORAN MUTASI & TOTAL KAS TERSEDIA</div>
+<div class="periode-laporan">Periode {{ $periode }}</div>
+<div class="dicetak-pada">
+    Dicetak pada : {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }} pukul {{ \Carbon\Carbon::now()->format('H:i') }} WIB
+</div>
+
+<table class="report-table">
+    <tr>
+        <td colspan="3" class="section-header">1. Sumber Kas & Saldo Awal Periode</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1" width="50%">Modal Disetor / Modal Awal Tahun BUM Desa</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value" width="30%">Rp {{ number_format($modalTahunan, 0, ',', '.') }}</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Akumulasi Saldo Kas Periode Sebelumnya</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value">Rp {{ number_format($saldoKasLalu, 0, ',', '.') }}</td>
+    </tr>
+    <tr class="subtotal-row">
+        <td>Total Saldo Kas Awal Periode</td>
+        <td></td>
+        <td class="item-value" style="color:#1d4ed8;">Rp {{ number_format($saldoKasAwal, 0, ',', '.') }}</td>
     </tr>
 
+    <tr>
+        <td colspan="3" class="section-header">2. Mutasi Operasional Periode Ini</td>
+    </tr>
+    <tr>
+        <td class="item-label indent-1">Laba / (Rugi) Bersih Periode Ini (dari Halaman 1)</td>
+        <td class="dot-line-cell"></td>
+        <td class="item-value" style="color:{{ $labaBersih >= 0 ? '#15803d' : '#b91c1c' }};">
+            {{ $labaBersih >= 0 ? '+' : '-' }} Rp {{ number_format(abs($labaBersih), 0, ',', '.') }}
+        </td>
+    </tr>
 </table>
 
+<div class="grand-total-box" style="background:#1e293b; color:#ffffff; border-color:#0f172a;">
+    <table style="width:100%; border:none;">
+        <tr>
+            <td style="border:none; padding:0; font-size:13px; font-weight:bold; color:#ffffff;">
+                TOTAL KAS TERSEDIA (SALDO KAS AKHIR PERIODE)
+            </td>
+            <td style="border:none; padding:0; text-align:right; font-size:14px; font-weight:bold; color:#ffffff;">
+                Rp {{ number_format($totalKasAkhir, 0, ',', '.') }}
+            </td>
+        </tr>
+    </table>
+</div>
 
+{{-- SIGNATURE HALAMAN 2 --}}
+<div class="signature">
+    <div class="signature-date">
+        Kalitinggar, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+    </div>
+    <table class="signature-table">
+        <tr>
+            <td width="33%">
+                <div class="signature-title">Mengetahui,<br>Ketua Unit Usaha Fotokopi<br>Jayadirana</div>
+            </td>
+            <td width="33%">
+                <div class="signature-title">Diperiksa oleh,<br>Bendahara BUM Desa</div>
+            </td>
+            <td width="33%">
+                <div class="signature-title">Disetujui oleh,<br>Direktur BUM Desa</div>
+            </td>
+        </tr>
+        <tr>
+            <td class="signature-space"></td>
+            <td class="signature-space"></td>
+            <td class="signature-space"></td>
+        </tr>
+        <tr>
+            <td class="signature-name">(.......................................)</td>
+            <td class="signature-name">(.......................................)</td>
+            <td class="signature-name">(.......................................)</td>
+        </tr>
+    </table>
+</div>
+
+<div class="page-break"></div>
 
 {{-- =========================================================
-     DETAIL PENDAPATAN
-     TAMBAH KOLOM HARGA
+     HALAMAN 3: DETAIL PENDAPATAN
      ========================================================= --}}
+<div class="text-center" style="margin-bottom:15px;">
+    <h2 style="font-size:18px; font-weight:bold;">DETAIL PENDAPATAN</h2>
+    <p style="font-size:12px;">Periode {{ $periode }}</p>
+</div>
 
 <table class="detail-table">
-
     <thead>
-
         <tr>
-
-            <th width="6%">
-                No
-            </th>
-
-            <th width="14%">
-                Tanggal
-            </th>
-
-            <th width="20%">
-                Kategori
-            </th>
-
-            <th width="26%">
-                Nama Barang / Jasa
-            </th>
-
-            <th width="10%">
-                Jumlah
-            </th>
-
-            <th width="12%">
-                Harga
-            </th>
-
-            <th width="12%">
-                Total
-            </th>
-
+            <th width="6%">No</th>
+            <th width="16%">Tanggal</th>
+            <th width="20%">Kategori</th>
+            <th width="30%">Nama Barang / Jasa</th>
+            <th width="10%">Jumlah</th>
+            <th width="18%">Total</th>
         </tr>
-
     </thead>
-
-
     <tbody>
-
-
     @forelse($pendapatan as $item)
-
-        @php
-
-            $jumlahItem = $item->jumlah ?? 1;
-
-            $hargaItem = $item->harga ?? (
-                $jumlahItem > 0
-                    ? $item->total / $jumlahItem
-                    : 0
-            );
-
-        @endphp
-
-
         <tr>
-
-            <td class="text-center">
-
-                {{ $loop->iteration }}
-
-            </td>
-
-
-            <td class="text-center">
-
-                {{ \Carbon\Carbon::parse(
-                    $item->tanggal
-                )->translatedFormat('d F Y') }}
-
-            </td>
-
-
-            <td>
-
-                {{ $item->category->nama_kategori ?? '-' }}
-
-            </td>
-
-
-            <td>
-
-                {{ $item->nama_barang }}
-
-            </td>
-
-
-            <td class="text-center">
-
-                {{ $jumlahItem }}
-
-            </td>
-
-
-            {{-- HARGA --}}
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $hargaItem,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-
-            {{-- TOTAL --}}
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $item->total,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
+            <td class="text-center">{{ $loop->iteration }}</td>
+            <td class="text-center">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
+            <td>{{ $item->category->nama_kategori ?? '-' }}</td>
+            <td>{{ $item->nama_barang }}</td>
+            <td class="text-center">{{ $item->jumlah ?? 1 }}</td>
+            <td class="text-end">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
         </tr>
-
-
     @empty
-
         <tr>
-
-            <td
-                colspan="7"
-                class="text-center"
-            >
-
-                Tidak ada data pendapatan
-
-            </td>
-
+            <td colspan="6" class="text-center">Tidak ada data pendapatan pada periode ini.</td>
         </tr>
-
     @endforelse
-
-
-        {{-- TOTAL PENDAPATAN --}}
-
-        <tr class="detail-total">
-
-            <td
-                colspan="6"
-                class="detail-total-label"
-            >
-
-                TOTAL PENDAPATAN
-
-            </td>
-
-
-            <td class="detail-total-value">
-
-                Rp
-                {{ number_format(
-                    $totalPendapatan,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
+        <tr style="font-weight:bold; background:#e2e8f0;">
+            <td colspan="5" class="text-end">TOTAL PENDAPATAN</td>
+            <td class="text-end">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
         </tr>
-
-
     </tbody>
-
 </table>
-
-
 
 <div class="page-break"></div>
 
-
-
 {{-- =========================================================
-     =========================================================
-     HALAMAN 3
-     DETAIL BEBAN USAHA
-     =========================================================
+     HALAMAN 4: DETAIL PENGELUARAN
      ========================================================= --}}
-
-
-<div class="detail-kop">
-
-
-    <table class="kop-table">
-
-        <tr>
-
-            {{-- LOGO BUM DESA --}}
-
-            <td class="kop-logo-left">
-
-                <img
-                    src="{{ public_path('images/logo bumdes.jpeg') }}"
-                    class="kop-logo"
-                    alt="Logo BUM Desa"
-                >
-
-            </td>
-
-
-            {{-- ISI KOP --}}
-
-            <td class="kop-center">
-
-                <div class="kop-instansi">
-                    BUM DESA KALITINGGAR MAKMUR KALITINGGAR
-                </div>
-
-                <div class="kop-unit">
-                    UNIT USAHA FOTOKOPI JAYADIRANA
-                </div>
-
-                <div class="kop-alamat">
-                    Desa Kalitinggar RT 01 RW 03,
-                    Karang Malang,
-                    Kec. Padamara,
-                    Kab. Purbalingga, 53372
-                </div>
-
-            </td>
-
-
-            {{-- LOGO JAYADIRANA --}}
-
-            <td class="kop-logo-right">
-
-                <img
-                    src="{{ public_path('images/logo fc.jpeg') }}"
-                    class="kop-logo"
-                    alt="Logo Jayadirana"
-                >
-
-            </td>
-
-        </tr>
-
-    </table>
-
-
-    <div class="kop-garis"></div>
-
+<div class="text-center" style="margin-bottom:15px;">
+    <h2 style="font-size:18px; font-weight:bold;">DETAIL PENGELUARAN</h2>
+    <p style="font-size:12px;">Periode {{ $periode }}</p>
 </div>
-
-
-
-{{-- =========================================================
-     JUDUL DETAIL BEBAN USAHA
-     ========================================================= --}}
-
-<div class="text-center mb-20">
-
-    <h2
-        style="
-            font-size:22px;
-            font-weight:bold;
-        "
-    >
-        DETAIL BEBAN USAHA
-    </h2>
-
-
-    <p
-        style="
-            margin-top:5px;
-            font-size:13px;
-        "
-    >
-        Periode {{ $periode }}
-    </p>
-
-</div>
-
-
-
-{{-- =========================================================
-     INFORMASI JUMLAH TRANSAKSI
-     ========================================================= --}}
-
-<table class="transaction-info">
-
-    <tr>
-
-        <td>
-
-            Jumlah Total Transaksi Beban Usaha
-
-        </td>
-
-
-        <td
-            width="25%"
-            class="jumlah-transaksi"
-        >
-
-            {{ $pengeluaran->count() }}
-
-            Transaksi
-
-        </td>
-
-    </tr>
-
-</table>
-
-
-
-{{-- =========================================================
-     DETAIL BEBAN USAHA
-     TAMBAH KOLOM HARGA
-     ========================================================= --}}
 
 <table class="detail-table">
-
     <thead>
-
         <tr>
-
-            <th width="6%">
-                No
-            </th>
-
-            <th width="14%">
-                Tanggal
-            </th>
-
-            <th width="20%">
-                Jenis Pengeluaran
-            </th>
-
-            <th width="26%">
-                Nama Pengeluaran
-            </th>
-
-            <th width="10%">
-                Jumlah
-            </th>
-
-            <th width="12%">
-                Harga
-            </th>
-
-            <th width="12%">
-                Total
-            </th>
-
+            <th width="6%">No</th>
+            <th width="16%">Tanggal</th>
+            <th width="24%">Jenis Pengeluaran</th>
+            <th width="26%">Nama Barang / Keterangan</th>
+            <th width="10%">Jumlah</th>
+            <th width="18%">Total</th>
         </tr>
-
     </thead>
-
-
     <tbody>
-
-
     @forelse($pengeluaran as $item)
-
-        @php
-
-            $jumlahItem = $item->jumlah ?? 1;
-
-            $hargaItem = $item->harga ?? (
-                $jumlahItem > 0
-                    ? $item->total / $jumlahItem
-                    : 0
-            );
-
-        @endphp
-
-
         <tr>
-
-            <td class="text-center">
-
-                {{ $loop->iteration }}
-
-            </td>
-
-
-            <td class="text-center">
-
-                {{ \Carbon\Carbon::parse(
-                    $item->tanggal
-                )->translatedFormat('d F Y') }}
-
-            </td>
-
-
-            <td class="text-center">
-
-                {{ $item->jenis_pengeluaran ?? '-' }}
-
-            </td>
-
-
-            <td>
-
-                {{ $item->nama_barang }}
-
-            </td>
-
-
-            <td class="text-center">
-
-                {{ $jumlahItem }}
-
-            </td>
-
-
-            {{-- HARGA --}}
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $hargaItem,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
-
-            {{-- TOTAL --}}
-
-            <td class="text-end">
-
-                Rp
-                {{ number_format(
-                    $item->total,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
+            <td class="text-center">{{ $loop->iteration }}</td>
+            <td class="text-center">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
+            <td>{{ $item->jenis_pengeluaran }}</td>
+            <td>{{ $item->nama_barang }} {{ $item->keterangan ? '('.$item->keterangan.')' : '' }}</td>
+            <td class="text-center">{{ $item->jumlah ?? 1 }}</td>
+            <td class="text-end">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
         </tr>
-
-
     @empty
-
         <tr>
-
-            <td
-                colspan="7"
-                class="text-center"
-            >
-
-                Tidak ada data pengeluaran
-
-            </td>
-
+            <td colspan="6" class="text-center">Tidak ada data pengeluaran pada periode ini.</td>
         </tr>
-
     @endforelse
-
-
-        {{-- TOTAL BEBAN USAHA --}}
-
-        <tr class="detail-total">
-
-            <td
-                colspan="6"
-                class="detail-total-label"
-            >
-
-                TOTAL BEBAN USAHA
-
-            </td>
-
-
-            <td class="detail-total-value">
-
-                Rp
-                {{ number_format(
-                    $totalPengeluaran,
-                    0,
-                    ',',
-                    '.'
-                ) }}
-
-            </td>
-
+        <tr style="font-weight:bold; background:#e2e8f0;">
+            <td colspan="5" class="text-end">TOTAL PENGELUARAN</td>
+            <td class="text-end">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</td>
         </tr>
-
-
     </tbody>
-
 </table>
-
 
 </body>
-
 </html>

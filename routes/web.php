@@ -108,6 +108,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/laporan/excel', [LaporanController::class, 'downloadExcel'])
             ->name('admin.laporan.excel');
 
+        Route::post('/laporan/update-detail', [LaporanController::class, 'updateDetail'])
+            ->name('admin.laporan.update-detail');
+
         /*
         |--------------------------------------------------------------------------
         | RIWAYAT LAPORAN
